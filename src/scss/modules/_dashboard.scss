@@ -1,0 +1,47 @@
+.dashboard {
+  display: grid;
+  gap: 10px;
+  margin: 10px;
+  height: 100vh;
+
+  grid-template-columns: 1fr 6fr 1fr;
+  grid-template-rows: 1fr 15fr 1fr;
+  grid-template-areas:
+    'header header header'
+    'aside main main'
+    'footer footer footer';
+  header {
+    grid-area: header;
+  }
+  aside {
+    grid-area: aside;
+    background-color: red;
+  }
+  main {
+    grid-area: main;
+    background-color: green;
+  }
+  footer {
+    grid-area: footer;
+    background-color: gray;
+  }
+}
+.container-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  color: var(--color-blue-01);
+}
+.icons {
+  width: 35px;
+  height: 35px;
+}
+.logo {
+  height: 50px;
+}
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
