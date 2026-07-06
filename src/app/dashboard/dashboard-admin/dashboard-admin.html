@@ -8,35 +8,53 @@
     </div>
     <div class="container-user-logout">
       <span class="user">
-        <img class="icons" src="icons/account_circle.svg" alt="usuario" />
+        <img class="icons" src="icons/account_circle.png" alt="usuario" />
         <h3>6067</h3>
       </span>
       <span class="logout">
-        <img src="icons/exit_to_app.svg" alt="sair" />
+        <img class="icons" src="icons/exit_to_app.png" alt="sair" />
         <h3>Sair</h3>
       </span>
     </div>
   </header>
-  <aside class="container-aside">
+  <aside class="container-aside" [class.sidebar-collapsed]="!isSidebarOpen()">
     <nav>
       <ul>
         <li>
-          <a href=""> <img src="icons/home.svg" alt="home" /> Inicial </a>
+          <a routerLink="" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+            <img class="icons" src="icons/home.png" alt="Home" />
+            <span class="nav-text">Inicial</span>
+          </a>
         </li>
         <li>
-          <a href=""> <img src="icons/home.svg" alt="home" /> Inicial </a>
+          <a href="">
+            <img class="icons" src="icons/swap_horizontal_circle.png" alt="Operacional" />
+            <span class="nav-text">Operacional</span>
+          </a>
         </li>
         <li>
-          <a href=""> <img src="icons/home.svg" alt="home" /> Inicial </a>
+          <a href="">
+            <img class="icons" src="icons/list_alt.png" alt="Solicitações" />
+            <span class="nav-text">Solicitações</span>
+          </a>
         </li>
         <li>
-          <a href=""> <img src="icons/home.svg" alt="home" /> Inicial </a>
+          <a href="">
+            <img class="icons" src="icons/insert_chart.png" alt="Eficiência" />
+            <span class="nav-text">Eficiência</span>
+          </a>
         </li>
         <li>
-          <a href=""> <img src="icons/home.svg" alt="home" /> Inicial </a>
+          <a href="">
+            <img class="icons" src="icons/add_box.png" alt="Cadastros" />
+            <span class="nav-text">Cadastros</span>
+          </a>
         </li>
         <li>
-          <a href=""> <img src="icons/home.svg" alt="home" /> Inicial </a>
+          <a href="">
+            <img class="icons" src="icons/badge.png" alt="Usuário" />
+            <span class="nav-text">Usuário</span>
+          </a>
         </li>
       </ul>
     </nav>

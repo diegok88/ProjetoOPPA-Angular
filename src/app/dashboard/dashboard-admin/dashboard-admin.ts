@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard-admin',
-  imports: [],
+  imports: [RouterLink, RouterLinkActive],
   templateUrl: './dashboard-admin.html',
   styleUrl: './dashboard-admin.scss',
 })
-export class DashboardAdmin {}
+export class DashboardAdmin {
+  protected isSidebarOpen = signal<boolean>(false);
+}

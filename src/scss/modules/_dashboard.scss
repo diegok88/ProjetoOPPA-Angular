@@ -4,8 +4,8 @@
   margin: 10px;
   height: 100vh;
 
-  grid-template-columns: 1fr 6fr 1fr;
-  grid-template-rows: 50px 610px 40px;
+  grid-template-columns: auto 1fr 1fr;
+  grid-template-rows: 50px 1fr 40px;
   grid-template-areas:
     'header header header'
     'aside main main'
@@ -15,7 +15,6 @@
   }
   aside {
     grid-area: aside;
-    background-color: red;
   }
   main {
     grid-area: main;
@@ -34,10 +33,6 @@
 
   color: var(--color-blue-01);
 
-  .icons {
-    width: 20px;
-    height: 20px;
-  }
   .logo {
     height: 40px;
   }
@@ -66,15 +61,82 @@
     cursor: pointer;
   }
 }
+.icons {
+  width: 20px;
+  height: 20px;
+}
 .container-aside {
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
+  background-color: var(--color-secondary);
+  //width: 200px;
+  transition: width 0.3s ease;
+  border-radius: 10px;
+  border: 1px solid var(--color-white);
+  nav {
+    padding-top: 15px;
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        a {
+          display: flex;
+          //align-items: center;
+          //gap: 10px;
+          //padding: 5px 16px;
+          color: var(--color-white);
+          text-decoration: none;
+          font-size: 14px;
+          white-space: nowrap;
+          transition: background 0.2s;
+        }
+        .icons {
+          width: 20px;
+          height: 20px;
+          flex-shrink: 0;
+        }
+        .nav-text {
+          display: inline;
+        }
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+        &.active {
+          background: rgba(255, 255, 255, 0.2);
+          font-weight: 500;
+        }
+      }
+    }
+  }
+  &.sidebar-collapsed {
+    width: 72px;
+    overflow: hidden;
+    nav ul li a {
+      justify-content: center;
+      padding: 10px 0;
+      gap: 0;
+      .nav-text {
+        display: none;
+      }
+    }
+  }
+  &:hover {
+    width: 200px;
+    overflow: visible;
+    nav ul li a {
+      justify-content: flex-start;
+      padding: 10px 16px;
+      gap: 10px;
+      .nav-text {
+        display: inline-flex;
+      }
+    }
+  }
 }
 .container-footer {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: start;
 
   .text-developed {
     font-size: 14px;
