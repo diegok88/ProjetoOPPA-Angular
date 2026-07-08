@@ -67,7 +67,7 @@
 }
 .container-aside {
   background-color: var(--color-secondary);
-  //width: 200px;
+  width: 200px;
   transition: width 0.3s ease;
   border-radius: 10px;
   border: 1px solid var(--color-white);
@@ -81,29 +81,57 @@
       li {
         a {
           display: flex;
-          //align-items: center;
-          //gap: 10px;
-          //padding: 5px 16px;
+          align-items: center;
+          gap: 10px;
+          padding: 10px 16px;
           color: var(--color-white);
           text-decoration: none;
           font-size: 14px;
           white-space: nowrap;
           transition: background 0.2s;
+
+          .icons {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+          }
+          .nav-text {
+            display: inline-flex;
+          }
+          .arrow {
+            margin-left: auto;
+            font-size: 12px;
+            transition: transform 0.3s ease;
+            &.rotated {
+              transform: rotate(-180deg);
+            }
+          }
+          &:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+          }
+          &.active {
+            background: rgba(255, 255, 255, 0.2);
+            font-weight: 500;
+          }
         }
-        .icons {
-          width: 20px;
-          height: 20px;
-          flex-shrink: 0;
-        }
-        .nav-text {
-          display: inline;
-        }
-        &:hover {
-          background-color: rgba(255, 255, 255, 0.1);
-        }
-        &.active {
-          background: rgba(255, 255, 255, 0.2);
-          font-weight: 500;
+        &.has-submenu {
+          .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition:
+              max-height 0.3s ease,
+              opacity 0.3s ease,
+              padding 0.03s ease;
+            opacity: 0;
+            padding: 0 0 0 20px;
+            margin: 0;
+            list-style: none;
+            &.open {
+              max-height: 500px;
+              opacity: 1;
+              padding: 4px 0 8px 20px;
+            }
+          }
         }
       }
     }
@@ -115,9 +143,13 @@
       justify-content: center;
       padding: 10px 0;
       gap: 0;
-      .nav-text {
+      .nav-text,
+      .arrow {
         display: none;
       }
+    }
+    .submenu {
+      display: none;
     }
   }
   &:hover {
@@ -127,8 +159,16 @@
       justify-content: flex-start;
       padding: 10px 16px;
       gap: 10px;
-      .nav-text {
-        display: inline-flex;
+      .nav-text,
+      .arrow {
+        display: inline;
+      }
+    }
+    .submenu {
+      display: block;
+      &.open {
+        max-width: 500px;
+        opacity: 1;
       }
     }
   }

@@ -26,11 +26,40 @@
             <span class="nav-text">Inicial</span>
           </a>
         </li>
-        <li>
-          <a href="">
-            <img class="icons" src="icons/swap_horizontal_circle.png" alt="Operacional" />
+        <li class="has-submenu" [class.open]="isReportingOpen()">
+          <a (click)="toggleReportingSubmenu($event)">
+            <img class="icons" src="icons/badge.png" alt="Operacional" />
             <span class="nav-text">Operacional</span>
+            <span class="icons" class="arrow" [class.rotated]="isReportingOpen()"
+              ><img src="icons/arrow_drop_down.png" alt="seta para baixo"
+            /></span>
           </a>
+          <ul class="submenu" [class.open]="isReportingOpen()">
+            <li>
+              <a routerLink="" routerLinkActive="">
+                <img class="icons" src="icons/add_box.png" alt="Cadastro" />
+                <span class="nav-text">Cadastros</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="" routerLinkActive="">
+                <img class="icons" src="icons/swap_horizontal_circle.png" alt="Alocação" />
+                <span class="nav-text">Alocações</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="" routerLinkActive="">
+                <img class="icons" src="icons/calendar_add_on.png" alt="Dispensa" />
+                <span class="nav-text">Dispensas</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="" routerLinkActive="">
+                <img class="icons" src="icons/dangerous.png" alt="Penalidade" />
+                <span class="nav-text">Penalidades</span>
+              </a>
+            </li>
+          </ul>
         </li>
         <li>
           <a href="">
@@ -46,13 +75,13 @@
         </li>
         <li>
           <a href="">
-            <img class="icons" src="icons/add_box.png" alt="Cadastros" />
+            <img class="icons" src="icons/post_add.png" alt="Cadastros" />
             <span class="nav-text">Cadastros</span>
           </a>
         </li>
         <li>
           <a href="">
-            <img class="icons" src="icons/badge.png" alt="Usuário" />
+            <img class="icons" src="icons/account_box.png" alt="Usuário" />
             <span class="nav-text">Usuário</span>
           </a>
         </li>
