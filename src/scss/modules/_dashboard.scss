@@ -24,6 +24,7 @@
     grid-area: footer;
   }
 }
+// HEADER
 .container-header {
   display: flex;
   align-items: center;
@@ -65,12 +66,14 @@
   width: 20px;
   height: 20px;
 }
+// SIDEBAR
 .container-aside {
   background-color: var(--color-secondary);
   width: 200px;
   transition: width 0.3s ease;
   border-radius: 10px;
   border: 1px solid var(--color-white);
+  overflow: hidden;
   nav {
     padding-top: 15px;
     ul {
@@ -89,6 +92,7 @@
           font-size: 14px;
           white-space: nowrap;
           transition: background 0.2s;
+          cursor: pointer;
 
           .icons {
             width: 20px;
@@ -97,11 +101,14 @@
           }
           .nav-text {
             display: inline-flex;
+            transition: opacity 0.3s ease;
           }
+          // SUBMENU - ICONES ARROW
           .arrow {
             margin-left: auto;
             font-size: 12px;
             transition: transform 0.3s ease;
+            display: inline-flex;
             &.rotated {
               transform: rotate(-180deg);
             }
@@ -114,14 +121,14 @@
             font-weight: 500;
           }
         }
+        // SUBMENU - CONTAINER
         &.has-submenu {
           .submenu {
             max-height: 0;
             overflow: hidden;
             transition:
               max-height 0.3s ease,
-              opacity 0.3s ease,
-              padding 0.03s ease;
+              opacity 0.3s ease;
             opacity: 0;
             padding: 0 0 0 20px;
             margin: 0;
@@ -138,30 +145,57 @@
   }
   &.sidebar-collapsed {
     width: 72px;
-    overflow: hidden;
+
     nav ul li a {
       justify-content: center;
       padding: 10px 0;
       gap: 0;
+
       .nav-text,
       .arrow {
-        display: none;
+        opacity: 0;
+        visibility: hidden;
+        width: 0;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        pointer-events: none;
       }
     }
+
     .submenu {
       display: none;
+    }
+
+    .reduce-sidebar {
+      position: fixed;
+      bottom: 60px;
+      left: 36px;
+      transition: left 0.3s ease;
     }
   }
   &:hover {
     width: 200px;
-    overflow: visible;
+
     nav ul li a {
       justify-content: flex-start;
       padding: 10px 16px;
       gap: 10px;
-      .nav-text,
+      .nav-text {
+        opacity: 1;
+        visibility: visible;
+        width: auto;
+        margin: 0;
+        padding: 0;
+        pointer-events: auto;
+      }
       .arrow {
-        display: inline;
+        opacity: 1;
+        visibility: visible;
+        width: auto;
+        margin-left: auto;
+        padding: 0;
+        pointer-events: auto;
       }
     }
     .submenu {
@@ -169,10 +203,35 @@
       &.open {
         max-width: 500px;
         opacity: 1;
+        padding: 4px 0 8px 20px;
       }
     }
+    .reduce-sidebar {
+      position: fixed;
+      bottom: 60px;
+      left: 100px;
+      transition: left 0.3s ease;
+    }
+  }
+  .reduce-sidebar {
+    position: fixed;
+    bottom: 60px;
+    left: 100px;
   }
 }
+// CLASSE DE UTILIDADE PARA OCULTAR ELEMENTOS
+.hidden {
+  opacity: 0;
+  visibility: hidden;
+  width: 0;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  pointer-events: none;
+  flex-shrink: 0;
+}
+// FOOTER
 .container-footer {
   display: flex;
   justify-content: center;

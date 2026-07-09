@@ -17,24 +17,28 @@
       </span>
     </div>
   </header>
-  <aside class="container-aside" [class.sidebar-collapsed]="!isSidebarOpen()">
+  <aside class="container-aside" [class.sidebar-collapsed]="isSidebarCollapsed()">
     <nav>
       <ul>
         <li>
           <a routerLink="" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
             <img class="icons" src="icons/home.png" alt="Home" />
-            <span class="nav-text">Inicial</span>
+            <span class="nav-text" [class.hidden]="isSidebarCollapsed()">Principal</span>
           </a>
         </li>
-        <li class="has-submenu" [class.open]="isReportingOpen()">
-          <a (click)="toggleReportingSubmenu($event)">
+        <li class="has-submenu" [class.open]="activeSubmenu() === 'operacional'">
+          <a (click)="toggleOperacionalSubmenu($event)">
             <img class="icons" src="icons/badge.png" alt="Operacional" />
-            <span class="nav-text">Operacional</span>
-            <span class="icons" class="arrow" [class.rotated]="isReportingOpen()"
+            <span class="nav-text" [class.hidden]="isSidebarCollapsed()">Operacional</span>
+            <span
+              class="icons"
+              class="arrow"
+              [class.rotated]="activeSubmenu() === 'operacional'"
+              [class.hidden]="isSidebarCollapsed()"
               ><img src="icons/arrow_drop_down.png" alt="seta para baixo"
             /></span>
           </a>
-          <ul class="submenu" [class.open]="isReportingOpen()">
+          <ul class="submenu" [class.open]="activeSubmenu() === 'operacional'">
             <li>
               <a routerLink="" routerLinkActive="">
                 <img class="icons" src="icons/add_box.png" alt="Cadastro" />
@@ -61,12 +65,40 @@
             </li>
           </ul>
         </li>
-        <li>
-          <a href="">
+        <li class="has-submenu" [class.open]="activeSubmenu() === 'solicitacao'">
+          <a (click)="toggleSolicitacaoSubmenu($event)">
             <img class="icons" src="icons/list_alt.png" alt="Solicitações" />
-            <span class="nav-text">Solicitações</span>
+            <span class="nav-text" [class.hidden]="isSidebarCollapsed()">Solicitações</span>
+            <span
+              class="arrow"
+              [class.rotated]="activeSubmenu() === 'solicitacao'"
+              [class.hidden]="isSidebarCollapsed()"
+            >
+              <img src="icons/arrow_drop_down.png" alt="seta para baixo" />
+            </span>
           </a>
+          <ul class="submenu" [class.open]="activeSubmenu() === 'solicitacao'">
+            <li>
+              <a routerLink="" routerLinkActive="">
+                <img class="icons" src="icons/box_edit.png" alt="Escrever" />
+                <span class="nav-text">Escrever</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="" routerLinkActive="">
+                <img class="icons" src="icons/outbox.png" alt="Enviadas" />
+                <span class="nav-text">Enviadas</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="" routerLinkActive="">
+                <img class="icons" src="icons/move_to_inbox.png" alt="Recebidas" />
+                <span class="nav-text">Recebidas</span>
+              </a>
+            </li>
+          </ul>
         </li>
+        <!-- Escrever, Enviadas, Recebidas -->
         <li>
           <a href="">
             <img class="icons" src="icons/insert_chart.png" alt="Eficiência" />
@@ -87,6 +119,11 @@
         </li>
       </ul>
     </nav>
+    <div class="reduce-sidebar">
+      <span (click)="toggleSidebar()">
+        <img class="icons" src="icons/dock_to_right.png" alt="Reduzir Sidebar" />
+      </span>
+    </div>
   </aside>
   <main>
     <p>main</p>

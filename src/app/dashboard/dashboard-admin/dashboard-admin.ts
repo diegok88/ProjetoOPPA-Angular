@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
@@ -8,11 +8,20 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './dashboard-admin.scss',
 })
 export class DashboardAdmin {
-  protected isSidebarOpen = signal<boolean>(true);
-  protected isReportingOpen = signal<boolean>(false);
+  protected activeSubmenu = signal<'operacional' | 'solicitacao' | null>(null);
+  protected isSidebarCollapsed = signal<boolean>(true);
 
-  protected toggleReportingSubmenu(event: Event) {
+  protected toggleOperacionalSubmenu(event: Event) {
     event.preventDefault();
-    this.isReportingOpen.update((v) => !v);
+    this.activeSubmenu.update((current) => (current === 'operacional' ? null : 'operacional'));
+  }
+
+  protected toggleSolicitacaoSubmenu(event: Event) {
+    event.preventDefault();
+    this.activeSubmenu.update((current) => (current === 'solicitacao' ? null : 'solicitacao'));
+  }
+
+  protected toggleSidebar() {
+    this.isSidebarCollapsed.update((current) => !current);
   }
 }
