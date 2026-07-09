@@ -20,12 +20,14 @@
   <aside class="container-aside" [class.sidebar-collapsed]="isSidebarCollapsed()">
     <nav>
       <ul>
+        <!-- PRINCIPAL -->
         <li>
           <a routerLink="" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
             <img class="icons" src="icons/home.png" alt="Home" />
             <span class="nav-text" [class.hidden]="isSidebarCollapsed()">Principal</span>
           </a>
         </li>
+        <!-- OPERACIONAL - Cadastros, Alocações, Dispensas, Penalidades -->
         <li class="has-submenu" [class.open]="activeSubmenu() === 'operacional'">
           <a (click)="toggleOperacionalSubmenu($event)">
             <img class="icons" src="icons/badge.png" alt="Operacional" />
@@ -65,6 +67,7 @@
             </li>
           </ul>
         </li>
+        <!-- SOLICITAÇÕES - Escrever, Enviadas, Recebidas -->
         <li class="has-submenu" [class.open]="activeSubmenu() === 'solicitacao'">
           <a (click)="toggleSolicitacaoSubmenu($event)">
             <img class="icons" src="icons/list_alt.png" alt="Solicitações" />
@@ -98,34 +101,178 @@
             </li>
           </ul>
         </li>
-        <!-- Escrever, Enviadas, Recebidas -->
-        <li>
-          <a href="">
+        <!-- EFICIÊNCIA - Monitoramento, Ativos, Operacional -->
+        <li class="has-submenu" [class.open]="activeSubmenu() === 'eficiencia'">
+          <a (click)="toggleEficienciaSubmenu($event)">
             <img class="icons" src="icons/insert_chart.png" alt="Eficiência" />
-            <span class="nav-text">Eficiência</span>
+            <span class="nav-text" [class.hidden]="isSidebarCollapsed()">Eficiência</span>
+            <span
+              class="arrow"
+              [class.rotated]="activeSubmenu() === 'eficiencia'"
+              [class.hidden]="isSidebarCollapsed()"
+            >
+              <img src="icons/arrow_drop_down.png" alt="seta para baixo" />
+            </span>
           </a>
+          <ul class="submenu" [class.open]="activeSubmenu() === 'eficiencia'">
+            <li>
+              <a routerLink="" routerLinkActive="">
+                <img class="icons" src="icons/bid_landscape.png" alt="Escrever" />
+                <span class="nav-text">Monitoração</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="" routerLinkActive="">
+                <img class="icons" src="icons/precision_manufacturing.png" alt="Escrever" />
+                <span class="nav-text">Ativos</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="" routerLinkActive="">
+                <img class="icons" src="icons/speed.png" alt="Escrever" />
+                <span class="nav-text">Operacional</span>
+              </a>
+            </li>
+          </ul>
         </li>
-        <li>
-          <a href="">
-            <img class="icons" src="icons/post_add.png" alt="Cadastros" />
-            <span class="nav-text">Cadastros</span>
+        <!-- TIPOS -->
+        <li class="has-submenu" [class.open]="activeSubmenu() === 'tipos'">
+          <a (click)="toggleTiposSubmenu($event)">
+            <img class="icons" src="icons/post_add.png" alt="Tipos" />
+            <span class="nav-text" [class.hidden]="isSidebarCollapsed()">Tipos</span>
+            <span
+              class="arrow"
+              [class.rotated]="activeSubmenu() === 'tipos'"
+              [class.hidden]="isSidebarCollapsed()"
+            >
+              <img src="icons/arrow_drop_down.png" alt="seta para baixo" />
+            </span>
           </a>
+          <ul class="submenu" [class.open]="activeSubmenu() === 'tipos'">
+            <li>
+              <a routerLink="" routerLinkActive="">
+                <img class="icons" src="icons/box_edit.png" alt="Solicitações" />
+                <span class="nav-text">Solicitações</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="" routerLinkActive="">
+                <img class="icons" src="icons/assignment_ind.png" alt="Perfil" />
+                <span class="nav-text">Perfil</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="" routerLinkActive="">
+                <img class="icons" src="icons/dangerous.png" alt="Penalidades" />
+                <span class="nav-text">Penalidades</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="" routerLinkActive="">
+                <img class="icons" src="icons/calendar_add_on.png" alt="Dispensas" />
+                <span class="nav-text">Dispensas</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="" routerLinkActive="">
+                <img class="icons" src="icons/schedule.png" alt="Jornadas" />
+                <span class="nav-text">Jornadas</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="" routerLinkActive="">
+                <img class="icons" src="icons/search_activity.png" alt="Estados Jornadas" />
+                <span class="nav-text">Estados de Jornadas</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="" routerLinkActive="">
+                <img class="icons" src="icons/factory.png" alt="Setores" />
+                <span class="nav-text">Setores</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="" routerLinkActive="">
+                <img class="icons" src="icons/precision_manufacturing.png" alt="Ativos" />
+                <span class="nav-text">Ativos</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="" routerLinkActive="">
+                <img class="icons" src="icons/manufacturing.png" alt="Ativos" />
+                <span class="nav-text">Tags Ativos</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="" routerLinkActive="">
+                <img class="icons" src="icons/manage_history.png" alt="Ativos" />
+                <span class="nav-text">Estados do Ativos </span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="" routerLinkActive="">
+                <img class="icons" src="icons/problem.png" alt="Ocorrencias" />
+                <span class="nav-text">Ocorrências</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="" routerLinkActive="">
+                <img class="icons" src="icons/warning.png" alt="Falhas" />
+                <span class="nav-text">Falhas</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="" routerLinkActive="">
+                <img class="icons" src="icons/lightbulb_circle.png" alt="Soluções" />
+                <span class="nav-text">Soluções</span>
+              </a>
+            </li>
+          </ul>
         </li>
-        <li>
-          <a href="">
-            <img class="icons" src="icons/account_box.png" alt="Usuário" />
-            <span class="nav-text">Usuário</span>
+        <!-- USUÁRIO - Informações, Trocar senha, Trocar PIN -->
+        <li class="has-submenu" [class.open]="activeSubmenu() === 'usuario'">
+          <a (click)="toggleUsuarioSubmenu($event)">
+            <img class="icons" src="icons/account_box.png" alt="Usuario" />
+            <span class="nav-text" [class.hidden]="isSidebarCollapsed()">Usuário</span>
+            <span
+              class="arrow"
+              [class.rotated]="activeSubmenu() === 'usuario'"
+              [class.hidden]="isSidebarCollapsed()"
+            >
+              <img src="icons/arrow_drop_down.png" alt="seta para baixo" />
+            </span>
           </a>
+          <ul class="submenu" [class.open]="activeSubmenu() === 'usuario'">
+            <li>
+              <a routerLink="" routerLinkActive="">
+                <img class="icons" src="icons/id_card.png" alt="Informação" />
+                <span class="nav-text">Informações</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="" routerLinkActive="">
+                <img class="icons" src="icons/lock_reset.png" alt="Escrever" />
+                <span class="nav-text">Trocar senha</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="" routerLinkActive="">
+                <img class="icons" src="icons/keyboard_lock.png" alt="Escrever" />
+                <span class="nav-text">Trocar PIN</span>
+              </a>
+            </li>
+          </ul>
         </li>
       </ul>
     </nav>
+    <!-- HABILITA A REDUÇÃO DO SIDEBAR -->
     <div class="reduce-sidebar">
       <span (click)="toggleSidebar()">
         <img class="icons" src="icons/dock_to_right.png" alt="Reduzir Sidebar" />
       </span>
     </div>
   </aside>
-  <main>
+  <main class="container-main">
     <p>main</p>
   </main>
   <footer class="container-footer">

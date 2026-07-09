@@ -1,3 +1,4 @@
+// DASHBOARD
 .dashboard {
   display: grid;
   gap: 10px;
@@ -5,7 +6,7 @@
   height: 100vh;
 
   grid-template-columns: auto 1fr 1fr;
-  grid-template-rows: 50px 1fr 40px;
+  grid-template-rows: 40px 1fr 30px;
   grid-template-areas:
     'header header header'
     'aside main main'
@@ -18,7 +19,6 @@
   }
   main {
     grid-area: main;
-    background-color: green;
   }
   footer {
     grid-area: footer;
@@ -69,7 +69,7 @@
 // SIDEBAR
 .container-aside {
   background-color: var(--color-secondary);
-  width: 200px;
+  width: 250px;
   transition: width 0.3s ease;
   border-radius: 10px;
   border: 1px solid var(--color-white);
@@ -86,17 +86,17 @@
           display: flex;
           align-items: center;
           gap: 10px;
-          padding: 10px 16px;
+          padding: 6px 16px;
           color: var(--color-white);
           text-decoration: none;
-          font-size: 14px;
+          font-size: 12px;
           white-space: nowrap;
           transition: background 0.2s;
           cursor: pointer;
 
           .icons {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             flex-shrink: 0;
           }
           .nav-text {
@@ -148,7 +148,7 @@
 
     nav ul li a {
       justify-content: center;
-      padding: 10px 0;
+      padding: 6px 0;
       gap: 0;
 
       .nav-text,
@@ -175,11 +175,11 @@
     }
   }
   &:hover {
-    width: 200px;
+    width: 250px;
 
     nav ul li a {
       justify-content: flex-start;
-      padding: 10px 16px;
+      padding: 6px 16px;
       gap: 10px;
       .nav-text {
         opacity: 1;
@@ -209,14 +209,14 @@
     .reduce-sidebar {
       position: fixed;
       bottom: 60px;
-      left: 100px;
+      left: 125px;
       transition: left 0.3s ease;
     }
   }
   .reduce-sidebar {
     position: fixed;
     bottom: 60px;
-    left: 100px;
+    left: 125px;
   }
 }
 // CLASSE DE UTILIDADE PARA OCULTAR ELEMENTOS
@@ -231,6 +231,12 @@
   pointer-events: none;
   flex-shrink: 0;
 }
+//MAIN
+.container-main {
+  background: var(--color-secondary);
+  border: 1px solid var(--color-white);
+  border-radius: 10px;
+}
 // FOOTER
 .container-footer {
   display: flex;
@@ -238,7 +244,7 @@
   align-items: start;
 
   .text-developed {
-    font-size: 14px;
+    font-size: 12px;
     color: var(--color-blue-01);
   }
 }
