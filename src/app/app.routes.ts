@@ -1,14 +1,19 @@
 import { Routes } from '@angular/router';
-import { DashboardAdmin } from './dashboard/dashboard-admin/dashboard-admin';
+import { DashboardUser } from './modules/dashboard-user/dashboard-user';
+import { LoginUser } from './modules/login-user/login-user';
 
 export const routes: Routes = [
   {
-    path: 'dashboard-admin',
-    component: DashboardAdmin,
+    path: 'login-user',
+    component: LoginUser,
+  },
+  {
+    path: 'dashboard-user',
+    component: DashboardUser,
   },
   {
     path: '',
-    redirectTo: '/dashboard-admin',
+    redirectTo: '/dashboard-user',
     pathMatch: 'full',
   },
 ];

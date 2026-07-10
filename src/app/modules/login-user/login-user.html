@@ -1,0 +1,26 @@
+<div class="container-login">
+  <img src="images/logoOPPA-2.png" alt="logo" />
+  <form action="">
+    <div class="form-group">
+      <label for="badge">Crachá:</label>
+      <input
+        type="text"
+        id="badge"
+        placeholder="Insira o seu crachá"
+        [value]="loginModel().badge"
+      />
+      <small class="helper">Digite o crachá da sua empresa</small>
+    </div>
+    <div class="form-group">
+      <label for="password">Senha:</label>
+      <input
+        type="text"
+        id="password"
+        placeholder="Insira a sua senha"
+        [value]="loginModel().password"
+      />
+      <small class="helper">Digite a sua senha</small>
+    </div>
+    <button>Entrar</button>
+  </form>
+</div>
