@@ -5,7 +5,103 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
+  font-family: var(--font-primary);
 }
-img {
-  max-width: 400px;
+.container-login {
+  width: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+
+  .logo {
+    max-width: 300px;
+  }
+
+  form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 12px;
+
+    .form-group {
+      width: 70%;
+
+      label {
+        font-size: 14px;
+        font-weight: 400;
+        color: var(--color-white);
+        letter-spacing: 0.3px;
+      }
+      // WRAPPER - invólucro
+      .input-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 16px;
+        margin-top: 5px;
+        background: transparent;
+        border: 1px solid var(--color-white);
+        border-radius: 8px;
+        transition: border-color 0.2s;
+        // FOCUS-WITHIN - foco-dentro
+        &:focus-within {
+          border-color: var(--color-action);
+          outline: 2px solid var(--font-primary);
+          outline-offset: 2px;
+        }
+
+        .icon {
+          flex-shrink: 0; // Garante que o icone não encolha com a diminuição do container
+          width: 20px;
+          height: 20px;
+        }
+
+        input {
+          flex: 1;
+          min-width: 0;
+          border: none;
+          outline: none;
+          background: transparent;
+          color: var(--color-white);
+          font-size: 14px;
+
+          &::placeholder {
+            color: #aaa;
+            font-size: 300;
+          }
+        }
+      }
+    }
+
+    .error {
+      border-color: var(--color-negative);
+    }
+
+    .error-message {
+      color: var(--color-negative);
+      font-size: 10px;
+    }
+
+    .btn {
+      padding: 10px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      background: var(--color-action);
+      color: var(--color-white);
+      min-width: 120px;
+      min-height: 44px;
+    }
+
+    .btn-enter:hover {
+      border: 2px solid var(--color-white);
+    }
+  }
 }

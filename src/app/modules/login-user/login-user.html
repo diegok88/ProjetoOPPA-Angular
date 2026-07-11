@@ -1,26 +1,37 @@
 <div class="container-login">
-  <img src="images/logoOPPA-2.png" alt="logo" />
+  <img class="logo" src="images/logoOPPA-2.png" alt="logo" />
   <form action="">
     <div class="form-group">
       <label for="badge">Crachá:</label>
-      <input
-        type="text"
-        id="badge"
-        placeholder="Insira o seu crachá"
-        [value]="loginModel().badge"
-      />
-      <small class="helper">Digite o crachá da sua empresa</small>
+      <div class="input-wrapper">
+        <img class="icon" src="icons/badge.png" alt="cracha" loading="lazy" />
+        <input
+          type="text"
+          id="badge"
+          placeholder="Insira o seu crachá"
+          [value]="loginModel().badge"
+          (input)="onBadgeInput($any($event.target).value)"
+          inputmode="numeric"
+          maxlength="5"
+          [class.error]="badgeError()"
+        />
+      </div>
+      @if (badgeError()) {
+        <span class="error-message">Apenas números são permitidos</span>
+      }
     </div>
     <div class="form-group">
       <label for="password">Senha:</label>
-      <input
-        type="text"
-        id="password"
-        placeholder="Insira a sua senha"
-        [value]="loginModel().password"
-      />
-      <small class="helper">Digite a sua senha</small>
+      <div class="input-wrapper">
+        <img class="icon" src="icons/lock.png" alt="cracha" loading="lazy" />
+        <input
+          type="password"
+          id="password"
+          placeholder="Insira a sua senha"
+          [value]="loginModel().password"
+        />
+      </div>
     </div>
-    <button>Entrar</button>
+    <button class="btn btn-enter">Entrar</button>
   </form>
 </div>
