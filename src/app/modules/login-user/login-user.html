@@ -1,6 +1,6 @@
 <div class="container-login">
   <img class="logo" src="images/logoOPPA-2.png" alt="logo" />
-  <form action="">
+  <form (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label for="badge">Crachá:</label>
       <div class="input-wrapper">
@@ -13,11 +13,15 @@
           (input)="onBadgeInput($any($event.target).value)"
           inputmode="numeric"
           maxlength="5"
-          [class.error]="badgeError()"
+          [class.error]="badgeErrorNumber() || badgeEmptyFieldError()"
+          autocomplete="off"
         />
       </div>
-      @if (badgeError()) {
+      @if (badgeErrorNumber()) {
         <span class="error-message">Apenas números são permitidos</span>
+      }
+      @if (badgeEmptyFieldError()) {
+        <span class="error-message">O crachá é obrigatório</span>
       }
     </div>
     <div class="form-group">
@@ -25,13 +29,27 @@
       <div class="input-wrapper">
         <img class="icon" src="icons/lock.png" alt="cracha" loading="lazy" />
         <input
-          type="password"
+          [type]="showPassword() ? 'text' : 'password'"
           id="password"
           placeholder="Insira a sua senha"
           [value]="loginModel().password"
+          (input)="onPasswordInput($any($event.target).value)"
+          [class.error]="passwordEmptyFieldError()"
+          autocomplete="new-password"
+        />
+        <img
+          class="icon"
+          [src]="showPassword() ? 'icons/visibility_off.png' : 'icons/visibility.png'"
+          alt="visivel"
+          loading="lazy"
+          (click)="togglePasswordVisibility()"
+          style="cursor: pointer"
         />
       </div>
+      @if (passwordEmptyFieldError()) {
+        <span class="error-message">A senha é obrigatória</span>
+      }
     </div>
-    <button class="btn btn-enter">Entrar</button>
+    <button class="btn btn-enter" [disabled]="">Entrar</button>
   </form>
 </div>
