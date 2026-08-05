@@ -1,6 +1,6 @@
 <div class="container-login">
   <img class="logo" src="images/logoOPPA-2.png" alt="logo" />
-  <form (ngSubmit)="onSubmit()">
+  <form (ngSubmit)="onSubmit($event)">
     <div class="form-group">
       <label for="badge">Crachá:</label>
       <div class="input-wrapper">
@@ -8,9 +8,10 @@
         <input
           type="text"
           id="badge"
+          name="badge"
           placeholder="Insira o seu crachá"
-          [value]="loginModel().badge"
-          (input)="onBadgeInput($any($event.target).value)"
+          [ngModel]="loginModel().badge"
+          (ngModelChange)="onInput('badge', $event)"
           inputmode="numeric"
           maxlength="5"
           [class.error]="badgeErrorNumber() || badgeEmptyFieldError()"
@@ -31,9 +32,10 @@
         <input
           [type]="showPassword() ? 'text' : 'password'"
           id="password"
+          name="password"
           placeholder="Insira a sua senha"
-          [value]="loginModel().password"
-          (input)="onPasswordInput($any($event.target).value)"
+          [ngModel]="loginModel().password"
+          (ngModelChange)="onInput('password', $event)"
           [class.error]="passwordEmptyFieldError()"
           autocomplete="new-password"
         />
@@ -48,6 +50,30 @@
       </div>
       @if (passwordEmptyFieldError()) {
         <span class="error-message">A senha é obrigatória</span>
+      }
+    </div>
+    <div class="form-group">
+      <label for="enterprice">Crachá:</label>
+      <div class="input-wrapper">
+        <img class="icon" src="/icons/factory.png" alt="empresa" loading="lazy" />
+        <input
+          type="text"
+          id="enterprice"
+          name="enterprice"
+          placeholder="Insira o código da empresa"
+          [ngModel]="loginModel().enterprice"
+          (ngModelChange)="onInput('enterprice', $event)"
+          inputmode="numeric"
+          maxlength="5"
+          [class.error]="enterpriceErrorNumber() || enterpriceEmptyFieldError()"
+          autocomplete="off"
+        />
+      </div>
+      @if (badgeErrorNumber()) {
+        <span class="error-message">Apenas números são permitidos</span>
+      }
+      @if (badgeEmptyFieldError()) {
+        <span class="error-message">O código da empresa é obrigatório</span>
       }
     </div>
     <button class="btn btn-enter" [disabled]="">Entrar</button>
