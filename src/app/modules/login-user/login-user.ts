@@ -8,7 +8,7 @@ import { LoginData } from '../../../interfaces/login-data.interface';
   styleUrl: './login-user.scss',
 })
 export class LoginUser {
-  protected loginModel = signal<LoginData>({ badge: '', password: '' }); // Objeto armazena dados para o login
+  protected loginModel = signal<LoginData>({ badge: '', password: '', enterprice: NaN }); // Objeto armazena dados para o login
   protected badgeErrorNumber = signal<boolean>(false); // armazena valor boleano se contem ou não numeros
   protected badgeEmptyFieldError = signal<boolean>(false); // armazena valor boleano se esta vazio
   protected passwordEmptyFieldError = signal<boolean>(false); // armazena valor boleano se esta vazio
