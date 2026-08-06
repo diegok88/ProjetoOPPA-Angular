@@ -1,46 +1,41 @@
-import { Component, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
-import { SUBMENU_OPTIONS, SubmenuOptionAdmin } from '../../../const/sidebar-admin.const';
+import { Component, inject, signal } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { MenuItemService } from '../../services/menu-item.service';
 
 @Component({
   selector: 'app-dashboard-user',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, RouterOutlet],
   templateUrl: './dashboard-user.html',
   styleUrl: './dashboard-user.scss',
 })
 export class DashboardUser {
+  protected authService = inject(AuthService);
+  protected menuService = inject(MenuItemService);
+  private router = inject(Router);
+
+  protected menuItens = this.menuService.menuItens;
+
   // VARIAVEL DE ARMAZENAMENTO DO SUBMENU ATUAL ABERTO
-  protected activeSubmenu = signal<SubmenuOptionAdmin | null>(null);
+  protected activeSubmenu = signal<string | null>(null);
   // VARIAVEL DO SIDEBAR
   protected isSidebarCollapsed = signal<boolean>(true);
-  // FUNÇÃO DE ABERTURA DOS SUBMENUS
-  protected toggleOperacionalSubmenu(event: Event) {
+  // FUNÇÃO DE ABERTURA E FECHAMENTO DO SUBMENUS DO SIDEBAR MANUALMENTE
+  protected toggleSubmenu(chave: string | undefined, event: Event): void {
     event.preventDefault();
-    if (this.activeSubmenu() === SUBMENU_OPTIONS.Operacional) this.activeSubmenu.set(null);
-    else this.activeSubmenu.set(SUBMENU_OPTIONS.Operacional);
-  }
-  protected toggleSolicitacaoSubmenu(event: Event) {
-    event.preventDefault();
-    if (this.activeSubmenu() === SUBMENU_OPTIONS.Solicitacoes) this.activeSubmenu.set(null);
-    else this.activeSubmenu.set(SUBMENU_OPTIONS.Solicitacoes);
-  }
-  protected toggleEficienciaSubmenu(event: Event) {
-    event.preventDefault();
-    if (this.activeSubmenu() === SUBMENU_OPTIONS.Eficiencia) this.activeSubmenu.set(null);
-    else this.activeSubmenu.set(SUBMENU_OPTIONS.Eficiencia);
-  }
-  protected toggleTiposSubmenu(event: Event) {
-    event.preventDefault();
-    if (this.activeSubmenu() === SUBMENU_OPTIONS.Tipos) this.activeSubmenu.set(null);
-    else this.activeSubmenu.set(SUBMENU_OPTIONS.Tipos);
-  }
-  protected toggleUsuarioSubmenu(event: Event) {
-    event.preventDefault();
-    if (this.activeSubmenu() === SUBMENU_OPTIONS.Usuario) this.activeSubmenu.set(null);
-    else this.activeSubmenu.set(SUBMENU_OPTIONS.Usuario);
+    if (!chave) return;
+    if (this.activeSubmenu() === chave) this.activeSubmenu.set(null);
+    else this.activeSubmenu.set(chave);
   }
   // FUNÇÃO DE ABERTURA E FECHAMENTO DO SIDEBAR MANUALMENTE
-  protected toggleSidebar() {
-    this.isSidebarCollapsed.update((current) => !current);
+  protected toggleSidebar(): void {
+    this.isSidebarCollapsed.update((atual) => !atual);
+  }
+
+  protected logout(): void {
+    this.authService.logout().subscribe({
+      next: () => this.router.navigate(['/login-user']),
+      error: () => this.router.navigate(['/login-user']),
+    });
   }
 }

@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { LoginData } from '../../interfaces/login-data.interface';
-import { Observable, tap } from 'rxjs';
-import { AuthResponse } from '../../interfaces/auth-response.interface';
-import { UserGuard } from '../../interfaces/user-guard.interface';
+import { computed, inject, Injectable, signal } from '@angular/core';
+import { Observable, of, tap } from 'rxjs';
+import { ROLES_MAP } from '../const/role-map.const';
+import { AuthResponse } from '../interfaces/auth-response.interface';
+import { LoginData } from '../interfaces/login-data.interface';
+import { UserGuard } from '../interfaces/user-guard.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -11,8 +12,13 @@ import { UserGuard } from '../../interfaces/user-guard.interface';
 export class AuthService {
   private http = inject(HttpClient);
   private apiUrl = 'http://localhost:3000/auth';
-  private perfilSignal: UserGuard | null = null;
-  private perfilAtual: string | null = null;
+  private perfilSignal = signal<UserGuard | null>(null);
+
+  public role = computed(() => {
+    const perfil = this.perfilSignal();
+    if (!perfil) return null;
+    return ROLES_MAP[perfil.perfilId] || null;
+  });
 
   login(credencial: LoginData): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credencial);
@@ -21,24 +27,26 @@ export class AuthService {
   logout(): Observable<{ message: string }> {
     return this.http
       .post<{ message: string }>(`${this.apiUrl}/logout`, {})
-      .pipe(tap(() => (this.perfilCache = null)));
+      .pipe(tap(() => this.perfilSignal.set(null)));
   }
 
   obterPerfil(): Observable<UserGuard> {
+    const cache = this.perfilSignal();
+    if (cache) return of(cache);
     return this.http
       .get<UserGuard>(`${this.apiUrl}/profile`)
-      .pipe(tap((usuario) => (this.perfilCache = usuario)));
+      .pipe(tap((usuario) => this.perfilSignal.set(usuario)));
   }
 
-  setRole(perfil: string) {
-    this.perfilAtual = perfil;
+  getPerfil(): UserGuard | null {
+    return this.perfilSignal();
   }
 
   getRole(): string | null {
-    return this.perfilAtual;
+    return this.role();
   }
 
   isLoggedIn(): boolean {
-    return this.perfilAtual !== null;
+    return this.perfilSignal() !== null;
   }
 }
