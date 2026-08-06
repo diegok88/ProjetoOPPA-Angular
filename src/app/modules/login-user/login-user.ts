@@ -18,42 +18,53 @@ export class LoginUser {
   protected passwordTouched = signal<boolean>(false);
   protected enterpriceTouched = signal<boolean>(false);
   protected formSubmitted = signal<boolean>(false);
-  // Funções de validações: executa sempre que haver mudança nos campos
-  protected badgeErrorNumber = computed(() => {
+  // Funções de validações privada: executa sempre que haver mudança nos campos
+  private isBadgeEmpty = computed(() => this.loginModel().badge.trim().length === 0);
+  private isBadgeNotNumber = computed(() => {
     const value = this.loginModel().badge;
     const onlyNumbers = /^\d+$/.test(value);
     return !onlyNumbers && value.length > 0;
+  });
+  private isPasswordEmpty = computed(() => this.loginModel().password.trim().length === 0);
+  private isEnterpriceEmpty = computed(() => this.loginModel().enterprice.trim().length === 0);
+  private isEnterpriceNotNumber = computed(() => {
+    const value = this.loginModel().enterprice;
+    const onlyNumbers = /^\d+$/.test(value);
+    return !onlyNumbers && value.length > 0;
+  });
+  // Erros visiveis na tela
+  protected badgeErrorNumber = computed(() => {
+    return (this.bagdeTouched() || this.formSubmitted()) && this.isBadgeNotNumber();
   });
   protected badgeEmptyFieldError = computed(() => {
-    const value = this.loginModel().badge;
-    return value.trim().length === 0;
+    return (this.bagdeTouched() || this.formSubmitted()) && this.isBadgeEmpty();
   });
   protected passwordEmptyFieldError = computed(() => {
-    const value = this.loginModel().password;
-    return value.trim().length === 0;
+    return (this.passwordTouched() || this.formSubmitted()) && this.isPasswordEmpty();
   });
   protected enterpriceErrorNumber = computed(() => {
-    const value = this.loginModel().badge;
-    const onlyNumbers = /^\d+$/.test(value);
-    return !onlyNumbers && value.length > 0;
+    return (this.enterpriceTouched() || this.formSubmitted()) && this.isEnterpriceNotNumber();
   });
   protected enterpriceEmptyFieldError = computed(() => {
-    const value = this.loginModel().password;
-    return value.trim().length === 0;
+    return (this.enterpriceTouched() || this.formSubmitted()) && this.isEnterpriceEmpty();
   });
   // Validação geral somente ao enviar o post do login
   protected isFormValid = computed(() => {
-    const model = this.loginModel();
-    const badgeOk = model.badge.length > 0 && !this.badgeErrorNumber();
-    const passwordOk = model.password.length > 0 && !this.passwordEmptyFieldError();
-    const enterpriceOk = model.enterprice.length > 0 && !this.enterpriceEmptyFieldError();
+    const badgeOk = !this.badgeEmptyFieldError() && !this.badgeErrorNumber();
+    const passwordOk = !this.passwordEmptyFieldError();
+    const enterpriceOk = !this.enterpriceEmptyFieldError() && !this.enterpriceEmptyFieldError();
     return badgeOk && passwordOk && enterpriceOk;
   });
   // Função generica de atualização todos os inputs
   protected onInput(field: keyof LoginData, value: string): void {
     this.loginModel.update((model) => ({ ...model, [field]: value }));
   }
-
+  // Marca o campo como tocado ao perder o foco (blur)
+  protected onBlur(field: 'badge' | 'password' | 'enterprice'): void {
+    if (field === 'badge') this.bagdeTouched.set(true);
+    if (field === 'password') this.passwordTouched.set(true);
+    if (field === 'enterprice') this.enterpriceTouched.set(true);
+  }
   // Função de visualização da senha
   protected togglePasswordVisibility(): void {
     this.showPassword.update((value) => !value);
@@ -61,6 +72,7 @@ export class LoginUser {
   // Função de confirmação do login
   protected onSubmit(event: Event): void {
     event.preventDefault();
+    this.formSubmitted.set(true);
     if (!this.isFormValid()) {
       console.warn('Formulário inválido - não enviar');
       return;
