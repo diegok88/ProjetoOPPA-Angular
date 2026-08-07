@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { roleGuard } from './const/role.guard';
 import { DashboardUser } from './modules/dashboard-user/dashboard-user';
 import { LoginUser } from './modules/login-user/login-user';
+import { AccessDenied } from './modules/access-denied/access-denied';
 
 export const routes: Routes = [
   {
@@ -9,7 +10,7 @@ export const routes: Routes = [
     component: LoginUser,
   },
   {
-    path: '',
+    path: 'dashboard-user',
     component: DashboardUser,
     canActivate: [roleGuard],
     children: [
@@ -28,7 +29,12 @@ export const routes: Routes = [
     ],
   },
   {
-    path: '**',
-    redirectTo: '/login-user',
+    path: 'access-denied',
+    component: AccessDenied,
   },
+  { path: '', redirectTo: '/dashboard-user', pathMatch: 'full' },
+  { path: '**', redirectTo: '/login-user' },
 ];
+/*
+    
+*/

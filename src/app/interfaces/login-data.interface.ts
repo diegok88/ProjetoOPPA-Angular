@@ -1,5 +1,5 @@
 export interface LoginData {
-  badge: string; // crachá
-  password: string; // senha
-  enterprice: string; // codigo empresa
+  cracha: string; // crachá
+  senha: string; // senha
+  codEmpresa: string; // codigo empresa
 }

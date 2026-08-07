@@ -2,17 +2,17 @@
   <img class="logo" src="images/logoOPPA-2.png" alt="logo" />
   <form (ngSubmit)="onSubmit($event)">
     <div class="form-group">
-      <label for="badge">Crachá:</label>
+      <label for="cracha">Crachá:</label>
       <div class="input-wrapper">
         <img class="icon" src="icons/badge.png" alt="cracha" loading="lazy" />
         <input
           type="text"
-          id="badge"
-          name="badge"
+          id="cracha"
+          name="cracha"
           placeholder="Insira o seu crachá"
-          [ngModel]="loginModel().badge"
-          (ngModelChange)="onInput('badge', $event)"
-          (blur)="onBlur('badge')"
+          [ngModel]="loginModel().cracha"
+          (ngModelChange)="onInput('cracha', $event)"
+          (blur)="onBlur('cracha')"
           inputmode="numeric"
           maxlength="5"
           [class.error]="badgeErrorNumber() || badgeEmptyFieldError()"
@@ -27,17 +27,17 @@
       }
     </div>
     <div class="form-group">
-      <label for="password">Senha:</label>
+      <label for="senha">Senha:</label>
       <div class="input-wrapper">
         <img class="icon" src="icons/lock.png" alt="cracha" loading="lazy" />
         <input
           [type]="showPassword() ? 'text' : 'password'"
-          id="password"
-          name="password"
+          id="senha"
+          name="senha"
           placeholder="Insira a sua senha"
-          [ngModel]="loginModel().password"
-          (ngModelChange)="onInput('password', $event)"
-          (blur)="onBlur('password')"
+          [ngModel]="loginModel().senha"
+          (ngModelChange)="onInput('senha', $event)"
+          (blur)="onBlur('senha')"
           [class.error]="passwordEmptyFieldError()"
           autocomplete="new-password"
         />
@@ -55,17 +55,17 @@
       }
     </div>
     <div class="form-group">
-      <label for="enterprice">Crachá:</label>
+      <label for="codEmpresa">Crachá:</label>
       <div class="input-wrapper">
         <img class="icon" src="/icons/factory.png" alt="empresa" loading="lazy" />
         <input
           type="text"
-          id="enterprice"
-          name="enterprice"
+          id="codEmpresa"
+          name="codEmpresa"
           placeholder="Insira o código da empresa"
-          [ngModel]="loginModel().enterprice"
-          (ngModelChange)="onInput('enterprice', $event)"
-          (blur)="onBlur('enterprice')"
+          [ngModel]="loginModel().codEmpresa"
+          (ngModelChange)="onInput('codEmpresa', $event)"
+          (blur)="onBlur('codEmpresa')"
           inputmode="numeric"
           maxlength="5"
           [class.error]="enterpriceErrorNumber() || enterpriceEmptyFieldError()"

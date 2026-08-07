@@ -13,11 +13,16 @@ export class AuthService {
   private http = inject(HttpClient);
   private apiUrl = 'http://localhost:3000/auth';
   private perfilSignal = signal<UserGuard | null>(null);
+  private usuario = this.perfilSignal();
 
   public role = computed(() => {
     const perfil = this.perfilSignal();
-    if (!perfil) return null;
-    return ROLES_MAP[perfil.perfilId] || null;
+    console.log(perfil);
+    if (!perfil) {
+      console.log('Não reconhece perfil!');
+      return null;
+    }
+    return ROLES_MAP[perfil.desPerfil];
   });
 
   login(credencial: LoginData): Observable<AuthResponse> {
@@ -43,6 +48,7 @@ export class AuthService {
   }
 
   getRole(): string | null {
+    console.log(this.role());
     return this.role();
   }
 

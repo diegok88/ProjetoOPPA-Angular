@@ -14,7 +14,7 @@ export class LoginUser {
   private router = inject(Router);
   private auth = inject(AuthService);
   // Objeto armazena dados para o login
-  protected loginModel = signal<LoginData>({ badge: '', password: '', enterprice: '' });
+  protected loginModel = signal<LoginData>({ cracha: '', senha: '', codEmpresa: '' });
   // Armazena valor boleano para visualização da senha
   protected showPassword = signal<boolean>(false);
   // Estados de controle de toque/interação do usuário
@@ -23,16 +23,16 @@ export class LoginUser {
   protected enterpriceTouched = signal<boolean>(false);
   protected formSubmitted = signal<boolean>(false);
   // Funções de validações privada: executa sempre que haver mudança nos campos
-  private isBadgeEmpty = computed(() => this.loginModel().badge.trim().length === 0);
+  private isBadgeEmpty = computed(() => this.loginModel().cracha.trim().length === 0);
   private isBadgeNotNumber = computed(() => {
-    const value = this.loginModel().badge;
+    const value = this.loginModel().cracha;
     const onlyNumbers = /^\d+$/.test(value);
     return !onlyNumbers && value.length > 0;
   });
-  private isPasswordEmpty = computed(() => this.loginModel().password.trim().length === 0);
-  private isEnterpriceEmpty = computed(() => this.loginModel().enterprice.trim().length === 0);
+  private isPasswordEmpty = computed(() => this.loginModel().senha.trim().length === 0);
+  private isEnterpriceEmpty = computed(() => this.loginModel().senha.trim().length === 0);
   private isEnterpriceNotNumber = computed(() => {
-    const value = this.loginModel().enterprice;
+    const value = this.loginModel().codEmpresa;
     const onlyNumbers = /^\d+$/.test(value);
     return !onlyNumbers && value.length > 0;
   });
@@ -64,10 +64,10 @@ export class LoginUser {
     this.loginModel.update((model) => ({ ...model, [field]: value }));
   }
   // Marca o campo como tocado ao perder o foco (blur)
-  protected onBlur(field: 'badge' | 'password' | 'enterprice'): void {
-    if (field === 'badge') this.bagdeTouched.set(true);
-    if (field === 'password') this.passwordTouched.set(true);
-    if (field === 'enterprice') this.enterpriceTouched.set(true);
+  protected onBlur(field: 'cracha' | 'senha' | 'codEmpresa'): void {
+    if (field === 'cracha') this.bagdeTouched.set(true);
+    if (field === 'senha') this.passwordTouched.set(true);
+    if (field === 'codEmpresa') this.enterpriceTouched.set(true);
   }
   // Função de visualização da senha
   protected togglePasswordVisibility(): void {
@@ -84,8 +84,12 @@ export class LoginUser {
     this.auth.login(this.loginModel()).subscribe({
       next: () => {
         this.auth.obterPerfil().subscribe({
-          next: (usuario) => {
-            this.router.navigate(['']);
+          next: () => {
+            this.router.navigate(['/dashboard-user']);
+          },
+          error: (err) => {
+            console.error('Erro ao obter perfil:', err);
+            alert('Falha ao carregar perfil. Tente novamente.');
           },
         });
       },
