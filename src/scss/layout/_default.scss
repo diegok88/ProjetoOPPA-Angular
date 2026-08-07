@@ -1,0 +1,30 @@
+.default {
+  display: grid;
+  margin: 10px;
+  height: 100vh;
+
+  grid-template-rows: 40px 1fr 30px;
+  grid-template-areas:
+    'header'
+    'main'
+    'footer';
+}
+header {
+  grid-area: header;
+  width: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .logo-header {
+    height: 40px;
+  }
+}
+main {
+  grid-area: main;
+}
+footer {
+  grid-area: footer;
+  text-align: center;
+}
