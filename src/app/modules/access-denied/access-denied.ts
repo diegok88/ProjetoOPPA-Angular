@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-access-denied',
@@ -7,4 +7,10 @@ import { RouterLink } from '@angular/router';
   templateUrl: './access-denied.html',
   styleUrl: './access-denied.scss',
 })
-export class AccessDenied {}
+export class AccessDenied {
+  private router = inject(Router);
+  
+  protected voltarLogin(): void {
+    this.router.navigate(['/login-user']);
+  }
+}

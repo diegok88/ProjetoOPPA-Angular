@@ -1,13 +1,24 @@
 :host {
   width: 100%;
   height: 100vh;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  font-family: var(--font-primary);
 }
+
+.logo-header {
+  height: 50px;
+}
+.voltar-header {
+  padding: 5px 20px;
+  background-color: var(--color-secondary);
+  border-radius: 20px;
+  border: 1px solid var(--color-blue-01);
+  cursor: pointer;
+}
+.texto-header {
+  text-align: center;
+  color: var(--color-white);
+  font-size: 1em;
+}
+
 .container-login {
   width: 500px;
   display: flex;
@@ -104,4 +115,9 @@
       border: 2px solid var(--color-white);
     }
   }
+}
+
+.texto-footer {
+  color: var(--color-white);
+  font-size: 1em;
 }

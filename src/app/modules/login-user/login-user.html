@@ -1,84 +1,100 @@
-<div class="container-login">
-  <img class="logo" src="images/logoOPPA-2.png" alt="logo" />
-  <form (ngSubmit)="onSubmit($event)">
-    <div class="form-group">
-      <label for="cracha">Crachá:</label>
-      <div class="input-wrapper">
-        <img class="icon" src="icons/badge.png" alt="cracha" loading="lazy" />
-        <input
-          type="text"
-          id="cracha"
-          name="cracha"
-          placeholder="Insira o seu crachá"
-          [ngModel]="loginModel().cracha"
-          (ngModelChange)="onInput('cracha', $event)"
-          (blur)="onBlur('cracha')"
-          inputmode="numeric"
-          maxlength="5"
-          [class.error]="badgeErrorNumber() || badgeEmptyFieldError()"
-          autocomplete="off"
-        />
-      </div>
-      @if (badgeErrorNumber()) {
-        <span class="error-message">Apenas números são permitidos</span>
-      }
-      @if (badgeEmptyFieldError()) {
-        <span class="error-message">O crachá é obrigatório</span>
-      }
+<div class="default">
+  <header class="default-header">
+    <img class="logo-header" src="images/logoOPPA-1.png" alt="logo" />
+    <span class="voltar-header">
+      <p class="texto-header">Inicial</p>
+    </span>
+  </header>
+  <main class="default-main">
+    <div class="container-login">
+      <img class="logo" src="images/logoOPPA-2.png" alt="logo" />
+      <form (ngSubmit)="onSubmit($event)">
+        <div class="form-group">
+          <label for="cracha">Crachá:</label>
+          <div class="input-wrapper">
+            <img class="icon" src="icons/badge.png" alt="cracha" loading="lazy" />
+            <input
+              type="text"
+              id="cracha"
+              name="cracha"
+              placeholder="Insira o seu crachá"
+              [ngModel]="loginModel().cracha"
+              (ngModelChange)="onInput('cracha', $event)"
+              (blur)="onBlur('cracha')"
+              inputmode="numeric"
+              maxlength="5"
+              [class.error]="badgeErrorNumber() || badgeEmptyFieldError()"
+              autocomplete="off"
+            />
+          </div>
+          @if (badgeErrorNumber()) {
+            <span class="error-message">Apenas números são permitidos</span>
+          }
+          @if (badgeEmptyFieldError()) {
+            <span class="error-message">O crachá é obrigatório</span>
+          }
+        </div>
+        <div class="form-group">
+          <label for="senha">Senha:</label>
+          <div class="input-wrapper">
+            <img class="icon" src="icons/lock.png" alt="cracha" loading="lazy" />
+            <input
+              [type]="showPassword() ? 'text' : 'password'"
+              id="senha"
+              name="senha"
+              placeholder="Insira a sua senha"
+              [ngModel]="loginModel().senha"
+              (ngModelChange)="onInput('senha', $event)"
+              (blur)="onBlur('senha')"
+              [class.error]="passwordEmptyFieldError()"
+              autocomplete="new-password"
+            />
+            <img
+              class="icon"
+              [src]="showPassword() ? 'icons/visibility_off.png' : 'icons/visibility.png'"
+              alt="visivel"
+              loading="lazy"
+              (click)="togglePasswordVisibility()"
+              style="cursor: pointer"
+            />
+          </div>
+          @if (passwordEmptyFieldError()) {
+            <span class="error-message">A senha é obrigatória</span>
+          }
+        </div>
+        <div class="form-group">
+          <label for="codEmpresa">Crachá:</label>
+          <div class="input-wrapper">
+            <img class="icon" src="/icons/factory.png" alt="empresa" loading="lazy" />
+            <input
+              type="text"
+              id="codEmpresa"
+              name="codEmpresa"
+              placeholder="Insira o código da empresa"
+              [ngModel]="loginModel().codEmpresa"
+              (ngModelChange)="onInput('codEmpresa', $event)"
+              (blur)="onBlur('codEmpresa')"
+              inputmode="numeric"
+              maxlength="5"
+              [class.error]="enterpriceErrorNumber() || enterpriceEmptyFieldError()"
+              autocomplete="off"
+            />
+          </div>
+          @if (enterpriceErrorNumber()) {
+            <span class="error-message">Apenas números são permitidos</span>
+          }
+          @if (enterpriceEmptyFieldError()) {
+            <span class="error-message">O código da empresa é obrigatório</span>
+          }
+        </div>
+        <button type="submit" class="btn btn-enter" [disabled]="formSubmitted()">Entrar</button>
+      </form>
     </div>
-    <div class="form-group">
-      <label for="senha">Senha:</label>
-      <div class="input-wrapper">
-        <img class="icon" src="icons/lock.png" alt="cracha" loading="lazy" />
-        <input
-          [type]="showPassword() ? 'text' : 'password'"
-          id="senha"
-          name="senha"
-          placeholder="Insira a sua senha"
-          [ngModel]="loginModel().senha"
-          (ngModelChange)="onInput('senha', $event)"
-          (blur)="onBlur('senha')"
-          [class.error]="passwordEmptyFieldError()"
-          autocomplete="new-password"
-        />
-        <img
-          class="icon"
-          [src]="showPassword() ? 'icons/visibility_off.png' : 'icons/visibility.png'"
-          alt="visivel"
-          loading="lazy"
-          (click)="togglePasswordVisibility()"
-          style="cursor: pointer"
-        />
-      </div>
-      @if (passwordEmptyFieldError()) {
-        <span class="error-message">A senha é obrigatória</span>
-      }
-    </div>
-    <div class="form-group">
-      <label for="codEmpresa">Crachá:</label>
-      <div class="input-wrapper">
-        <img class="icon" src="/icons/factory.png" alt="empresa" loading="lazy" />
-        <input
-          type="text"
-          id="codEmpresa"
-          name="codEmpresa"
-          placeholder="Insira o código da empresa"
-          [ngModel]="loginModel().codEmpresa"
-          (ngModelChange)="onInput('codEmpresa', $event)"
-          (blur)="onBlur('codEmpresa')"
-          inputmode="numeric"
-          maxlength="5"
-          [class.error]="enterpriceErrorNumber() || enterpriceEmptyFieldError()"
-          autocomplete="off"
-        />
-      </div>
-      @if (enterpriceErrorNumber()) {
-        <span class="error-message">Apenas números são permitidos</span>
-      }
-      @if (enterpriceEmptyFieldError()) {
-        <span class="error-message">O código da empresa é obrigatório</span>
-      }
-    </div>
-    <button type="submit" class="btn btn-enter" [disabled]="formSubmitted()">Entrar</button>
-  </form>
+  </main>
+  <footer class="default-footer">
+    <p class="texto-footer">Desenvolvido por DDK</p>
+  </footer>
 </div>
+<!--
+    
+-->

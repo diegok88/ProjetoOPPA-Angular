@@ -1,21 +1,44 @@
-.acesso-negado {
+:host {
   width: 100%;
-  height: 100dvh;
+  height: 100vh;
+}
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  gap: 10px;
+.logo-header {
+  height: 50px;
 }
+
+.voltar-header {
+  padding: 5px 20px;
+  background-color: var(--color-secondary);
+  border-radius: 20px;
+  border: 1px solid var(--color-blue-01);
+  cursor: pointer;
+}
+
+.texto-header {
+  text-align: center;
+  color: var(--color-white);
+  font-size: 1em;
+}
+
 .imagem {
-  width: 800px;
-  height: 533px;
+  width: 700px;
+  height: 466px;
 }
+
 .texto-main {
   color: var(--color-white);
-  font-size: 3em;
+
+  &.info {
+    font-size: 3em;
+  }
+
+  &.mensagem {
+    margin-top: 10px;
+    font-size: 1.5em;
+  }
 }
+
 .texto-footer {
   color: var(--color-white);
   font-size: 1em;

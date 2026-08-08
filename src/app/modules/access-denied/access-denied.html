@@ -1,13 +1,14 @@
 <div class="default">
   <header class="default-header">
     <img class="logo-header" src="images/logoOPPA-1.png" alt="logo" />
-    <span>
-      <a routerLink="/login-user">Voltar ao login</a>
+    <span class="voltar-header" (click)="voltarLogin()">
+      <p class="texto-header">Voltar ao login</p>
     </span>
   </header>
   <main class="default-main">
     <img class="imagem" src="images/acesso-negado.png" alt="acesso negado" />
-    <p class="texto-main">acesso negado</p>
+    <p class="texto-main info">Acesso Negado</p>
+    <p class="texto-main mensagem">Usuário não autorizado, verifique com seu gestor!</p>
   </main>
   <footer class="default-footer">
     <p class="texto-footer">Desenvolvido por DDK</p>
