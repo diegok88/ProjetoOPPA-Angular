@@ -17,11 +17,11 @@ export class MenuItemService {
     },
     {
       rotulo: 'Gestão',
-      icone: 'icons/badge.png',
+      icone: 'icons/group.png',
       chave: 'gestao',
       papeis: ['ASSISTENCIA - NIVEL 1', 'ADMINISTRADOR - NIVEL 1'],
       children: [
-        { rotulo: 'Cadastros', icone: 'icons/add_box.png', caminho: 'gestao/cadastros' },
+        { rotulo: 'Cadastros', icone: 'icons/badge.png', caminho: 'gestao/cadastros' },
         {
           rotulo: 'Alocações',
           icone: 'icons/swap_horizontal_circle.png',
@@ -33,14 +33,26 @@ export class MenuItemService {
           caminho: 'gestao/dispensas',
         },
         { rotulo: 'Penalidades', icone: 'icons/dangerous.png', caminho: 'gestao/penalidades' },
-        { rotulo: 'Perfil', icone: 'icons/assignment_ind.png', caminho: 'gestao/perfil' },
-        { rotulo: 'Penalidades', icone: 'icons/dangerous.png', caminho: 'gestao/penalidades' },
-        { rotulo: 'Dispensas', icone: 'icons/calendar_add_on.png', caminho: 'gestao/dispensas' },
-        { rotulo: 'Jornadas', icone: 'icons/schedule.png', caminho: 'gestao/jornadas' },
+      ],
+    },
+    {
+      rotulo: 'Assistência',
+      icone: 'icons/add_box.png',
+      chave: 'assistencia',
+      papeis: ['ASSISTENCIA - NIVEL 1'],
+      children: [
+        { rotulo: 'Perfil', icone: 'icons/assignment_ind.png', caminho: 'perfil' },
+        { rotulo: 'Penalidades', icone: 'icons/dangerous.png', caminho: 'assistencia/penalidades' },
+        {
+          rotulo: 'Dispensas',
+          icone: 'icons/calendar_add_on.png',
+          caminho: 'assistencia/dispensas',
+        },
+        { rotulo: 'Jornadas', icone: 'icons/schedule.png', caminho: 'assistencia/jornadas' },
         {
           rotulo: 'Estados de Jornadas',
           icone: 'icons/search_activity.png',
-          caminho: 'gestao/estados-jornadas',
+          caminho: 'assistencia/estados-jornadas',
         },
       ],
     },

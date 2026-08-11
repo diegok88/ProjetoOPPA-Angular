@@ -6,7 +6,7 @@
   height: 100vh;
 
   grid-template-columns: auto 1fr 1fr;
-  grid-template-rows: 40px 1fr 30px;
+  grid-template-rows: 50px 1fr 50px;
   grid-template-areas:
     'header header header'
     'aside main main'

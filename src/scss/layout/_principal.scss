@@ -15,12 +15,18 @@
 
 .principal-cards {
   display: grid;
-  height: 70vh;
+  height: 75vh;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: 1fr 1fr 2fr;
+  grid-template-rows: 2fr 2fr 4fr;
   gap: 20px;
   margin: 10px 20px;
   padding: 0;
+}
+
+@media (max-height: 650px) {
+  .principal-cards {
+    height: auto;
+  }
 }
 
 .card {

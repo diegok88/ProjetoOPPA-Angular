@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Observable, of, tap } from 'rxjs';
+import { RequestHttp } from '../const/requests.const';
 import { ROLES_MAP } from '../const/role-map.const';
 import { AuthResponse } from '../interfaces/auth-response.interface';
 import { LoginData } from '../interfaces/login-data.interface';
@@ -11,7 +12,7 @@ import { UserGuard } from '../interfaces/user-guard.interface';
 })
 export class AuthService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:3000/auth';
+  private apiUrl = RequestHttp.auth;
   private perfilSignal = signal<UserGuard | null>(null);
 
   public usuario = this.perfilSignal.asReadonly();

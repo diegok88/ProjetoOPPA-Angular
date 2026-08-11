@@ -23,11 +23,7 @@
         @for (item of menuItens(); track item.rotulo) {
           @if (!item.children) {
             <li>
-              <a
-                [routerLink]="'/' + item.caminho"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-              >
+              <a [routerLink]="['/dashboard-user', item.caminho]" routerLinkActive="active">
                 <img class="icons" [src]="item.icone" [alt]="item.rotulo" />
                 <span class="nav-text" [class.hidden]="isSidebarCollapsed()">{{
                   item.rotulo
@@ -52,7 +48,7 @@
               <ul class="submenu" [class.open]="activeSubmenu() === item.chave">
                 @for (sub of item.children; track sub.rotulo) {
                   <li>
-                    <a [routerLink]="'/' + sub.caminho" routerLinkActive="active">
+                    <a [routerLink]="['/dashboard-user', sub.caminho]" routerLinkActive="active">
                       <img class="icons" [src]="sub.icone" alt="sub.rotulo" />
                       <span class="nav-text">{{ sub.rotulo }}</span>
                     </a>
