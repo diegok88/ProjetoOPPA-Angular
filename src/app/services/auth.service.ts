@@ -13,7 +13,8 @@ export class AuthService {
   private http = inject(HttpClient);
   private apiUrl = 'http://localhost:3000/auth';
   private perfilSignal = signal<UserGuard | null>(null);
-  private usuario = this.perfilSignal();
+
+  public usuario = this.perfilSignal.asReadonly();
 
   public role = computed(() => {
     const perfil = this.perfilSignal();

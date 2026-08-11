@@ -12,7 +12,7 @@
     height: 40px;
   }
   .container-centralized {
-    width: 203px;
+    width: 220px;
     display: flex;
     &.center {
       justify-content: center;
@@ -191,6 +191,10 @@
     position: fixed;
     bottom: 60px;
     left: 125px;
+
+    .redunce {
+      cursor: pointer;
+    }
   }
 }
 // CLASSE DE UTILIDADE PARA OCULTAR ELEMENTOS

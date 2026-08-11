@@ -15,6 +15,7 @@ export class DashboardUser {
   private router = inject(Router);
 
   protected menuItens = this.menuService.menuItens;
+  protected readonly usuario = this.authService.usuario;
 
   // VARIAVEL DE ARMAZENAMENTO DO SUBMENU ATUAL ABERTO
   protected activeSubmenu = signal<string | null>(null);

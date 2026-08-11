@@ -91,6 +91,11 @@ export class MenuItemService {
       children: [
         { rotulo: 'Empresa', icone: 'icons/add_business.png', caminho: 'empresa/setores' },
         { rotulo: 'Setores', icone: 'icons/add_column_right.png', caminho: 'empresa/setores' },
+        {
+          rotulo: 'Competência Setorial',
+          icone: 'icons/demography.png',
+          caminho: 'empresa/competenciasetorial',
+        },
       ],
     },
     {

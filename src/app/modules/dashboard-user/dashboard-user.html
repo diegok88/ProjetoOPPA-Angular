@@ -4,12 +4,12 @@
       <img class="logo" src="images/logoOPPA-1.png" alt="logo" />
     </div>
     <div class="container-centralized center">
-      <h1>S. A. Têxteis Ltda</h1>
+      <h1>{{ usuario()?.desEmpresa }}</h1>
     </div>
     <div class="container-user-logout">
       <span class="user">
         <img class="icons" src="icons/account_circle.png" alt="usuario" />
-        <h3>6067</h3>
+        <h3>{{ usuario()?.cracha }}</h3>
       </span>
       <span class="logout" (click)="logout()">
         <img class="icons" src="icons/exit_to_app.png" alt="sair" />
@@ -66,13 +66,12 @@
     </nav>
     <!-- HABILITA A REDUÇÃO DO SIDEBAR -->
     <div class="reduce-sidebar">
-      <span (click)="toggleSidebar()">
+      <span class="redunce" (click)="toggleSidebar()">
         <img class="icons" src="icons/dock_to_right.png" alt="Reduzir Sidebar" />
       </span>
     </div>
   </aside>
   <main class="container-main">
-    <p>main</p>
     <router-outlet></router-outlet>
   </main>
   <footer class="container-footer">
