@@ -12,18 +12,18 @@ export const routes: Routes = [
   {
     path: 'dashboard-user',
     component: DashboardUser,
-    canActivate: [roleGuard],
+    //canActivate: [roleGuard],
     children: [
       {
         path: 'principal',
         loadComponent: () => import('./components/principal/principal').then((m) => m.Principal),
-        canActivate: [roleGuard],
+        //canActivate: [roleGuard],
         data: { roles: ['ASSISTENCIA - NIVEL 1', 'ADMINISTRADOR - NIVEL 1'] },
       },
       {
         path: 'perfil',
         loadComponent: () => import('./components/perfil/perfil').then((m) => m.Perfil),
-        canActivate: [roleGuard],
+        //canActivate: [roleGuard],
         data: { roles: ['ASSISTENCIA - NIVEL 1'] },
       },
       //  Adicione aqui as outras subrotas declaradas no MenuService
