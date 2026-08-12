@@ -1,8 +1,9 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { PerfilService } from '../../services/perfil.service';
 import { FormsModule } from '@angular/forms';
+import { PerfilService } from '../../services/perfil.service';
 
-type Operacao = 'inicial' | 'cadastrar';
+type Operacao = 'inicial' | 'cadastrar' | 'registro';
+type Registro = 'informacao' | 'atualizar' | 'inativar' | 'eliminar';
 
 @Component({
   selector: 'app-perfil',
@@ -15,6 +16,7 @@ export class Perfil implements OnInit {
   protected readonly listar = this.perfilService.perfil;
 
   protected operacaoEstado = signal<string>('inicial');
+  protected registroEstado = signal<string>('informacao');
 
   ngOnInit(): void {
     this.perfilService.listar();
@@ -26,5 +28,9 @@ export class Perfil implements OnInit {
 
   protected mudarOperacao(operacao: Operacao): void {
     this.operacaoEstado.set(operacao);
+  }
+
+  protected mudarRegistro(registro: Registro): void {
+    this.registroEstado.set(registro);
   }
 }

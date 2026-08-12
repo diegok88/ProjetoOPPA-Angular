@@ -2,7 +2,10 @@
 .operacao-container,
 .operacao-acao,
 .operacao-lista,
-.operacao-inicial {
+.operacao-inicial,
+.operacao-forms,
+.operacao-cadastrar,
+.operacao-titulo {
   display: flex;
   gap: 10px;
 }
@@ -17,7 +20,7 @@
 }
 .operacao-acao,
 .operacao-lista {
-  height: 70vh;
+  height: 80vh;
   border: 1px solid var(--color-white);
   border-radius: 10px;
 }
@@ -31,7 +34,7 @@
   .operacao-tabela {
     width: 100%;
     border-collapse: collapse;
-    font-size: 14px;
+    font-size: 12px;
   }
   .operacao-coluna,
   .operacao-dado {
@@ -55,6 +58,21 @@
   justify-content: center;
   align-items: center;
 
+  .operacao-inicial,
+  .operacao-cadastrar {
+    animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   .operacao-inicial {
     flex-direction: column;
     align-items: center;
@@ -62,6 +80,43 @@
 
   .operacao-texto {
     font-size: 2em;
+  }
+
+  .operacao-cadastrar {
+    height: 100%;
+    width: 100%;
+    padding: 10px;
+
+    flex-direction: column;
+
+    .operacao-titulo {
+      justify-content: space-between;
+      align-items: center;
+
+      .operacao-voltar {
+        cursor: pointer;
+      }
+    }
+
+    .operacao-forms {
+      min-height: 95%;
+      padding: 20px;
+      border-top: 1px solid var(--color-white);
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .form-group,
+    .form-input {
+      width: 80%;
+      display: flex;
+      flex-direction: column;
+    }
+    .form-group {
+      align-items: center;
+      justify-content: center;
+    }
   }
 
   .operacao-botao {
@@ -74,8 +129,35 @@
     border-radius: 10px;
     cursor: pointer;
   }
+
   .operacao-botao:hover {
     box-sizing: border-box;
     outline: 2px solid var(--color-white);
+  }
+}
+
+@media (max-height: 650px) {
+  .operacao-acao,
+  .operacao-lista {
+    height: 70vh;
+  }
+  .operacao-acao {
+    .operacao-texto {
+      font-size: 20px;
+    }
+    .operacao-botao {
+      font-size: 14px;
+    }
+  }
+  .operacao-lista {
+    .operacao-tabela {
+      font-size: 11px;
+    }
+    .operacao-coluna {
+      padding: 5px 8px;
+    }
+    .operacao-dado {
+      padding: 2px 8px;
+    }
   }
 }

@@ -1,0 +1,63 @@
+.registro-selecao input {
+  display: none;
+}
+
+.registro-selecao {
+  --container_width: 600px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 10px;
+  width: var(--container_width);
+  border: 1px solid var(--color-white);
+}
+
+.registro-selecao label {
+  width: 100%;
+  padding: 10px 20px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  letter-spacing: 0.3px;
+  font-size: 1em;
+}
+
+.selecao {
+  display: none;
+  position: absolute;
+  height: 100%;
+  width: calc(var(--container_width) / 4);
+  z-index: 9;
+  left: 0;
+  top: 0;
+  transition: 0.3s ease;
+}
+
+.registro-selecao label:has(input:checked) {
+  color: var(--color-white);
+}
+
+.registro-selecao label:has(input:checked) ~ .selecao {
+  background-color: var(--color-primary);
+  border-radius: 10px;
+  display: inline-block;
+}
+
+.registro-selecao label:nth-child(1):has(input:checked) ~ .selecao {
+  transform: translateX(calc(var(--container_width) * 0 / 4));
+}
+
+.registro-selecao label:nth-child(2):has(input:checked) ~ .selecao {
+  transform: translateX(calc(var(--container_width) * 1 / 4));
+}
+
+.registro-selecao label:nth-child(3):has(input:checked) ~ .selecao {
+  transform: translateX(calc(var(--container_width) * 2 / 4));
+}
+
+.registro-selecao label:nth-child(4):has(input:checked) ~ .selecao {
+  transform: translateX(calc(var(--container_width) * 3 / 4));
+}

@@ -14,7 +14,12 @@
             <td class="operacao-dado">{{ item?.codigo }}</td>
             <td class="operacao-dado">{{ item?.descricao }}</td>
             <td class="operacao-dado">
-              <img class="operacao-icone" src="icons/more_horiz.png" alt="Ação" />
+              <img
+                class="operacao-icone"
+                src="icons/more_horiz.png"
+                alt="Ação"
+                (click)="mudarOperacao('registro')"
+              />
             </td>
           </tr>
         }
@@ -23,31 +28,110 @@
     <div class="operacao-acao">
       @switch (operacaoEstado()) {
         @case ('inicial') {
-          <div class="operacao-inicial">
+          <section class="operacao-inicial">
             <img class="operacao-img" src="images/4151017.png" alt="Perfil" />
             <span class="operacao-texto">Cadastrar um novo perfil?</span>
             <button class="operacao-botao" (click)="mudarOperacao('cadastrar')">Clique aqui</button>
-          </div>
+          </section>
         }
         @case ('cadastrar') {
-          <div class="operacao-cadastrar">
-            <span>Cadastrar Perfil</span>
-            <form>
+          <section class="operacao-cadastrar">
+            <div class="operacao-titulo">
+              <span>Cadastrar Perfil</span>
+              <img
+                class="operacao-voltar"
+                src="icons/arrow_circle_left.png"
+                alt="Voltar"
+                (click)="mudarOperacao('inicial')"
+              />
+            </div>
+            <form class="operacao-forms">
               <div class="form-group">
-                <label for="descricao">Descrição:</label>
-                <div class="input-wrapper">
-                  <input
-                    type="text"
-                    id="descricao"
-                    name="descricao"
-                    placeholder="Insira a descrição do perfil"
-                    autocomplete="off"
-                  />
+                <div class="form-input">
+                  <label for="descricao" class="form-label">Descrição:</label>
+                  <div class="form-wrapper">
+                    <input
+                      type="text"
+                      id="descricao"
+                      name="descricao"
+                      placeholder="Insira a descrição do perfil"
+                      autocomplete="off"
+                    />
+                  </div>
                 </div>
               </div>
-              <button>Cadastrar</button>
+              <button class="operacao-botao">Cadastrar</button>
             </form>
-          </div>
+          </section>
+        }
+        @case ('registro') {
+          <section class="operacao-registro">
+            <div class="registro-selecao">
+              <label>
+                <input
+                  type="radio"
+                  id="valor-1"
+                  name="valor-radio"
+                  value="informacao"
+                  [(ngModel)]="registroEstado"
+                />
+                <span>Informação</span>
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  id="valor-2"
+                  name="valor-radio"
+                  value="atualizar"
+                  [(ngModel)]="registroEstado"
+                />
+                <span>Atualizar</span>
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  id="valor-3"
+                  name="valor-radio"
+                  value="inativar"
+                  [(ngModel)]="registroEstado"
+                />
+                <span>Inativar</span>
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  id="valor-4"
+                  name="valor-radio"
+                  value="eliminar"
+                  [(ngModel)]="registroEstado"
+                />
+                <span>Eliminar</span>
+              </label>
+              <span class="selecao"></span>
+            </div>
+            @switch (registroEstado()) {
+              @case ('informacao') {
+                <div class="registro-informacao">
+                  <span>Informação</span>
+                </div>
+              }
+              @case ('atualizar') {
+                <div class="registro-atualizar">
+                  <span>Atualizar</span>
+                </div>
+              }
+              @case ('inativar') {
+                <div class="registro-inativar">
+                  <span>Inativar</span>
+                </div>
+              }
+              @case ('eliminar') {
+                <div class="registro-eliminar">
+                  <span>Eliminar</span>
+                </div>
+              }
+            }
+          </section>
         }
       }
     </div>
