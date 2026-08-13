@@ -3,7 +3,7 @@
 }
 
 .registro-selecao {
-  --container_width: 600px;
+  --container_width: 900px;
   position: relative;
   display: flex;
   align-items: center;
@@ -29,7 +29,7 @@
   display: none;
   position: absolute;
   height: 100%;
-  width: calc(var(--container_width) / 4);
+  width: calc(var(--container_width) / 5);
   z-index: 9;
   left: 0;
   top: 0;
@@ -47,17 +47,34 @@
 }
 
 .registro-selecao label:nth-child(1):has(input:checked) ~ .selecao {
-  transform: translateX(calc(var(--container_width) * 0 / 4));
+  transform: translateX(calc(var(--container_width) * 0 / 5));
 }
 
 .registro-selecao label:nth-child(2):has(input:checked) ~ .selecao {
-  transform: translateX(calc(var(--container_width) * 1 / 4));
+  transform: translateX(calc(var(--container_width) * 1 / 5));
 }
 
 .registro-selecao label:nth-child(3):has(input:checked) ~ .selecao {
-  transform: translateX(calc(var(--container_width) * 2 / 4));
+  transform: translateX(calc(var(--container_width) * 2 / 5));
 }
 
 .registro-selecao label:nth-child(4):has(input:checked) ~ .selecao {
-  transform: translateX(calc(var(--container_width) * 3 / 4));
+  transform: translateX(calc(var(--container_width) * 3 / 5));
+}
+
+.registro-selecao label:nth-child(5):has(input:checked) ~ .selecao {
+  transform: translateX(calc(var(--container_width) * 4 / 5));
+}
+
+@media (max-width: 1550px) {
+  .registro-selecao {
+    --container_width: 700px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    border-radius: 10px;
+    width: var(--container_width);
+    border: 1px solid var(--color-white);
+  }
 }

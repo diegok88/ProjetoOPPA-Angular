@@ -18,7 +18,7 @@
                 class="operacao-icone"
                 src="icons/more_horiz.png"
                 alt="Ação"
-                (click)="mudarOperacao('registro')"
+                (click)="mudarOperacao('registro', item)"
               />
             </td>
           </tr>
@@ -107,27 +107,175 @@
                 />
                 <span>Eliminar</span>
               </label>
+              <label>
+                <input
+                  type="radio"
+                  id="valor-5"
+                  name="valor-radio"
+                  value="auditoria"
+                  [(ngModel)]="registroEstado"
+                />
+                <span>Auditoria</span>
+              </label>
               <span class="selecao"></span>
             </div>
             @switch (registroEstado()) {
               @case ('informacao') {
-                <div class="registro-informacao">
-                  <span>Informação</span>
+                <div class="registro-container">
+                  <div class="operacao-titulo">
+                    <span>Dados do Perfil</span>
+                    <img
+                      class="operacao-voltar"
+                      src="icons/arrow_circle_left.png"
+                      alt="Voltar"
+                      (click)="mudarOperacao('inicial')"
+                    />
+                  </div>
+                  <div class="registro-informacao">
+                    <ul>
+                      <li>
+                        <span>Id:</span><span>{{ buscar()?.id }}</span>
+                      </li>
+                      <li>
+                        <span>Código:</span><span>{{ buscar()?.codigo }}</span>
+                      </li>
+                      <li>
+                        <span>Descrição:</span><span>{{ buscar()?.descricao }}</span>
+                      </li>
+                      <li>
+                        <span>Status:</span><span>{{ buscar()?.status }}</span>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               }
               @case ('atualizar') {
-                <div class="registro-atualizar">
-                  <span>Atualizar</span>
+                <div class="registro-container">
+                  <div class="operacao-titulo">
+                    <span>Atualizar o Perfil</span>
+                    <img
+                      class="operacao-voltar"
+                      src="icons/arrow_circle_left.png"
+                      alt="Voltar"
+                      (click)="mudarOperacao('inicial')"
+                    />
+                  </div>
+                  <div class="registro-atualizar">
+                    <ul>
+                      <li>
+                        <span>Id:</span><span>{{ buscar()?.id }}</span>
+                      </li>
+                      <li>
+                        <span>Código:</span><span>{{ buscar()?.codigo }}</span>
+                      </li>
+                      <li class="registro-linha">
+                        <span>Descrição:</span
+                        ><span
+                          ><div class="form-wrapper atualizar">
+                            <input
+                              type="text"
+                              id="descricao"
+                              name="descricao"
+                              placeholder="Insira a descrição do perfil"
+                              autocomplete="off"
+                            /></div
+                        ></span>
+                      </li>
+                      <li>
+                        <span>Status:</span><span>{{ buscar()?.status }}</span>
+                      </li>
+                    </ul>
+                    <div>
+                      <button class="operacao-botao">Atualizar</button>
+                    </div>
+                  </div>
                 </div>
               }
               @case ('inativar') {
-                <div class="registro-inativar">
-                  <span>Inativar</span>
+                <div class="registro-container">
+                  <div class="operacao-titulo">
+                    <span>Inativar o Perfil</span>
+                    <img
+                      class="operacao-voltar"
+                      src="icons/arrow_circle_left.png"
+                      alt="Voltar"
+                      (click)="mudarOperacao('inicial')"
+                    />
+                  </div>
+                  <div class="registro-informacao">
+                    <ul>
+                      <li>
+                        <span>Id:</span><span>{{ buscar()?.id }}</span>
+                      </li>
+                      <li>
+                        <span>Código:</span><span>{{ buscar()?.codigo }}</span>
+                      </li>
+                      <li>
+                        <span>Descrição:</span><span>{{ buscar()?.descricao }}</span>
+                      </li>
+                      <li>
+                        <span>Status:</span><span>{{ buscar()?.status }}</span>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               }
               @case ('eliminar') {
-                <div class="registro-eliminar">
-                  <span>Eliminar</span>
+                <div class="registro-container">
+                  <div class="operacao-titulo">
+                    <span>Eliminar o Perfil</span>
+                    <img
+                      class="operacao-voltar"
+                      src="icons/arrow_circle_left.png"
+                      alt="Voltar"
+                      (click)="mudarOperacao('inicial')"
+                    />
+                  </div>
+                  <div class="registro-informacao">
+                    <ul>
+                      <li>
+                        <span>Id:</span><span>{{ buscar()?.id }}</span>
+                      </li>
+                      <li>
+                        <span>Código:</span><span>{{ buscar()?.codigo }}</span>
+                      </li>
+                      <li>
+                        <span>Descrição:</span><span>{{ buscar()?.descricao }}</span>
+                      </li>
+                      <li>
+                        <span>Status:</span><span>{{ buscar()?.status }}</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              }
+              @case ('auditoria') {
+                <div class="registro-container">
+                  <div class="operacao-titulo">
+                    <span>Auditoria do Perfil</span>
+                    <img
+                      class="operacao-voltar"
+                      src="icons/arrow_circle_left.png"
+                      alt="Voltar"
+                      (click)="mudarOperacao('inicial')"
+                    />
+                  </div>
+                  <div class="registro-informacao">
+                    <ul>
+                      <li>
+                        <span>Id:</span><span>{{ buscar()?.id }}</span>
+                      </li>
+                      <li>
+                        <span>Código:</span><span>{{ buscar()?.codigo }}</span>
+                      </li>
+                      <li>
+                        <span>Descrição:</span><span>{{ buscar()?.descricao }}</span>
+                      </li>
+                      <li>
+                        <span>Status:</span><span>{{ buscar()?.status }}</span>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               }
             }
