@@ -137,13 +137,14 @@
         }
       }
     }
-    .registro-atualizar {
+    .registro-atualizar,
+    .registro-inativar,
+    .registro-eliminar {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
       height: 100%;
-      width: 100%;
       ul {
         border-top: 1px solid var(--color-white);
         width: 100%;
@@ -152,6 +153,10 @@
           list-style: none;
           display: flex;
           justify-content: space-between;
+
+          .registro-span {
+            width: 40%;
+          }
         }
         .registro-linha {
           align-items: center;

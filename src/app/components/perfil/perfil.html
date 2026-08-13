@@ -45,7 +45,7 @@
                 (click)="mudarOperacao('inicial')"
               />
             </div>
-            <form class="operacao-forms">
+            <form (ngSubmit)="cadastrar($event)" class="operacao-forms">
               <div class="form-group">
                 <div class="form-input">
                   <label for="descricao" class="form-label">Descrição:</label>
@@ -55,12 +55,19 @@
                       id="descricao"
                       name="descricao"
                       placeholder="Insira a descrição do perfil"
+                      [ngModel]="perfilModel().descricao"
+                      (ngModelChange)="onInput('descricao', $event)"
+                      (blur)="onBlur('descricao')"
+                      [class.error]="descricaoEmptyFielsError()"
                       autocomplete="off"
                     />
                   </div>
+                  @if (descricaoEmptyFielsError()) {
+                    <span class="error-message">O descrição é obrigatório</span>
+                  }
                 </div>
               </div>
-              <button class="operacao-botao">Cadastrar</button>
+              <button type="submit" class="operacao-botao">Cadastrar</button>
             </form>
           </section>
         }
@@ -170,16 +177,24 @@
                       </li>
                       <li class="registro-linha">
                         <span>Descrição:</span
-                        ><span
+                        ><span class="registro-span"
                           ><div class="form-wrapper atualizar">
                             <input
                               type="text"
                               id="descricao"
                               name="descricao"
                               placeholder="Insira a descrição do perfil"
+                              [ngModel]="perfilModel().descricao"
+                              (ngModelChange)="onInput('descricao', $event)"
+                              (blur)="onBlur('descricao')"
+                              [class.error]="descricaoEmptyFielsError()"
                               autocomplete="off"
-                            /></div
-                        ></span>
+                            />
+                          </div>
+                          @if (descricaoEmptyFielsError()) {
+                            <span class="error-message">O descrição é obrigatório</span>
+                          }
+                        </span>
                       </li>
                       <li>
                         <span>Status:</span><span>{{ buscar()?.status }}</span>
@@ -202,7 +217,7 @@
                       (click)="mudarOperacao('inicial')"
                     />
                   </div>
-                  <div class="registro-informacao">
+                  <div class="registro-inativar">
                     <ul>
                       <li>
                         <span>Id:</span><span>{{ buscar()?.id }}</span>
@@ -217,6 +232,9 @@
                         <span>Status:</span><span>{{ buscar()?.status }}</span>
                       </li>
                     </ul>
+                    <div>
+                      <button class="operacao-botao">Inativar</button>
+                    </div>
                   </div>
                 </div>
               }
@@ -231,7 +249,7 @@
                       (click)="mudarOperacao('inicial')"
                     />
                   </div>
-                  <div class="registro-informacao">
+                  <div class="registro-eliminar">
                     <ul>
                       <li>
                         <span>Id:</span><span>{{ buscar()?.id }}</span>
@@ -246,6 +264,9 @@
                         <span>Status:</span><span>{{ buscar()?.status }}</span>
                       </li>
                     </ul>
+                    <div>
+                      <button class="operacao-botao">Eliminar</button>
+                    </div>
                   </div>
                 </div>
               }

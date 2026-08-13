@@ -9,7 +9,7 @@
   align-items: center;
   gap: 10px;
   padding: 10px 16px;
-  margin-top: 5px;
+  margin-bottom: 5px;
   background: transparent;
   border: 1px solid var(--color-white);
   border-radius: 8px;
@@ -35,4 +35,13 @@
       font-size: 300;
     }
   }
+}
+
+.error {
+  border-color: var(--color-negative);
+}
+
+.error-message {
+  color: var(--color-negative);
+  font-size: 10px;
 }

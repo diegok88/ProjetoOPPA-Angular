@@ -96,8 +96,17 @@ export class LoginUser {
       error: (err) => {
         console.error(err);
         alert('Falha no login. Verifique suas credenciais!');
+        this.resetForm();
       },
     });
     console.log('Login com: ', this.loginModel());
+  }
+
+  private resetForm(): void {
+    this.loginModel.set({ cracha: '', senha: '', codEmpresa: '' });
+    this.bagdeTouched.set(false);
+    this.passwordTouched.set(false);
+    this.enterpriceTouched.set(false);
+    this.formSubmitted.set(false);
   }
 }
