@@ -58,11 +58,11 @@
                       [ngModel]="perfilModel().descricao"
                       (ngModelChange)="onInput('descricao', $event)"
                       (blur)="onBlur('descricao')"
-                      [class.error]="descricaoEmptyFielsError()"
+                      [class.error]="descricaoEmptyFiedlsError()"
                       autocomplete="off"
                     />
                   </div>
-                  @if (descricaoEmptyFielsError()) {
+                  @if (descricaoEmptyFiedlsError()) {
                     <span class="error-message">O descrição é obrigatório</span>
                   }
                 </div>
@@ -183,16 +183,21 @@
                               type="text"
                               id="descricao"
                               name="descricao"
-                              placeholder="Insira a descrição do perfil"
+                              placeholder="Insira a nova descrição do perfil"
                               [ngModel]="perfilModel().descricao"
                               (ngModelChange)="onInput('descricao', $event)"
                               (blur)="onBlur('descricao')"
-                              [class.error]="descricaoEmptyFielsError()"
+                              [class.error]="
+                                descricaoEmptyFiedlsError() || descricaoEqualsFiedlsError()
+                              "
                               autocomplete="off"
                             />
                           </div>
-                          @if (descricaoEmptyFielsError()) {
-                            <span class="error-message">O descrição é obrigatório</span>
+                          @if (descricaoEmptyFiedlsError()) {
+                            <span class="error-message">O descrição é obrigatório!</span>
+                          }
+                          @if (descricaoEqualsFiedlsError()) {
+                            <span class="error-message">O descrição igual a anterior!</span>
                           }
                         </span>
                       </li>

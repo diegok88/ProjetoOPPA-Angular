@@ -30,7 +30,7 @@ export class LoginUser {
     return !onlyNumbers && value.length > 0;
   });
   private isPasswordEmpty = computed(() => this.loginModel().senha.trim().length === 0);
-  private isEnterpriceEmpty = computed(() => this.loginModel().senha.trim().length === 0);
+  private isEnterpriceEmpty = computed(() => this.loginModel().codEmpresa.trim().length === 0);
   private isEnterpriceNotNumber = computed(() => {
     const value = this.loginModel().codEmpresa;
     const onlyNumbers = /^\d+$/.test(value);

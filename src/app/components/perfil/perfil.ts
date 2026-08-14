@@ -26,15 +26,22 @@ export class Perfil implements OnInit {
   protected formSubmitted = signal<boolean>(false);
   protected descricaoTouched = signal<boolean>(false);
   protected isDescricaoEmpty = computed(() => {
-    this.perfilModel().descricao.trim().length === 0;
+    return this.perfilModel().descricao.trim().length === 0;
+  });
+  protected isDescricaoEquals = computed(() => {
+    return this.perfilModel().descricao.toUpperCase() === this.buscar()?.descricao;
   });
 
-  protected descricaoEmptyFielsError = computed(() => {
+  protected descricaoEmptyFiedlsError = computed(() => {
     return (this.descricaoTouched() || this.formSubmitted()) && this.isDescricaoEmpty();
   });
 
+  protected descricaoEqualsFiedlsError = computed(() => {
+    return (this.descricaoTouched() || this.formSubmitted()) && this.isDescricaoEquals();
+  });
+
   protected isFormValid = computed(() => {
-    const descricaoOk = !this.descricaoEmptyFielsError();
+    const descricaoOk = !this.descricaoEmptyFiedlsError();
     return descricaoOk;
   });
 
@@ -71,6 +78,7 @@ export class Perfil implements OnInit {
   }
 
   private carregarRegistro(item: PerfilData): void {
+    this.perfilModel.set({ descricao: item.descricao });
     this.buscar.set(item);
   }
 

@@ -23,16 +23,17 @@
               (blur)="onBlur('cracha')"
               inputmode="numeric"
               maxlength="5"
-              [class.error]="badgeErrorNumber() || badgeEmptyFieldError()"
               autocomplete="off"
             />
           </div>
-          @if (badgeErrorNumber()) {
-            <span class="error-message">Apenas números são permitidos</span>
-          }
-          @if (badgeEmptyFieldError()) {
-            <span class="error-message">O crachá é obrigatório</span>
-          }
+          <div class="error-container">
+            <span class="error-message" [class.show]="badgeErrorNumber()"
+              >Apenas números são permitidos</span
+            >
+            <span class="error-message" [class.show]="badgeEmptyFieldError()"
+              >O crachá é obrigatório</span
+            >
+          </div>
         </div>
         <div class="form-group">
           <label for="senha">Senha:</label>
@@ -58,12 +59,14 @@
               style="cursor: pointer"
             />
           </div>
-          @if (passwordEmptyFieldError()) {
-            <span class="error-message">A senha é obrigatória</span>
-          }
+          <div class="error-container">
+            <span class="error-message" [class.show]="passwordEmptyFieldError()">
+              A senha é obrigatória
+            </span>
+          </div>
         </div>
         <div class="form-group">
-          <label for="codEmpresa">Crachá:</label>
+          <label for="codEmpresa">Empresa:</label>
           <div class="input-wrapper">
             <img class="icon" src="/icons/factory.png" alt="empresa" loading="lazy" />
             <input
@@ -80,12 +83,14 @@
               autocomplete="off"
             />
           </div>
-          @if (enterpriceErrorNumber()) {
-            <span class="error-message">Apenas números são permitidos</span>
-          }
-          @if (enterpriceEmptyFieldError()) {
-            <span class="error-message">O código da empresa é obrigatório</span>
-          }
+          <div class="error-container">
+            <span class="error-message" [class.show]="enterpriceErrorNumber()"
+              >Apenas números são permitidos</span
+            >
+            <span class="error-message" [class.show]="enterpriceEmptyFieldError()"
+              >O código da empresa é obrigatório</span
+            >
+          </div>
         </div>
         <button type="submit" class="btn btn-enter" [disabled]="formSubmitted()">Entrar</button>
       </form>
