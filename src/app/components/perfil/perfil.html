@@ -47,24 +47,23 @@
             </div>
             <form (ngSubmit)="cadastrar($event)" class="operacao-forms">
               <div class="form-group">
-                <div class="form-input">
-                  <label for="descricao" class="form-label">Descrição:</label>
-                  <div class="form-wrapper">
-                    <input
-                      type="text"
-                      id="descricao"
-                      name="descricao"
-                      placeholder="Insira a descrição do perfil"
-                      [ngModel]="perfilModel().descricao"
-                      (ngModelChange)="onInput('descricao', $event)"
-                      (blur)="onBlur('descricao')"
-                      [class.error]="descricaoEmptyFiedlsError()"
-                      autocomplete="off"
-                    />
-                  </div>
-                  @if (descricaoEmptyFiedlsError()) {
-                    <span class="error-message">O descrição é obrigatório</span>
-                  }
+                <label for="descricao" class="form-label">Descrição:</label>
+                <div class="form-wrapper">
+                  <input
+                    type="text"
+                    id="descricao"
+                    name="descricao"
+                    placeholder="Insira a descrição do perfil"
+                    [ngModel]="perfilModel().descricao"
+                    (ngModelChange)="onInput('descricao', $event)"
+                    (blur)="onBlur('descricao')"
+                    autocomplete="off"
+                  />
+                </div>
+                <div class="error-container">
+                  <span class="error-message" [class.show]="descricaoEmptyFiedlsError()"
+                    >O descrição é obrigatório</span
+                  >
                 </div>
               </div>
               <button type="submit" class="operacao-botao">Cadastrar</button>
@@ -74,7 +73,7 @@
         @case ('registro') {
           <section class="operacao-registro">
             <div class="registro-selecao">
-              <label>
+              <label (click)="mudarRegistro('informacao')">
                 <input
                   type="radio"
                   id="valor-1"
@@ -84,7 +83,7 @@
                 />
                 <span>Informação</span>
               </label>
-              <label>
+              <label (click)="mudarRegistro('atualizar')">
                 <input
                   type="radio"
                   id="valor-2"
@@ -94,7 +93,7 @@
                 />
                 <span>Atualizar</span>
               </label>
-              <label>
+              <label (click)="mudarRegistro('inativar')">
                 <input
                   type="radio"
                   id="valor-3"
@@ -104,7 +103,7 @@
                 />
                 <span>Inativar</span>
               </label>
-              <label>
+              <label (click)="mudarRegistro('eliminar')">
                 <input
                   type="radio"
                   id="valor-4"
@@ -114,7 +113,7 @@
                 />
                 <span>Eliminar</span>
               </label>
-              <label>
+              <label (click)="mudarRegistro('auditoria')">
                 <input
                   type="radio"
                   id="valor-5"
@@ -139,20 +138,26 @@
                     />
                   </div>
                   <div class="registro-informacao">
-                    <ul>
-                      <li>
-                        <span>Id:</span><span>{{ buscar()?.id }}</span>
-                      </li>
-                      <li>
-                        <span>Código:</span><span>{{ buscar()?.codigo }}</span>
-                      </li>
-                      <li>
-                        <span>Descrição:</span><span>{{ buscar()?.descricao }}</span>
-                      </li>
-                      <li>
-                        <span>Status:</span><span>{{ buscar()?.status }}</span>
-                      </li>
-                    </ul>
+                    <form class="operacao-forms">
+                      <div class="container-info">
+                        <div class="form-info">
+                          <span class="info-label">Id:</span>
+                          <span class="info-value">{{ buscar()?.id }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Código:</span>
+                          <span class="info-value">{{ buscar()?.codigo }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Descrição:</span>
+                          <span class="info-value">{{ buscar()?.descricao }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Status:</span>
+                          <span class="info-value">{{ buscar()?.status }}</span>
+                        </div>
+                      </div>
+                    </form>
                   </div>
                 </div>
               }
@@ -168,46 +173,54 @@
                     />
                   </div>
                   <div class="registro-atualizar">
-                    <ul>
-                      <li>
-                        <span>Id:</span><span>{{ buscar()?.id }}</span>
-                      </li>
-                      <li>
-                        <span>Código:</span><span>{{ buscar()?.codigo }}</span>
-                      </li>
-                      <li class="registro-linha">
-                        <span>Descrição:</span
-                        ><span class="registro-span"
-                          ><div class="form-wrapper atualizar">
-                            <input
-                              type="text"
-                              id="descricao"
-                              name="descricao"
-                              placeholder="Insira a nova descrição do perfil"
-                              [ngModel]="perfilModel().descricao"
-                              (ngModelChange)="onInput('descricao', $event)"
-                              (blur)="onBlur('descricao')"
-                              [class.error]="
-                                descricaoEmptyFiedlsError() || descricaoEqualsFiedlsError()
-                              "
-                              autocomplete="off"
-                            />
+                    <form (ngSubmit)="atualizar($event)" class="operacao-forms">
+                      <div class="container-info">
+                        <div class="form-info">
+                          <span class="info-label">Id:</span>
+                          <span class="info-value">{{ buscar()?.id }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Código:</span>
+                          <span class="info-value">{{ buscar()?.codigo }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Descrição:</span>
+                          <div class="form-group">
+                            <div class="form-wrapper">
+                              <input
+                                type="text"
+                                id="descricao"
+                                name="descricao"
+                                placeholder="Insira a descrição do perfil"
+                                [ngModel]="perfilModel().descricao"
+                                (ngModelChange)="onInput('descricao', $event)"
+                                (blur)="onBlur('descricao')"
+                                autocomplete="off"
+                              />
+                            </div>
+                            <div class="error-container">
+                              <span
+                                class="error-message"
+                                [class.show]="descricaoEmptyFiedlsError()"
+                              >
+                                A descrição é obrigatória.
+                              </span>
+                              <span
+                                class="error-message"
+                                [class.show]="descricaoEqualsFiedlsError()"
+                              >
+                                A descrição igual a cadastrada.
+                              </span>
+                            </div>
                           </div>
-                          @if (descricaoEmptyFiedlsError()) {
-                            <span class="error-message">O descrição é obrigatório!</span>
-                          }
-                          @if (descricaoEqualsFiedlsError()) {
-                            <span class="error-message">O descrição igual a anterior!</span>
-                          }
-                        </span>
-                      </li>
-                      <li>
-                        <span>Status:</span><span>{{ buscar()?.status }}</span>
-                      </li>
-                    </ul>
-                    <div>
-                      <button class="operacao-botao">Atualizar</button>
-                    </div>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Status:</span>
+                          <span class="info-value">{{ buscar()?.status }}</span>
+                        </div>
+                      </div>
+                      <button type="submit" class="operacao-botao">Atualizar</button>
+                    </form>
                   </div>
                 </div>
               }
@@ -223,23 +236,27 @@
                     />
                   </div>
                   <div class="registro-inativar">
-                    <ul>
-                      <li>
-                        <span>Id:</span><span>{{ buscar()?.id }}</span>
-                      </li>
-                      <li>
-                        <span>Código:</span><span>{{ buscar()?.codigo }}</span>
-                      </li>
-                      <li>
-                        <span>Descrição:</span><span>{{ buscar()?.descricao }}</span>
-                      </li>
-                      <li>
-                        <span>Status:</span><span>{{ buscar()?.status }}</span>
-                      </li>
-                    </ul>
-                    <div>
-                      <button class="operacao-botao">Inativar</button>
-                    </div>
+                    <form (ngSubmit)="cadastrar($event)" class="operacao-forms">
+                      <div class="container-info">
+                        <div class="form-info">
+                          <span class="info-label">Id:</span>
+                          <span class="info-value">{{ buscar()?.id }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Código:</span>
+                          <span class="info-value">{{ buscar()?.codigo }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Descrição:</span>
+                          <span class="info-value">{{ buscar()?.descricao }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Status:</span>
+                          <span class="info-value">{{ buscar()?.status }}</span>
+                        </div>
+                      </div>
+                      <button type="submit" class="operacao-botao">Inativar</button>
+                    </form>
                   </div>
                 </div>
               }
@@ -255,23 +272,27 @@
                     />
                   </div>
                   <div class="registro-eliminar">
-                    <ul>
-                      <li>
-                        <span>Id:</span><span>{{ buscar()?.id }}</span>
-                      </li>
-                      <li>
-                        <span>Código:</span><span>{{ buscar()?.codigo }}</span>
-                      </li>
-                      <li>
-                        <span>Descrição:</span><span>{{ buscar()?.descricao }}</span>
-                      </li>
-                      <li>
-                        <span>Status:</span><span>{{ buscar()?.status }}</span>
-                      </li>
-                    </ul>
-                    <div>
-                      <button class="operacao-botao">Eliminar</button>
-                    </div>
+                    <form (ngSubmit)="cadastrar($event)" class="operacao-forms">
+                      <div class="container-info">
+                        <div class="form-info">
+                          <span class="info-label">Id:</span>
+                          <span class="info-value">{{ buscar()?.id }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Código:</span>
+                          <span class="info-value">{{ buscar()?.codigo }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Descrição:</span>
+                          <span class="info-value">{{ buscar()?.descricao }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Status:</span>
+                          <span class="info-value">{{ buscar()?.status }}</span>
+                        </div>
+                      </div>
+                      <button type="submit" class="operacao-botao">Eliminar</button>
+                    </form>
                   </div>
                 </div>
               }

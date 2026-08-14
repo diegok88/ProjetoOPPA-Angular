@@ -22,7 +22,9 @@ export class PerfilService {
     return this.http.patch<PerfilData>(`${this.apiUrl}/${id}`, dados);
   }
 
-  inativar(): void {}
+  inativar(id: string): Observable<PerfilData> {
+    return this.http.patch<PerfilData>(`${this.apiUrl}/deactive/${id}`, {});
+  }
   deletar(): void {}
 
   listar(): void {

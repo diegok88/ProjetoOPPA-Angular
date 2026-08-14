@@ -74,6 +74,10 @@ export class Perfil implements OnInit {
   }
 
   protected mudarRegistro(registro: Registro): void {
+    if (registro === 'atualizar') {
+      this.resetForm();
+      this.perfilModel.set({ descricao: this.buscar()!.descricao });
+    }
     this.registroEstado.set(registro);
   }
 
@@ -96,13 +100,31 @@ export class Perfil implements OnInit {
         this.mudarOperacao('inicial');
       },
       error: (err: any) => {
-        console.error('Erro ao obter perfil:', err);
-        alert('Falha ao carregar perfil. Tente novamente.');
+        console.error('Erro ao cadastrar perfil:', err);
+        alert('Falha ao cadastrar perfil. Tente novamente.');
       },
     });
   }
 
-  protected atualizar() {}
+  protected atualizar(event: Event): void {
+    event.preventDefault();
+    this.formSubmitted.set(true);
+    if (!this.isFormValid()) {
+      console.warn('Formulário inválido - não enviar');
+      return;
+    }
+    this.perfilService.atualizar(this.buscar()!.id!, this.perfilModel()).subscribe({
+      next: () => {
+        this.perfilService.listar();
+        this.resetForm();
+        this.mudarOperacao('inicial');
+      },
+      error: (err: any) => {
+        console.error('Erro ao atualizar perfil:', err);
+        alert('Falha ao atualizar perfil. Tente novamente.');
+      },
+    });
+  }
 
   private resetForm(): void {
     this.perfilModel.set({ descricao: '' });
