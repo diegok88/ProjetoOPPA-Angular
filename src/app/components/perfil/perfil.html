@@ -18,7 +18,7 @@
                 class="operacao-icone"
                 src="icons/more_horiz.png"
                 alt="Ação"
-                (click)="mudarOperacao('registro', item)"
+                (click)="mudarOperacao('registro', item.id)"
               />
             </td>
           </tr>
@@ -236,7 +236,7 @@
                     />
                   </div>
                   <div class="registro-inativar">
-                    <form (ngSubmit)="cadastrar($event)" class="operacao-forms">
+                    <form (ngSubmit)="inativar($event)" class="operacao-forms">
                       <div class="container-info">
                         <div class="form-info">
                           <span class="info-label">Id:</span>
@@ -272,7 +272,7 @@
                     />
                   </div>
                   <div class="registro-eliminar">
-                    <form (ngSubmit)="cadastrar($event)" class="operacao-forms">
+                    <form (ngSubmit)="eliminar($event)" class="operacao-forms">
                       <div class="container-info">
                         <div class="form-info">
                           <span class="info-label">Id:</span>

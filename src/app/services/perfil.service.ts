@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { RequestHttp } from '../const/requests.const';
 import { PerfilData } from '../interfaces/perfil-data.interface';
 
@@ -25,16 +25,16 @@ export class PerfilService {
   inativar(id: string): Observable<PerfilData> {
     return this.http.patch<PerfilData>(`${this.apiUrl}/deactive/${id}`, {});
   }
-  deletar(): void {}
 
-  listar(): void {
-    this.http.get<PerfilData[]>(this.apiUrl).subscribe({
-      next: (dados) => {
+  deletar(id: string): Observable<PerfilData> {
+    return this.http.delete<PerfilData>(`${this.apiUrl}/${id}`);
+  }
+
+  listar(): Observable<PerfilData[]> {
+    return this.http.get<PerfilData[]>(this.apiUrl).pipe(
+      tap((dados) => {
         this.perfilSignal.set(dados);
-      },
-      error: (err) => {
-        console.error(err);
-      },
-    });
+      }),
+    );
   }
 }
