@@ -28,7 +28,7 @@
 }
 
 .operacao-lista {
-  width: 35%;
+  width: 30%;
   padding: 10px;
 
   flex-direction: column;
@@ -46,7 +46,6 @@
   }
   .operacao-hover:hover {
     background-color: rgba(255, 255, 255, 0.1);
-    //opacity: 50%;
     cursor: default;
   }
   .operacao-icone {
@@ -54,8 +53,27 @@
   }
 }
 
+.operacao-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.operacao-coluna,
+.operacao-dado {
+  padding: 5px 10px;
+  text-align: center;
+  border-bottom: 1px solid var(--color-white);
+}
+.operacao-hover:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  cursor: default;
+}
+.operacao-icone {
+  cursor: pointer;
+}
+
 .operacao-acao {
-  width: 65%;
+  width: 70%;
 
   justify-content: center;
   align-items: center;

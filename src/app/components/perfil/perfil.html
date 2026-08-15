@@ -308,20 +308,22 @@
                     />
                   </div>
                   <div class="registro-informacao">
-                    <ul>
-                      <li>
-                        <span>Id:</span><span>{{ buscar()?.id }}</span>
-                      </li>
-                      <li>
-                        <span>Código:</span><span>{{ buscar()?.codigo }}</span>
-                      </li>
-                      <li>
-                        <span>Descrição:</span><span>{{ buscar()?.descricao }}</span>
-                      </li>
-                      <li>
-                        <span>Status:</span><span>{{ buscar()?.status }}</span>
-                      </li>
-                    </ul>
+                    <table class="operacao-tabela">
+                      <tr>
+                        <th class="operacao-coluna">Ação</th>
+                        <th class="operacao-coluna">Dados Registrados</th>
+                        <th class="operacao-coluna">Data/Hora</th>
+                        <th class="operacao-coluna">Registrado Por Id</th>
+                      </tr>
+                      @for (item of listarAuditoria(); track item.id) {
+                        <tr>
+                          <td class="operacao-dado">{{ item.acao }}</td>
+                          <td class="operacao-dado">{{ item.dadosRegistrados }}</td>
+                          <td class="operacao-dado">{{ item.dataHora }}</td>
+                          <td class="operacao-dado">{{ item.registradoPorId }}</td>
+                        </tr>
+                      }
+                    </table>
                   </div>
                 </div>
               }

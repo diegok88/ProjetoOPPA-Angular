@@ -1,9 +1,9 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { switchMap } from 'rxjs';
 import { PerfilData } from '../../interfaces/perfil-data.interface';
-import { PerfilService } from '../../services/perfil.service';
 import { AuditoriaService } from '../../services/auditoria.service';
-import { Observable } from 'rxjs';
+import { PerfilService } from '../../services/perfil.service';
 
 type Operacao = 'inicial' | 'cadastrar' | 'registro';
 type Registro = 'informacao' | 'atualizar' | 'inativar' | 'eliminar' | 'auditoria';
@@ -36,7 +36,6 @@ export class Perfil implements OnInit {
     const des = this.perfilModel().descricao.toUpperCase();
     const atualizaIgual = des === this.buscar()?.descricao;
     const registroIgual = this.listar().some((item) => item.descricao === des);
-    console.log(atualizaIgual, registroIgual);
     return atualizaIgual || registroIgual;
   });
 
@@ -62,11 +61,15 @@ export class Perfil implements OnInit {
   }
 
   ngOnInit(): void {
-    this.perfilService.listar();
+    this.carregar().subscribe();
   }
 
-  protected carregar(): void {
-    this.perfilService.listar();
+  protected carregar() {
+    return this.perfilService.listar();
+  }
+
+  protected carregarAuditoria(field: string, query: string) {
+    return this.auditoriaService.listar(field, query);
   }
 
   protected mudarOperacao(operacao: Operacao, item?: string): void {
@@ -90,13 +93,17 @@ export class Perfil implements OnInit {
   }
 
   private carregarRegistro(id: string): void {
-    this.listar().map((item) => {
-      if (id === item.id) {
-        this.buscar.set(item);
-        item;
-      }
+    this.carregar().subscribe({
+      next: () => {
+        const dado = this.listar().find((item) => item.id === id);
+        if (dado) {
+          this.buscar.set(dado);
+          this.perfilModel.set({ descricao: dado.descricao });
+        }
+      },
     });
-    this.perfilModel.set({ descricao: this.buscar()!.descricao });
+    const field: string = 'registroId';
+    this.carregarAuditoria(field, id).subscribe();
   }
 
   protected cadastrar(event: Event): void {
@@ -106,17 +113,20 @@ export class Perfil implements OnInit {
       alert('Formulário inválido - não enviar');
       return;
     }
-    this.perfilService.cadastrar(this.perfilModel()).subscribe({
-      next: () => {
-        this.carregar();
-        this.resetForm();
-        this.mudarOperacao('inicial');
-      },
-      error: (err: any) => {
-        console.error('Erro ao cadastrar perfil:', err);
-        alert('Falha ao cadastrar perfil. Tente novamente.');
-      },
-    });
+    this.perfilService
+      .cadastrar(this.perfilModel())
+      .pipe(switchMap(() => this.carregar()))
+      .subscribe({
+        next: () => {
+          this.carregar();
+          this.resetForm();
+          this.mudarOperacao('inicial');
+        },
+        error: (err: any) => {
+          console.error('Erro ao cadastrar perfil:', err);
+          alert('Falha ao cadastrar perfil. Tente novamente.');
+        },
+      });
   }
 
   protected atualizar(event: Event): void {
@@ -126,21 +136,19 @@ export class Perfil implements OnInit {
       alert('Formulário inválido - não enviar');
       return;
     }
-    this.perfilService.atualizar(this.buscar()!.id!, this.perfilModel()).subscribe({
-      next: () => {
-        this.resetForm();
-        this.perfilService.listar().subscribe({
-          next: () => {
-            this.carregarRegistro(this.buscar()!.id!);
-            this.mudarOperacao('registro', this.buscar()!.id!);
-          },
-        });
-      },
-      error: (err: any) => {
-        console.error('Erro ao atualizar perfil:', err);
-        alert('Falha ao atualizar perfil. Tente novamente.');
-      },
-    });
+    this.perfilService
+      .atualizar(this.buscar()!.id!, this.perfilModel())
+      .pipe(switchMap(() => this.carregar()))
+      .subscribe({
+        next: () => {
+          this.resetForm();
+          this.mudarOperacao('registro', this.buscar()!.id!);
+        },
+        error: (err: any) => {
+          console.error('Erro ao atualizar perfil:', err);
+          alert('Falha ao atualizar perfil. Tente novamente.');
+        },
+      });
   }
 
   protected inativar(event: Event): void {
@@ -150,17 +158,20 @@ export class Perfil implements OnInit {
       alert('Perfil já está inativo!');
       return;
     }
-    this.perfilService.inativar(this.buscar()!.id!).subscribe({
-      next: () => {
-        this.carregar();
-        this.carregarRegistro(this.buscar()!.id!);
-        this.mudarOperacao('registro', this.buscar()!.id!);
-      },
-      error: (err: any) => {
-        console.error('Erro ao inativar o perfil:', err);
-        alert('Falha ao inativar perfil. Tente novamente.');
-      },
-    });
+    this.perfilService
+      .inativar(this.buscar()!.id!)
+      .pipe(switchMap(() => this.carregar()))
+      .subscribe({
+        next: () => {
+          this.carregar();
+          this.carregarRegistro(this.buscar()!.id!);
+          this.mudarOperacao('registro', this.buscar()!.id!);
+        },
+        error: (err: any) => {
+          console.error('Erro ao inativar o perfil:', err);
+          alert('Falha ao inativar perfil. Tente novamente.');
+        },
+      });
   }
 
   protected eliminar(event: Event) {
@@ -170,16 +181,19 @@ export class Perfil implements OnInit {
       alert('Perfil não está inativo!');
       return;
     }
-    this.perfilService.deletar(this.buscar()!.id!).subscribe({
-      next: () => {
-        this.carregar();
-        this.mudarOperacao('inicial');
-      },
-      error: (err: any) => {
-        console.error('Erro ao eliminar o perfil:', err);
-        alert('Falha ao eliminar o perfil. Tente novamente.');
-      },
-    });
+    this.perfilService
+      .deletar(this.buscar()!.id!)
+      .pipe(switchMap(() => this.carregar()))
+      .subscribe({
+        next: () => {
+          this.carregar();
+          this.mudarOperacao('inicial');
+        },
+        error: (err: any) => {
+          console.error('Erro ao eliminar o perfil:', err);
+          alert('Falha ao eliminar o perfil. Tente novamente.');
+        },
+      });
   }
 
   private resetForm(): void {

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 import { RequestHttp } from '../const/requests.const';
 import { PerfilData } from '../interfaces/perfil-data.interface';
 
@@ -35,6 +35,7 @@ export class PerfilService {
       tap((dados) => {
         this.perfilSignal.set(dados);
       }),
+      catchError((error) => throwError(() => error)),
     );
   }
 }
