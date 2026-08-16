@@ -17,6 +17,11 @@
       align-items: center;
       justify-content: space-between;
       padding: 10px;
+
+      .info-value-1 {
+        width: 60%;
+        text-align: right;
+      }
     }
   }
 
@@ -108,7 +113,7 @@
     cursor: pointer;
     background: var(--color-action);
     color: var(--color-white);
-    width: 25%;
+    width: 200px;
     min-height: 44px;
   }
 

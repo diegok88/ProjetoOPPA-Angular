@@ -26,6 +26,12 @@ export const routes: Routes = [
         canActivate: [roleGuard],
         data: { roles: ['ASSISTÊNCIA - NIVEL 1'] },
       },
+      {
+        path: 'empresa',
+        loadComponent: () => import('./components/empresa/empresa').then((m) => m.Empresa),
+        canActivate: [roleGuard],
+        data: { roles: ['ASSISTÊNCIA - NIVEL 1'] },
+      },
       //  Adicione aqui as outras subrotas declaradas no MenuService
       {
         path: '',

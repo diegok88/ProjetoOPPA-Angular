@@ -4,6 +4,7 @@ import { switchMap } from 'rxjs';
 import { PerfilData } from '../../interfaces/perfil-data.interface';
 import { AuditoriaService } from '../../services/auditoria.service';
 import { PerfilService } from '../../services/perfil.service';
+import { AuditoriaData } from '../../interfaces/auditoria-data.interface';
 
 type Operacao = 'inicial' | 'cadastrar' | 'registro';
 type Registro = 'informacao' | 'atualizar' | 'inativar' | 'eliminar' | 'auditoria';
@@ -21,9 +22,11 @@ export class Perfil implements OnInit {
   protected readonly listar = this.perfilService.perfil;
   protected readonly buscar = signal<PerfilData | null>(null);
   protected readonly listarAuditoria = this.auditoriaService.auditoria;
+  protected readonly buscarAuditoria = signal<AuditoriaData | null>(null);
 
   protected operacaoEstado = signal<string>('inicial');
   protected registroEstado = signal<string>('informacao');
+  protected auditoriaEstado = signal<boolean>(true);
 
   protected perfilModel = signal<PerfilData>({ descricao: '' });
 
@@ -48,7 +51,7 @@ export class Perfil implements OnInit {
   });
 
   protected isFormValid = computed(() => {
-    const descricaoOk = !this.descricaoEmptyFiedlsError();
+    const descricaoOk = !this.descricaoEmptyFiedlsError() && !this.descricaoEqualsFiedlsError();
     return descricaoOk;
   });
 
@@ -89,7 +92,18 @@ export class Perfil implements OnInit {
       this.resetForm();
       this.perfilModel.set({ descricao: this.buscar()!.descricao });
     }
+    this.auditoriaEstado.set(true);
     this.registroEstado.set(registro);
+  }
+
+  protected mudarAuditoria(dados?: AuditoriaData): void {
+    if (this.auditoriaEstado() && dados) {
+      this.auditoriaEstado.update((atual) => (atual = !atual));
+      this.buscarAuditoria.set(dados);
+    } else {
+      this.auditoriaEstado.update((atual) => (atual = !atual));
+      this.buscarAuditoria.set(null);
+    }
   }
 
   private carregarRegistro(id: string): void {
@@ -97,13 +111,13 @@ export class Perfil implements OnInit {
       next: () => {
         const dado = this.listar().find((item) => item.id === id);
         if (dado) {
+          const field: string = 'registroId';
+          this.carregarAuditoria(field, id).subscribe();
           this.buscar.set(dado);
           this.perfilModel.set({ descricao: dado.descricao });
         }
       },
     });
-    const field: string = 'registroId';
-    this.carregarAuditoria(field, id).subscribe();
   }
 
   protected cadastrar(event: Event): void {

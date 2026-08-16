@@ -1,0 +1,889 @@
+<div class="operacao-dados">
+  <h2 class="operacao-h2">Perfil</h2>
+  <section class="operacao-container">
+    <div class="operacao-lista">
+      <span>Lista de Empresas</span>
+      <table class="operacao-tabela">
+        <thead>
+          <tr>
+            <th class="operacao-coluna">Código</th>
+            <th class="operacao-coluna">Razão Social</th>
+            <th class="operacao-coluna">Ação</th>
+          </tr>
+        </thead>
+        <tbody class="operacao-tbody">
+          @for (item of listar(); track item.id) {
+            <tr class="operacao-hover">
+              <td class="operacao-dado">{{ item?.codigo }}</td>
+              <td class="operacao-dado">{{ item?.razaoSocial }}</td>
+              <td class="operacao-dado">
+                <img
+                  class="operacao-icone"
+                  src="icons/more_horiz.png"
+                  alt="Ação"
+                  (click)="mudarOperacao('registro', item.id)"
+                />
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <div class="operacao-acao">
+      @switch (operacaoEstado()) {
+        @case ('inicial') {
+          <section class="operacao-inicial">
+            <img class="operacao-img" src="images/4151017.png" alt="Perfil" />
+            <span class="operacao-texto">Cadastrar uma nova empresa?</span>
+            <button class="operacao-botao" (click)="mudarOperacao('cadastrar')">Clique aqui</button>
+          </section>
+        }
+        @case ('cadastrar') {
+          <section class="operacao-cadastrar">
+            <div class="operacao-titulo">
+              <span>Cadastrar Empresa</span>
+              <img
+                class="operacao-voltar"
+                src="icons/arrow_circle_left.png"
+                alt="Voltar"
+                (click)="mudarOperacao('inicial')"
+              />
+            </div>
+            <form (ngSubmit)="cadastrar($event)" class="operacao-forms">
+              <div class="form-group">
+                <label for="cnpj" class="form-label">Cnpj:</label>
+                <div class="form-wrapper">
+                  <input
+                    type="text"
+                    id="cnpj"
+                    name="cnpj"
+                    placeholder="Insira o cnpj da empresa"
+                    [ngModel]="empresaModel().cnpj"
+                    (ngModelChange)="onInput('cnpj', $event)"
+                    (blur)="onBlur('cnpj')"
+                    autocomplete="off"
+                  />
+                </div>
+                <div class="error-container">
+                  <span class="error-message" [class.show]="cnpjEmptyFiedlsError()">
+                    O cnpj é obrigatório
+                  </span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="razaoSocial" class="form-label">Razão Social:</label>
+                <div class="form-wrapper">
+                  <input
+                    type="text"
+                    id="razaoSocial"
+                    name="razaoSocial"
+                    placeholder="Insira a razão social da empresa"
+                    [ngModel]="empresaModel().razaoSocial"
+                    (ngModelChange)="onInput('razaoSocial', $event)"
+                    (blur)="onBlur('razaoSocial')"
+                    autocomplete="off"
+                  />
+                </div>
+                <div class="error-container">
+                  <span class="error-message" [class.show]="razaoSocialEmptyFiedlsError()">
+                    O razão social é obrigatório
+                  </span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="nomeFantasia" class="form-label">Nome Fantasia:</label>
+                <div class="form-wrapper">
+                  <input
+                    type="text"
+                    id="nomeFantasia"
+                    name="nomeFantasia"
+                    placeholder="Insira a nome fantasia da empresa"
+                    [ngModel]="empresaModel().nomeFantasia"
+                    (ngModelChange)="onInput('nomeFantasia', $event)"
+                    (blur)="onBlur('nomeFantasia')"
+                    autocomplete="off"
+                  />
+                </div>
+                <div class="error-container">
+                  <span class="error-message" [class.show]="nomeFantasiaEmptyFiedlsError()">
+                    O nome fantasia é obrigatório
+                  </span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="contato" class="form-label">Contato:</label>
+                <div class="form-wrapper">
+                  <input
+                    type="text"
+                    id="contato"
+                    name="contato"
+                    placeholder="Insira o contato da empresa"
+                    [ngModel]="empresaModel().contato"
+                    (ngModelChange)="onInput('contato', $event)"
+                    (blur)="onBlur('contato')"
+                    autocomplete="off"
+                  />
+                </div>
+                <div class="error-container">
+                  <span class="error-message" [class.show]="contatoEmptyFiedlsError()">
+                    O contato é obrigatório
+                  </span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="email" class="form-label">Email:</label>
+                <div class="form-wrapper">
+                  <input
+                    type="text"
+                    id="email"
+                    name="email"
+                    placeholder="Insira o email da empresa"
+                    [ngModel]="empresaModel().email"
+                    (ngModelChange)="onInput('email', $event)"
+                    (blur)="onBlur('email')"
+                    autocomplete="off"
+                  />
+                </div>
+                <div class="error-container">
+                  <span class="error-message" [class.show]="emailEmptyFiedlsError()">
+                    O email é obrigatório
+                  </span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="rua" class="form-label">Rua:</label>
+                <div class="form-wrapper">
+                  <input
+                    type="text"
+                    id="rua"
+                    name="rua"
+                    placeholder="Insira a rua da empresa"
+                    [ngModel]="empresaModel().rua"
+                    (ngModelChange)="onInput('rua', $event)"
+                    (blur)="onBlur('rua')"
+                    autocomplete="off"
+                  />
+                </div>
+                <div class="error-container">
+                  <span class="error-message" [class.show]="ruaEmptyFiedlsError()">
+                    O rua é obrigatório
+                  </span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="numero" class="form-label">Rua:</label>
+                <div class="form-wrapper">
+                  <input
+                    type="text"
+                    id="numero"
+                    name="numero"
+                    placeholder="Insira o numero da empresa"
+                    [ngModel]="empresaModel().numero"
+                    (ngModelChange)="onInput('numero', $event)"
+                    (blur)="onBlur('numero')"
+                    autocomplete="off"
+                  />
+                </div>
+                <div class="error-container">
+                  <span class="error-message" [class.show]="numeroEmptyFiedlsError()">
+                    O numero é obrigatório
+                  </span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="bairro" class="form-label">Bairro:</label>
+                <div class="form-wrapper">
+                  <input
+                    type="text"
+                    id="bairro"
+                    name="bairro"
+                    placeholder="Insira o bairro da empresa"
+                    [ngModel]="empresaModel().bairro"
+                    (ngModelChange)="onInput('bairro', $event)"
+                    (blur)="onBlur('bairro')"
+                    autocomplete="off"
+                  />
+                </div>
+                <div class="error-container">
+                  <span class="error-message" [class.show]="bairroEmptyFiedlsError()">
+                    O bairro é obrigatório
+                  </span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="cidade" class="form-label">Cidade:</label>
+                <div class="form-wrapper">
+                  <input
+                    type="text"
+                    id="cidade"
+                    name="cidade"
+                    placeholder="Insira a cidade da empresa"
+                    [ngModel]="empresaModel().cidade"
+                    (ngModelChange)="onInput('cidade', $event)"
+                    (blur)="onBlur('cidade')"
+                    autocomplete="off"
+                  />
+                </div>
+                <div class="error-container">
+                  <span class="error-message" [class.show]="cidadeEmptyFiedlsError()">
+                    O cidade é obrigatório
+                  </span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="estado" class="form-label">Estado:</label>
+                <div class="form-wrapper">
+                  <input
+                    type="text"
+                    id="estado"
+                    name="estado"
+                    placeholder="Insira o estado da empresa"
+                    [ngModel]="empresaModel().estado"
+                    (ngModelChange)="onInput('estado', $event)"
+                    (blur)="onBlur('estado')"
+                    autocomplete="off"
+                  />
+                </div>
+                <div class="error-container">
+                  <span class="error-message" [class.show]="estadoEmptyFiedlsError()">
+                    O estado é obrigatório
+                  </span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="cep" class="form-label">Cep:</label>
+                <div class="form-wrapper">
+                  <input
+                    type="text"
+                    id="cep"
+                    name="cep"
+                    placeholder="Insira o cep da empresa"
+                    [ngModel]="empresaModel().cep"
+                    (ngModelChange)="onInput('cep', $event)"
+                    (blur)="onBlur('cep')"
+                    autocomplete="off"
+                  />
+                </div>
+                <div class="error-container">
+                  <span class="error-message" [class.show]="cepEmptyFiedlsError()">
+                    O cep é obrigatório
+                  </span>
+                </div>
+              </div>
+              <button type="submit" class="operacao-botao">Cadastrar</button>
+            </form>
+          </section>
+        }
+        @case ('registro') {
+          <section class="operacao-registro">
+            <div class="registro-selecao">
+              <label (click)="mudarRegistro('informacao')">
+                <input
+                  type="radio"
+                  id="valor-1"
+                  name="valor-radio"
+                  value="informacao"
+                  [(ngModel)]="registroEstado"
+                />
+                <span>Informação</span>
+              </label>
+              <label (click)="mudarRegistro('atualizar')">
+                <input
+                  type="radio"
+                  id="valor-2"
+                  name="valor-radio"
+                  value="atualizar"
+                  [(ngModel)]="registroEstado"
+                />
+                <span>Atualizar</span>
+              </label>
+              <label (click)="mudarRegistro('inativar')">
+                <input
+                  type="radio"
+                  id="valor-3"
+                  name="valor-radio"
+                  value="inativar"
+                  [(ngModel)]="registroEstado"
+                />
+                <span>Inativar</span>
+              </label>
+              <label (click)="mudarRegistro('eliminar')">
+                <input
+                  type="radio"
+                  id="valor-4"
+                  name="valor-radio"
+                  value="eliminar"
+                  [(ngModel)]="registroEstado"
+                />
+                <span>Eliminar</span>
+              </label>
+              <label (click)="mudarRegistro('auditoria')">
+                <input
+                  type="radio"
+                  id="valor-5"
+                  name="valor-radio"
+                  value="auditoria"
+                  [(ngModel)]="registroEstado"
+                />
+                <span>Auditoria</span>
+              </label>
+              <span class="selecao"></span>
+            </div>
+            @switch (registroEstado()) {
+              @case ('informacao') {
+                <div class="registro-container">
+                  <div class="operacao-titulo">
+                    <span>Dados da Empresa</span>
+                    <img
+                      class="operacao-voltar"
+                      src="icons/arrow_circle_left.png"
+                      alt="Voltar"
+                      (click)="mudarOperacao('inicial')"
+                    />
+                  </div>
+                  <div class="registro-informacao">
+                    <form class="operacao-forms">
+                      <div class="container-info">
+                        <div class="form-info">
+                          <span class="info-label">Id:</span>
+                          <span class="info-value">{{ buscar()?.id }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Código:</span>
+                          <span class="info-value">{{ buscar()?.codigo }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Cnpj:</span>
+                          <span class="info-value">{{ buscar()?.cnpj }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Razão Social:</span>
+                          <span class="info-value">{{ buscar()?.razaoSocial }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Nome Fantasia:</span>
+                          <span class="info-value">{{ buscar()?.nomeFantasia }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Contato:</span>
+                          <span class="info-value">{{ buscar()?.contato }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Email:</span>
+                          <span class="info-value">{{ buscar()?.email }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Rua:</span>
+                          <span class="info-value">{{ buscar()?.rua }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Número:</span>
+                          <span class="info-value">{{ buscar()?.numero }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Bairro:</span>
+                          <span class="info-value">{{ buscar()?.bairro }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Cidade:</span>
+                          <span class="info-value">{{ buscar()?.cidade }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Estado:</span>
+                          <span class="info-value">{{ buscar()?.estado }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Cep:</span>
+                          <span class="info-value">{{ buscar()?.cep }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Status:</span>
+                          <span class="info-value">{{ buscar()?.status }}</span>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              }
+              @case ('atualizar') {
+                <div class="registro-container">
+                  <div class="operacao-titulo">
+                    <span>Atualizar da Empresa</span>
+                    <img
+                      class="operacao-voltar"
+                      src="icons/arrow_circle_left.png"
+                      alt="Voltar"
+                      (click)="mudarOperacao('inicial')"
+                    />
+                  </div>
+                  <div class="registro-atualizar">
+                    <form (ngSubmit)="atualizar($event)" class="operacao-forms">
+                      <div class="container-info">
+                        <div class="form-info">
+                          <span class="info-label">Id:</span>
+                          <span class="info-value">{{ buscar()?.id }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Código:</span>
+                          <span class="info-value">{{ buscar()?.codigo }}</span>
+                        </div>
+                        <div class="form-group">
+                          <label for="cnpj" class="form-label">Cnpj:</label>
+                          <div class="form-wrapper">
+                            <input
+                              type="text"
+                              id="cnpj"
+                              name="cnpj"
+                              placeholder="Insira o cnpj da empresa"
+                              [ngModel]="empresaModel().cnpj"
+                              (ngModelChange)="onInput('cnpj', $event)"
+                              (blur)="onBlur('cnpj')"
+                              autocomplete="off"
+                            />
+                          </div>
+                          <div class="error-container">
+                            <span class="error-message" [class.show]="cnpjEmptyFiedlsError()">
+                              O cnpj é obrigatório
+                            </span>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="razaoSocial" class="form-label">Razão Social:</label>
+                          <div class="form-wrapper">
+                            <input
+                              type="text"
+                              id="razaoSocial"
+                              name="razaoSocial"
+                              placeholder="Insira a razão social da empresa"
+                              [ngModel]="empresaModel().razaoSocial"
+                              (ngModelChange)="onInput('razaoSocial', $event)"
+                              (blur)="onBlur('razaoSocial')"
+                              autocomplete="off"
+                            />
+                          </div>
+                          <div class="error-container">
+                            <span
+                              class="error-message"
+                              [class.show]="razaoSocialEmptyFiedlsError()"
+                            >
+                              O razão social é obrigatório
+                            </span>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="nomeFantasia" class="form-label">Nome Fantasia:</label>
+                          <div class="form-wrapper">
+                            <input
+                              type="text"
+                              id="nomeFantasia"
+                              name="nomeFantasia"
+                              placeholder="Insira a nome fantasia da empresa"
+                              [ngModel]="empresaModel().nomeFantasia"
+                              (ngModelChange)="onInput('nomeFantasia', $event)"
+                              (blur)="onBlur('nomeFantasia')"
+                              autocomplete="off"
+                            />
+                          </div>
+                          <div class="error-container">
+                            <span
+                              class="error-message"
+                              [class.show]="nomeFantasiaEmptyFiedlsError()"
+                            >
+                              O nome fantasia é obrigatório
+                            </span>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="contato" class="form-label">Contato:</label>
+                          <div class="form-wrapper">
+                            <input
+                              type="text"
+                              id="contato"
+                              name="contato"
+                              placeholder="Insira o contato da empresa"
+                              [ngModel]="empresaModel().contato"
+                              (ngModelChange)="onInput('contato', $event)"
+                              (blur)="onBlur('contato')"
+                              autocomplete="off"
+                            />
+                          </div>
+                          <div class="error-container">
+                            <span class="error-message" [class.show]="contatoEmptyFiedlsError()">
+                              O contato é obrigatório
+                            </span>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="email" class="form-label">Email:</label>
+                          <div class="form-wrapper">
+                            <input
+                              type="text"
+                              id="email"
+                              name="email"
+                              placeholder="Insira o email da empresa"
+                              [ngModel]="empresaModel().email"
+                              (ngModelChange)="onInput('email', $event)"
+                              (blur)="onBlur('email')"
+                              autocomplete="off"
+                            />
+                          </div>
+                          <div class="error-container">
+                            <span class="error-message" [class.show]="emailEmptyFiedlsError()">
+                              O email é obrigatório
+                            </span>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="rua" class="form-label">Rua:</label>
+                          <div class="form-wrapper">
+                            <input
+                              type="text"
+                              id="rua"
+                              name="rua"
+                              placeholder="Insira a rua da empresa"
+                              [ngModel]="empresaModel().rua"
+                              (ngModelChange)="onInput('rua', $event)"
+                              (blur)="onBlur('rua')"
+                              autocomplete="off"
+                            />
+                          </div>
+                          <div class="error-container">
+                            <span class="error-message" [class.show]="ruaEmptyFiedlsError()">
+                              O rua é obrigatório
+                            </span>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="numero" class="form-label">Rua:</label>
+                          <div class="form-wrapper">
+                            <input
+                              type="text"
+                              id="numero"
+                              name="numero"
+                              placeholder="Insira o numero da empresa"
+                              [ngModel]="empresaModel().numero"
+                              (ngModelChange)="onInput('numero', $event)"
+                              (blur)="onBlur('numero')"
+                              autocomplete="off"
+                            />
+                          </div>
+                          <div class="error-container">
+                            <span class="error-message" [class.show]="numeroEmptyFiedlsError()">
+                              O numero é obrigatório
+                            </span>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="bairro" class="form-label">Bairro:</label>
+                          <div class="form-wrapper">
+                            <input
+                              type="text"
+                              id="bairro"
+                              name="bairro"
+                              placeholder="Insira o bairro da empresa"
+                              [ngModel]="empresaModel().bairro"
+                              (ngModelChange)="onInput('bairro', $event)"
+                              (blur)="onBlur('bairro')"
+                              autocomplete="off"
+                            />
+                          </div>
+                          <div class="error-container">
+                            <span class="error-message" [class.show]="bairroEmptyFiedlsError()">
+                              O bairro é obrigatório
+                            </span>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="cidade" class="form-label">Cidade:</label>
+                          <div class="form-wrapper">
+                            <input
+                              type="text"
+                              id="cidade"
+                              name="cidade"
+                              placeholder="Insira a cidade da empresa"
+                              [ngModel]="empresaModel().cidade"
+                              (ngModelChange)="onInput('cidade', $event)"
+                              (blur)="onBlur('cidade')"
+                              autocomplete="off"
+                            />
+                          </div>
+                          <div class="error-container">
+                            <span class="error-message" [class.show]="cidadeEmptyFiedlsError()">
+                              O cidade é obrigatório
+                            </span>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="estado" class="form-label">Estado:</label>
+                          <div class="form-wrapper">
+                            <input
+                              type="text"
+                              id="estado"
+                              name="estado"
+                              placeholder="Insira o estado da empresa"
+                              [ngModel]="empresaModel().estado"
+                              (ngModelChange)="onInput('estado', $event)"
+                              (blur)="onBlur('estado')"
+                              autocomplete="off"
+                            />
+                          </div>
+                          <div class="error-container">
+                            <span class="error-message" [class.show]="estadoEmptyFiedlsError()">
+                              O estado é obrigatório
+                            </span>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="cep" class="form-label">Cep:</label>
+                          <div class="form-wrapper">
+                            <input
+                              type="text"
+                              id="cep"
+                              name="cep"
+                              placeholder="Insira o cep da empresa"
+                              [ngModel]="empresaModel().cep"
+                              (ngModelChange)="onInput('cep', $event)"
+                              (blur)="onBlur('cep')"
+                              autocomplete="off"
+                            />
+                          </div>
+                          <div class="error-container">
+                            <span class="error-message" [class.show]="cepEmptyFiedlsError()">
+                              O cep é obrigatório
+                            </span>
+                          </div>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Status:</span>
+                          <span class="info-value">{{ buscar()?.status }}</span>
+                        </div>
+                      </div>
+                      <button type="submit" class="operacao-botao">Atualizar</button>
+                    </form>
+                  </div>
+                </div>
+              }
+              @case ('inativar') {
+                <div class="registro-container">
+                  <div class="operacao-titulo">
+                    <span>Inativar a Empresa</span>
+                    <img
+                      class="operacao-voltar"
+                      src="icons/arrow_circle_left.png"
+                      alt="Voltar"
+                      (click)="mudarOperacao('inicial')"
+                    />
+                  </div>
+                  <div class="registro-inativar">
+                    <form (ngSubmit)="inativar($event)" class="operacao-forms">
+                      <div class="container-info">
+                        <div class="form-info">
+                          <span class="info-label">Id:</span>
+                          <span class="info-value">{{ buscar()?.id }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Código:</span>
+                          <span class="info-value">{{ buscar()?.codigo }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Cnpj:</span>
+                          <span class="info-value">{{ buscar()?.cnpj }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Razão Social:</span>
+                          <span class="info-value">{{ buscar()?.razaoSocial }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Nome Fantasia:</span>
+                          <span class="info-value">{{ buscar()?.nomeFantasia }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Contato:</span>
+                          <span class="info-value">{{ buscar()?.contato }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Email:</span>
+                          <span class="info-value">{{ buscar()?.email }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Rua:</span>
+                          <span class="info-value">{{ buscar()?.rua }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Número:</span>
+                          <span class="info-value">{{ buscar()?.numero }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Bairro:</span>
+                          <span class="info-value">{{ buscar()?.bairro }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Cidade:</span>
+                          <span class="info-value">{{ buscar()?.cidade }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Estado:</span>
+                          <span class="info-value">{{ buscar()?.estado }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Cep:</span>
+                          <span class="info-value">{{ buscar()?.cep }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Status:</span>
+                          <span class="info-value">{{ buscar()?.status }}</span>
+                        </div>
+                      </div>
+                      <button type="submit" class="operacao-botao">Inativar</button>
+                    </form>
+                  </div>
+                </div>
+              }
+              @case ('eliminar') {
+                <div class="registro-container">
+                  <div class="operacao-titulo">
+                    <span>Eliminar a Empresa</span>
+                    <img
+                      class="operacao-voltar"
+                      src="icons/arrow_circle_left.png"
+                      alt="Voltar"
+                      (click)="mudarOperacao('inicial')"
+                    />
+                  </div>
+                  <div class="registro-eliminar">
+                    <form (ngSubmit)="eliminar($event)" class="operacao-forms">
+                      <div class="container-info">
+                        <div class="form-info">
+                          <span class="info-label">Id:</span>
+                          <span class="info-value">{{ buscar()?.id }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Código:</span>
+                          <span class="info-value">{{ buscar()?.codigo }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Cnpj:</span>
+                          <span class="info-value">{{ buscar()?.cnpj }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Razão Social:</span>
+                          <span class="info-value">{{ buscar()?.razaoSocial }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Nome Fantasia:</span>
+                          <span class="info-value">{{ buscar()?.nomeFantasia }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Contato:</span>
+                          <span class="info-value">{{ buscar()?.contato }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Email:</span>
+                          <span class="info-value">{{ buscar()?.email }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Rua:</span>
+                          <span class="info-value">{{ buscar()?.rua }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Número:</span>
+                          <span class="info-value">{{ buscar()?.numero }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Bairro:</span>
+                          <span class="info-value">{{ buscar()?.bairro }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Cidade:</span>
+                          <span class="info-value">{{ buscar()?.cidade }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Estado:</span>
+                          <span class="info-value">{{ buscar()?.estado }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Cep:</span>
+                          <span class="info-value">{{ buscar()?.cep }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Status:</span>
+                          <span class="info-value">{{ buscar()?.status }}</span>
+                        </div>
+                      </div>
+                      <button type="submit" class="operacao-botao">Eliminar</button>
+                    </form>
+                  </div>
+                </div>
+              }
+              @case ('auditoria') {
+                <div class="registro-container">
+                  <div class="operacao-titulo">
+                    <span>Auditoria da Empresa</span>
+                    <img
+                      class="operacao-voltar"
+                      src="icons/arrow_circle_left.png"
+                      alt="Voltar"
+                      (click)="mudarOperacao('inicial')"
+                    />
+                  </div>
+                  <div class="registro-auditoria">
+                    @if (auditoriaEstado()) {
+                      <table class="operacao-tabela">
+                        <thead>
+                          <tr>
+                            <th class="operacao-coluna">Ação</th>
+                            <th class="operacao-coluna">Dados Registrados</th>
+                            <th class="operacao-coluna">Data/Hora</th>
+                            <th class="operacao-coluna">Registrado Por Id</th>
+                          </tr>
+                        </thead>
+                        <tbody class="operacao-tbody">
+                          @for (item of listarAuditoria(); track item.id) {
+                            <tr class="operacao-hover">
+                              <td class="operacao-dado">{{ item.acao }}</td>
+                              <td class="operacao-dado">
+                                <span (click)="mudarAuditoria(item)">VISUALIZAR</span>
+                              </td>
+                              <td class="operacao-dado">{{ item.dataHora }}</td>
+                              <td class="operacao-dado">{{ item.registradoPorId }}</td>
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    } @else {
+                      <form class="operacao-forms">
+                        <div class="container-info">
+                          <div class="form-info">
+                            <span class="info-label">Ação:</span>
+                            <span class="info-value">{{ buscarAuditoria()?.acao }}</span>
+                          </div>
+                          <div class="form-info">
+                            <span class="info-label">Dados Registrados:</span>
+                            <span class="info-value-1">{{
+                              buscarAuditoria()?.dadosRegistrados
+                            }}</span>
+                          </div>
+                          <div class="form-info">
+                            <span class="info-label">Data/Hora:</span>
+                            <span class="info-value">{{ buscarAuditoria()?.dataHora }}</span>
+                          </div>
+                          <div class="form-info">
+                            <span class="info-label">Registrado Por Id:</span>
+                            <span class="info-value">{{ buscarAuditoria()?.registradoPorId }}</span>
+                          </div>
+                        </div>
+                        <button type="button" (click)="mudarAuditoria()" class="operacao-botao">
+                          Voltar
+                        </button>
+                      </form>
+                    }
+                  </div>
+                </div>
+              }
+            }
+          </section>
+        }
+      }
+    </div>
+  </section>
+</div>

@@ -4,25 +4,29 @@
     <div class="operacao-lista">
       <span>Lista de Perfis</span>
       <table class="operacao-tabela">
-        <tr>
-          <th class="operacao-coluna">Código</th>
-          <th class="operacao-coluna">Descrição</th>
-          <th class="operacao-coluna">Ação</th>
-        </tr>
-        @for (item of listar(); track item.id) {
-          <tr class="operacao-hover">
-            <td class="operacao-dado">{{ item?.codigo }}</td>
-            <td class="operacao-dado">{{ item?.descricao }}</td>
-            <td class="operacao-dado">
-              <img
-                class="operacao-icone"
-                src="icons/more_horiz.png"
-                alt="Ação"
-                (click)="mudarOperacao('registro', item.id)"
-              />
-            </td>
+        <thead>
+          <tr>
+            <th class="operacao-coluna">Código</th>
+            <th class="operacao-coluna">Descrição</th>
+            <th class="operacao-coluna">Ação</th>
           </tr>
-        }
+        </thead>
+        <tbody class="operacao-tbody">
+          @for (item of listar(); track item.id) {
+            <tr class="operacao-hover">
+              <td class="operacao-dado">{{ item?.codigo }}</td>
+              <td class="operacao-dado">{{ item?.descricao }}</td>
+              <td class="operacao-dado">
+                <img
+                  class="operacao-icone"
+                  src="icons/more_horiz.png"
+                  alt="Ação"
+                  (click)="mudarOperacao('registro', item.id)"
+                />
+              </td>
+            </tr>
+          }
+        </tbody>
       </table>
     </div>
     <div class="operacao-acao">
@@ -61,9 +65,12 @@
                   />
                 </div>
                 <div class="error-container">
-                  <span class="error-message" [class.show]="descricaoEmptyFiedlsError()"
-                    >O descrição é obrigatório</span
-                  >
+                  <span class="error-message" [class.show]="descricaoEmptyFiedlsError()">
+                    O descrição é obrigatório
+                  </span>
+                  <span class="error-message" [class.show]="descricaoEqualsFiedlsError()">
+                    A descrição igual a cadastrada.
+                  </span>
                 </div>
               </div>
               <button type="submit" class="operacao-botao">Cadastrar</button>
@@ -307,23 +314,57 @@
                       (click)="mudarOperacao('inicial')"
                     />
                   </div>
-                  <div class="registro-informacao">
-                    <table class="operacao-tabela">
-                      <tr>
-                        <th class="operacao-coluna">Ação</th>
-                        <th class="operacao-coluna">Dados Registrados</th>
-                        <th class="operacao-coluna">Data/Hora</th>
-                        <th class="operacao-coluna">Registrado Por Id</th>
-                      </tr>
-                      @for (item of listarAuditoria(); track item.id) {
-                        <tr>
-                          <td class="operacao-dado">{{ item.acao }}</td>
-                          <td class="operacao-dado">{{ item.dadosRegistrados }}</td>
-                          <td class="operacao-dado">{{ item.dataHora }}</td>
-                          <td class="operacao-dado">{{ item.registradoPorId }}</td>
-                        </tr>
-                      }
-                    </table>
+                  <div class="registro-auditoria">
+                    @if (auditoriaEstado()) {
+                      <table class="operacao-tabela">
+                        <thead>
+                          <tr>
+                            <th class="operacao-coluna">Ação</th>
+                            <th class="operacao-coluna">Dados Registrados</th>
+                            <th class="operacao-coluna">Data/Hora</th>
+                            <th class="operacao-coluna">Registrado Por Id</th>
+                          </tr>
+                        </thead>
+                        <tbody class="operacao-tbody">
+                          @for (item of listarAuditoria(); track item.id) {
+                            <tr class="operacao-hover">
+                              <td class="operacao-dado">{{ item.acao }}</td>
+                              <td class="operacao-dado">
+                                <span (click)="mudarAuditoria(item)">VISUALIZAR</span>
+                              </td>
+                              <td class="operacao-dado">{{ item.dataHora }}</td>
+                              <td class="operacao-dado">{{ item.registradoPorId }}</td>
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    } @else {
+                      <form class="operacao-forms">
+                        <div class="container-info">
+                          <div class="form-info">
+                            <span class="info-label">Ação:</span>
+                            <span class="info-value">{{ buscarAuditoria()?.acao }}</span>
+                          </div>
+                          <div class="form-info">
+                            <span class="info-label">Dados Registrados:</span>
+                            <span class="info-value-1">{{
+                              buscarAuditoria()?.dadosRegistrados
+                            }}</span>
+                          </div>
+                          <div class="form-info">
+                            <span class="info-label">Data/Hora:</span>
+                            <span class="info-value">{{ buscarAuditoria()?.dataHora }}</span>
+                          </div>
+                          <div class="form-info">
+                            <span class="info-label">Registrado Por Id:</span>
+                            <span class="info-value">{{ buscarAuditoria()?.registradoPorId }}</span>
+                          </div>
+                        </div>
+                        <button type="button" (click)="mudarAuditoria()" class="operacao-botao">
+                          Voltar
+                        </button>
+                      </form>
+                    }
                   </div>
                 </div>
               }
