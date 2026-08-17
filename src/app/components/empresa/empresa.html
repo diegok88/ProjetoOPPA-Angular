@@ -1,5 +1,5 @@
 <div class="operacao-dados">
-  <h2 class="operacao-h2">Perfil</h2>
+  <h2 class="operacao-h2">Empresa</h2>
   <section class="operacao-container">
     <div class="operacao-lista">
       <span>Lista de Empresas</span>
@@ -7,7 +7,7 @@
         <thead>
           <tr>
             <th class="operacao-coluna">Código</th>
-            <th class="operacao-coluna">Razão Social</th>
+            <th class="operacao-coluna centro">Razão Social</th>
             <th class="operacao-coluna">Ação</th>
           </tr>
         </thead>
@@ -15,7 +15,7 @@
           @for (item of listar(); track item.id) {
             <tr class="operacao-hover">
               <td class="operacao-dado">{{ item?.codigo }}</td>
-              <td class="operacao-dado">{{ item?.razaoSocial }}</td>
+              <td class="operacao-dado centro">{{ item?.razaoSocial }}</td>
               <td class="operacao-dado">
                 <img
                   class="operacao-icone"
@@ -36,6 +36,17 @@
             <img class="operacao-img" src="images/4151017.png" alt="Perfil" />
             <span class="operacao-texto">Cadastrar uma nova empresa?</span>
             <button class="operacao-botao" (click)="mudarOperacao('cadastrar')">Clique aqui</button>
+            <div class="dados-inicial">
+              <span>Total de Empresas: {{ listar().length }}</span>
+              <span
+                >Total de Ativas:
+                {{ listar()?.filter((item) => item.status === true)?.length || 0 }}</span
+              >
+              <span
+                >Total de Inativas:
+                {{ listar()?.filter((item) => item.status === false)?.length || 0 }}</span
+              >
+            </div>
           </section>
         }
         @case ('cadastrar') {
@@ -58,8 +69,9 @@
                     id="cnpj"
                     name="cnpj"
                     placeholder="Insira o cnpj da empresa"
-                    [ngModel]="empresaModel().cnpj"
-                    (ngModelChange)="onInput('cnpj', $event)"
+                    [ngModel]="getField('cnpj')"
+                    (ngModelChange)="setField('cnpj', $event)"
+                    mask="00.000.000/0000-00"
                     (blur)="onBlur('cnpj')"
                     autocomplete="off"
                   />
@@ -78,8 +90,8 @@
                     id="razaoSocial"
                     name="razaoSocial"
                     placeholder="Insira a razão social da empresa"
-                    [ngModel]="empresaModel().razaoSocial"
-                    (ngModelChange)="onInput('razaoSocial', $event)"
+                    [ngModel]="getField('razaoSocial')"
+                    (ngModelChange)="setField('razaoSocial', $event)"
                     (blur)="onBlur('razaoSocial')"
                     autocomplete="off"
                   />
@@ -98,8 +110,8 @@
                     id="nomeFantasia"
                     name="nomeFantasia"
                     placeholder="Insira a nome fantasia da empresa"
-                    [ngModel]="empresaModel().nomeFantasia"
-                    (ngModelChange)="onInput('nomeFantasia', $event)"
+                    [ngModel]="getField('nomeFantasia')"
+                    (ngModelChange)="setField('nomeFantasia', $event)"
                     (blur)="onBlur('nomeFantasia')"
                     autocomplete="off"
                   />
@@ -118,8 +130,9 @@
                     id="contato"
                     name="contato"
                     placeholder="Insira o contato da empresa"
-                    [ngModel]="empresaModel().contato"
-                    (ngModelChange)="onInput('contato', $event)"
+                    [ngModel]="getField('contato')"
+                    (ngModelChange)="setField('contato', $event)"
+                    mask="(00)00000-0000"
                     (blur)="onBlur('contato')"
                     autocomplete="off"
                   />
@@ -138,8 +151,8 @@
                     id="email"
                     name="email"
                     placeholder="Insira o email da empresa"
-                    [ngModel]="empresaModel().email"
-                    (ngModelChange)="onInput('email', $event)"
+                    [ngModel]="getField('email')"
+                    (ngModelChange)="setField('email', $event)"
                     (blur)="onBlur('email')"
                     autocomplete="off"
                   />
@@ -158,8 +171,8 @@
                     id="rua"
                     name="rua"
                     placeholder="Insira a rua da empresa"
-                    [ngModel]="empresaModel().rua"
-                    (ngModelChange)="onInput('rua', $event)"
+                    [ngModel]="getField('rua')"
+                    (ngModelChange)="setField('rua', $event)"
                     (blur)="onBlur('rua')"
                     autocomplete="off"
                   />
@@ -171,15 +184,15 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="numero" class="form-label">Rua:</label>
+                <label for="numero" class="form-label">Número:</label>
                 <div class="form-wrapper">
                   <input
                     type="text"
                     id="numero"
                     name="numero"
                     placeholder="Insira o numero da empresa"
-                    [ngModel]="empresaModel().numero"
-                    (ngModelChange)="onInput('numero', $event)"
+                    [ngModel]="getField('numero')"
+                    (ngModelChange)="setField('numero', $event)"
                     (blur)="onBlur('numero')"
                     autocomplete="off"
                   />
@@ -198,8 +211,8 @@
                     id="bairro"
                     name="bairro"
                     placeholder="Insira o bairro da empresa"
-                    [ngModel]="empresaModel().bairro"
-                    (ngModelChange)="onInput('bairro', $event)"
+                    [ngModel]="getField('bairro')"
+                    (ngModelChange)="setField('bairro', $event)"
                     (blur)="onBlur('bairro')"
                     autocomplete="off"
                   />
@@ -218,8 +231,8 @@
                     id="cidade"
                     name="cidade"
                     placeholder="Insira a cidade da empresa"
-                    [ngModel]="empresaModel().cidade"
-                    (ngModelChange)="onInput('cidade', $event)"
+                    [ngModel]="getField('cidade')"
+                    (ngModelChange)="setField('cidade', $event)"
                     (blur)="onBlur('cidade')"
                     autocomplete="off"
                   />
@@ -238,8 +251,8 @@
                     id="estado"
                     name="estado"
                     placeholder="Insira o estado da empresa"
-                    [ngModel]="empresaModel().estado"
-                    (ngModelChange)="onInput('estado', $event)"
+                    [ngModel]="getField('estado')"
+                    (ngModelChange)="setField('estado', $event)"
                     (blur)="onBlur('estado')"
                     autocomplete="off"
                   />
@@ -258,8 +271,9 @@
                     id="cep"
                     name="cep"
                     placeholder="Insira o cep da empresa"
-                    [ngModel]="empresaModel().cep"
-                    (ngModelChange)="onInput('cep', $event)"
+                    [ngModel]="getField('cep')"
+                    (ngModelChange)="setField('cep', $event)"
+                    mask="00000-000"
                     (blur)="onBlur('cep')"
                     autocomplete="off"
                   />
@@ -270,7 +284,9 @@
                   </span>
                 </div>
               </div>
-              <button type="submit" class="operacao-botao">Cadastrar</button>
+              <button type="submit" class="operacao-botao" [disabled]="!isFormValid()">
+                Cadastrar
+              </button>
             </form>
           </section>
         }
@@ -427,230 +443,294 @@
                           <span class="info-label">Código:</span>
                           <span class="info-value">{{ buscar()?.codigo }}</span>
                         </div>
-                        <div class="form-group">
-                          <label for="cnpj" class="form-label">Cnpj:</label>
-                          <div class="form-wrapper">
-                            <input
-                              type="text"
-                              id="cnpj"
-                              name="cnpj"
-                              placeholder="Insira o cnpj da empresa"
-                              [ngModel]="empresaModel().cnpj"
-                              (ngModelChange)="onInput('cnpj', $event)"
-                              (blur)="onBlur('cnpj')"
-                              autocomplete="off"
-                            />
-                          </div>
-                          <div class="error-container">
-                            <span class="error-message" [class.show]="cnpjEmptyFiedlsError()">
-                              O cnpj é obrigatório
-                            </span>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label for="razaoSocial" class="form-label">Razão Social:</label>
-                          <div class="form-wrapper">
-                            <input
-                              type="text"
-                              id="razaoSocial"
-                              name="razaoSocial"
-                              placeholder="Insira a razão social da empresa"
-                              [ngModel]="empresaModel().razaoSocial"
-                              (ngModelChange)="onInput('razaoSocial', $event)"
-                              (blur)="onBlur('razaoSocial')"
-                              autocomplete="off"
-                            />
-                          </div>
-                          <div class="error-container">
-                            <span
-                              class="error-message"
-                              [class.show]="razaoSocialEmptyFiedlsError()"
-                            >
-                              O razão social é obrigatório
-                            </span>
+                        <div class="form-info">
+                          <span class="info-label">Cnpj:</span>
+                          <div class="form-group">
+                            <div class="form-wrapper">
+                              <input
+                                type="text"
+                                id="cnpj"
+                                name="cnpj"
+                                placeholder="Insira o cnpj da empresa"
+                                [ngModel]="getField('cnpj')"
+                                (ngModelChange)="setField('cnpj', $event)"
+                                mask="00.000.000/0000-00"
+                                (blur)="onBlur('cnpj')"
+                                autocomplete="off"
+                              />
+                            </div>
+                            <div class="error-container">
+                              <span class="error-message" [class.show]="cnpjEmptyFiedlsError()">
+                                O cnpj é obrigatório
+                              </span>
+                              <span class="error-message" [class.show]="cnpjEqualsFiedlsError()">
+                                O cnpj igual ao anterior!
+                              </span>
+                            </div>
                           </div>
                         </div>
-                        <div class="form-group">
-                          <label for="nomeFantasia" class="form-label">Nome Fantasia:</label>
-                          <div class="form-wrapper">
-                            <input
-                              type="text"
-                              id="nomeFantasia"
-                              name="nomeFantasia"
-                              placeholder="Insira a nome fantasia da empresa"
-                              [ngModel]="empresaModel().nomeFantasia"
-                              (ngModelChange)="onInput('nomeFantasia', $event)"
-                              (blur)="onBlur('nomeFantasia')"
-                              autocomplete="off"
-                            />
-                          </div>
-                          <div class="error-container">
-                            <span
-                              class="error-message"
-                              [class.show]="nomeFantasiaEmptyFiedlsError()"
-                            >
-                              O nome fantasia é obrigatório
-                            </span>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label for="contato" class="form-label">Contato:</label>
-                          <div class="form-wrapper">
-                            <input
-                              type="text"
-                              id="contato"
-                              name="contato"
-                              placeholder="Insira o contato da empresa"
-                              [ngModel]="empresaModel().contato"
-                              (ngModelChange)="onInput('contato', $event)"
-                              (blur)="onBlur('contato')"
-                              autocomplete="off"
-                            />
-                          </div>
-                          <div class="error-container">
-                            <span class="error-message" [class.show]="contatoEmptyFiedlsError()">
-                              O contato é obrigatório
-                            </span>
+                        <div class="form-info">
+                          <span class="info-label">Razão Social:</span>
+                          <div class="form-group">
+                            <div class="form-wrapper">
+                              <input
+                                type="text"
+                                id="razaoSocial"
+                                name="razaoSocial"
+                                placeholder="Insira a razão social da empresa"
+                                [ngModel]="getField('razaoSocial')"
+                                (ngModelChange)="setField('razaoSocial', $event)"
+                                (blur)="onBlur('razaoSocial')"
+                                autocomplete="off"
+                              />
+                            </div>
+                            <div class="error-container">
+                              <span
+                                class="error-message"
+                                [class.show]="razaoSocialEmptyFiedlsError()"
+                              >
+                                O razão social é obrigatório
+                              </span>
+                              <span
+                                class="error-message"
+                                [class.show]="razaoSocialEqualsFiedlsError()"
+                              >
+                                O razão social igual ao anterior!
+                              </span>
+                            </div>
                           </div>
                         </div>
-                        <div class="form-group">
-                          <label for="email" class="form-label">Email:</label>
-                          <div class="form-wrapper">
-                            <input
-                              type="text"
-                              id="email"
-                              name="email"
-                              placeholder="Insira o email da empresa"
-                              [ngModel]="empresaModel().email"
-                              (ngModelChange)="onInput('email', $event)"
-                              (blur)="onBlur('email')"
-                              autocomplete="off"
-                            />
-                          </div>
-                          <div class="error-container">
-                            <span class="error-message" [class.show]="emailEmptyFiedlsError()">
-                              O email é obrigatório
-                            </span>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label for="rua" class="form-label">Rua:</label>
-                          <div class="form-wrapper">
-                            <input
-                              type="text"
-                              id="rua"
-                              name="rua"
-                              placeholder="Insira a rua da empresa"
-                              [ngModel]="empresaModel().rua"
-                              (ngModelChange)="onInput('rua', $event)"
-                              (blur)="onBlur('rua')"
-                              autocomplete="off"
-                            />
-                          </div>
-                          <div class="error-container">
-                            <span class="error-message" [class.show]="ruaEmptyFiedlsError()">
-                              O rua é obrigatório
-                            </span>
+                        <div class="form-info">
+                          <span class="info-label">Nome Fantasia:</span>
+                          <div class="form-group">
+                            <div class="form-wrapper">
+                              <input
+                                type="text"
+                                id="nomeFantasia"
+                                name="nomeFantasia"
+                                placeholder="Insira a nome fantasia da empresa"
+                                [ngModel]="getField('nomeFantasia')"
+                                (ngModelChange)="setField('nomeFantasia', $event)"
+                                (blur)="onBlur('nomeFantasia')"
+                                autocomplete="off"
+                              />
+                            </div>
+                            <div class="error-container">
+                              <span
+                                class="error-message"
+                                [class.show]="nomeFantasiaEmptyFiedlsError()"
+                              >
+                                O nome fantasia é obrigatório
+                              </span>
+                              <span
+                                class="error-message"
+                                [class.show]="nomeFantasiaEqualsFiedlsError()"
+                              >
+                                O nome fantasia igual ao anterior!
+                              </span>
+                            </div>
                           </div>
                         </div>
-                        <div class="form-group">
-                          <label for="numero" class="form-label">Rua:</label>
-                          <div class="form-wrapper">
-                            <input
-                              type="text"
-                              id="numero"
-                              name="numero"
-                              placeholder="Insira o numero da empresa"
-                              [ngModel]="empresaModel().numero"
-                              (ngModelChange)="onInput('numero', $event)"
-                              (blur)="onBlur('numero')"
-                              autocomplete="off"
-                            />
-                          </div>
-                          <div class="error-container">
-                            <span class="error-message" [class.show]="numeroEmptyFiedlsError()">
-                              O numero é obrigatório
-                            </span>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label for="bairro" class="form-label">Bairro:</label>
-                          <div class="form-wrapper">
-                            <input
-                              type="text"
-                              id="bairro"
-                              name="bairro"
-                              placeholder="Insira o bairro da empresa"
-                              [ngModel]="empresaModel().bairro"
-                              (ngModelChange)="onInput('bairro', $event)"
-                              (blur)="onBlur('bairro')"
-                              autocomplete="off"
-                            />
-                          </div>
-                          <div class="error-container">
-                            <span class="error-message" [class.show]="bairroEmptyFiedlsError()">
-                              O bairro é obrigatório
-                            </span>
+                        <div class="form-info">
+                          <span class="info-label">Contato:</span>
+                          <div class="form-group">
+                            <div class="form-wrapper">
+                              <input
+                                type="text"
+                                id="contato"
+                                name="contato"
+                                placeholder="Insira o contato da empresa"
+                                [ngModel]="getField('contato')"
+                                (ngModelChange)="setField('contato', $event)"
+                                mask="(00)00000-0000"
+                                (blur)="onBlur('contato')"
+                                autocomplete="off"
+                              />
+                            </div>
+                            <div class="error-container">
+                              <span class="error-message" [class.show]="contatoEmptyFiedlsError()">
+                                O contato é obrigatório!
+                              </span>
+                              <span class="error-message" [class.show]="contatoEqualsFiedlsError()">
+                                O contato igual ao anterior!
+                              </span>
+                            </div>
                           </div>
                         </div>
-                        <div class="form-group">
-                          <label for="cidade" class="form-label">Cidade:</label>
-                          <div class="form-wrapper">
-                            <input
-                              type="text"
-                              id="cidade"
-                              name="cidade"
-                              placeholder="Insira a cidade da empresa"
-                              [ngModel]="empresaModel().cidade"
-                              (ngModelChange)="onInput('cidade', $event)"
-                              (blur)="onBlur('cidade')"
-                              autocomplete="off"
-                            />
-                          </div>
-                          <div class="error-container">
-                            <span class="error-message" [class.show]="cidadeEmptyFiedlsError()">
-                              O cidade é obrigatório
-                            </span>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label for="estado" class="form-label">Estado:</label>
-                          <div class="form-wrapper">
-                            <input
-                              type="text"
-                              id="estado"
-                              name="estado"
-                              placeholder="Insira o estado da empresa"
-                              [ngModel]="empresaModel().estado"
-                              (ngModelChange)="onInput('estado', $event)"
-                              (blur)="onBlur('estado')"
-                              autocomplete="off"
-                            />
-                          </div>
-                          <div class="error-container">
-                            <span class="error-message" [class.show]="estadoEmptyFiedlsError()">
-                              O estado é obrigatório
-                            </span>
+                        <div class="form-info">
+                          <span class="info-label">Email:</span>
+                          <div class="form-group">
+                            <div class="form-wrapper">
+                              <input
+                                type="text"
+                                id="email"
+                                name="email"
+                                placeholder="Insira o email da empresa"
+                                [ngModel]="getField('email')"
+                                (ngModelChange)="setField('email', $event)"
+                                (blur)="onBlur('email')"
+                                autocomplete="off"
+                              />
+                            </div>
+                            <div class="error-container">
+                              <span class="error-message" [class.show]="emailEmptyFiedlsError()">
+                                O email é obrigatório
+                              </span>
+                              <span class="error-message" [class.show]="emailEqualsFiedlsError()">
+                                O email igual ao anterior!
+                              </span>
+                            </div>
                           </div>
                         </div>
-                        <div class="form-group">
-                          <label for="cep" class="form-label">Cep:</label>
-                          <div class="form-wrapper">
-                            <input
-                              type="text"
-                              id="cep"
-                              name="cep"
-                              placeholder="Insira o cep da empresa"
-                              [ngModel]="empresaModel().cep"
-                              (ngModelChange)="onInput('cep', $event)"
-                              (blur)="onBlur('cep')"
-                              autocomplete="off"
-                            />
+                        <div class="form-info">
+                          <span class="info-label">Rua:</span>
+                          <div class="form-group">
+                            <div class="form-wrapper">
+                              <input
+                                type="text"
+                                id="rua"
+                                name="rua"
+                                placeholder="Insira a rua da empresa"
+                                [ngModel]="getField('rua')"
+                                (ngModelChange)="setField('rua', $event)"
+                                (blur)="onBlur('rua')"
+                                autocomplete="off"
+                              />
+                            </div>
+                            <div class="error-container">
+                              <span class="error-message" [class.show]="ruaEmptyFiedlsError()">
+                                O rua é obrigatório!
+                              </span>
+                              <span class="error-message" [class.show]="ruaEqualsFiedlsError()">
+                                O rua igual ao anterior!
+                              </span>
+                            </div>
                           </div>
-                          <div class="error-container">
-                            <span class="error-message" [class.show]="cepEmptyFiedlsError()">
-                              O cep é obrigatório
-                            </span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Número:</span>
+                          <div class="form-group">
+                            <div class="form-wrapper">
+                              <input
+                                type="text"
+                                id="numero"
+                                name="numero"
+                                placeholder="Insira o numero da empresa"
+                                [ngModel]="getField('numero')"
+                                (ngModelChange)="setField('numero', $event)"
+                                (blur)="onBlur('numero')"
+                                autocomplete="off"
+                              />
+                            </div>
+                            <div class="error-container">
+                              <span class="error-message" [class.show]="numeroEmptyFiedlsError()">
+                                O numero é obrigatório!
+                              </span>
+                              <span class="error-message" [class.show]="numeroEqualsFiedlsError()">
+                                O número igual ao anterior!
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Bairro:</span>
+                          <div class="form-group">
+                            <div class="form-wrapper">
+                              <input
+                                type="text"
+                                id="bairro"
+                                name="bairro"
+                                placeholder="Insira o bairro da empresa"
+                                [ngModel]="getField('bairro')"
+                                (ngModelChange)="setField('bairro', $event)"
+                                (blur)="onBlur('bairro')"
+                                autocomplete="off"
+                              />
+                            </div>
+                            <div class="error-container">
+                              <span class="error-message" [class.show]="bairroEmptyFiedlsError()">
+                                O bairro é obrigatório
+                              </span>
+                              <span class="error-message" [class.show]="bairroEqualsFiedlsError()">
+                                O bairro igual ao anterior!
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Cidade:</span>
+                          <div class="form-group">
+                            <div class="form-wrapper">
+                              <input
+                                type="text"
+                                id="cidade"
+                                name="cidade"
+                                placeholder="Insira a cidade da empresa"
+                                [ngModel]="getField('cidade')"
+                                (ngModelChange)="onInput('cidade', $event)"
+                                (blur)="onBlur('cidade')"
+                                autocomplete="off"
+                              />
+                            </div>
+                            <div class="error-container">
+                              <span class="error-message" [class.show]="cidadeEmptyFiedlsError()">
+                                O cidade é obrigatório
+                              </span>
+                              <span class="error-message" [class.show]="cidadeEqualsFiedlsError()">
+                                O cidade igual ao anterior!
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Estado:</span>
+                          <div class="form-group">
+                            <div class="form-wrapper">
+                              <input
+                                type="text"
+                                id="estado"
+                                name="estado"
+                                placeholder="Insira o estado da empresa"
+                                [ngModel]="getField('estado')"
+                                (ngModelChange)="setField('estado', $event)"
+                                (blur)="onBlur('estado')"
+                                autocomplete="off"
+                              />
+                            </div>
+                            <div class="error-container">
+                              <span class="error-message" [class.show]="estadoEmptyFiedlsError()">
+                                O estado é obrigatório!
+                              </span>
+                              <span class="error-message" [class.show]="estadoEqualsFiedlsError()">
+                                O estado igual ao anterior!
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Cep:</span>
+                          <div class="form-group">
+                            <div class="form-wrapper">
+                              <input
+                                type="text"
+                                id="cep"
+                                name="cep"
+                                placeholder="Insira o cep da empresa"
+                                [ngModel]="getField('cep')"
+                                (ngModelChange)="setField('cep', $event)"
+                                mask="00000-000"
+                                (blur)="onBlur('cep')"
+                                autocomplete="off"
+                              />
+                            </div>
+                            <div class="error-container">
+                              <span class="error-message" [class.show]="cepEmptyFiedlsError()">
+                                O cep é obrigatório!
+                              </span>
+                              <span class="error-message" [class.show]="cepEqualsFiedlsError()">
+                                O cep igual ao anterior!
+                              </span>
+                            </div>
                           </div>
                         </div>
                         <div class="form-info">
@@ -658,7 +738,9 @@
                           <span class="info-value">{{ buscar()?.status }}</span>
                         </div>
                       </div>
-                      <button type="submit" class="operacao-botao">Atualizar</button>
+                      <button type="submit" class="operacao-botao" [disabled]="!isFormValid()">
+                        Atualizar
+                      </button>
                     </form>
                   </div>
                 </div>

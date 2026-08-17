@@ -7,6 +7,8 @@
   flex-direction: column;
   padding-top: 10px;
 
+  overflow-y: scroll;
+
   border-top: 1px solid var(--color-white);
 
   .container-info {
@@ -16,7 +18,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px;
+      padding: 5px 10px;
+      font-size: 0.9em;
 
       .info-value-1 {
         width: 60%;
@@ -117,7 +120,15 @@
     min-height: 44px;
   }
 
+  .operacao-botao:disabled {
+    opacity: 50%;
+    border: none;
+  }
+
   .operacao-botao:hover {
     border: 1px solid var(--color-white);
   }
+}
+.operacao-forms::-webkit-scrollbar {
+  display: none;
 }

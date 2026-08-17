@@ -5,6 +5,7 @@ import { AuditoriaService } from '../../services/auditoria.service';
 import { EmpresaService } from '../../services/empresa.service';
 import { EmpresaData } from '../../interfaces/empresa-data.interface';
 import { FormsModule } from '@angular/forms';
+import { NgxMaskDirective } from 'ngx-mask';
 
 type Operacao = 'inicial' | 'cadastrar' | 'registro';
 type Registro = 'informacao' | 'atualizar' | 'inativar' | 'eliminar' | 'auditoria';
@@ -23,7 +24,7 @@ type Field =
 
 @Component({
   selector: 'app-empresa',
-  imports: [FormsModule],
+  imports: [FormsModule, NgxMaskDirective],
   templateUrl: './empresa.html',
   styleUrl: './empresa.scss',
 })
@@ -56,126 +57,282 @@ export class Empresa {
 
   protected formSubmitted = signal<boolean>(false);
 
+  protected touchedSubmitted = signal<boolean>(false);
+  //----------------------------------------------------------------------------------------//
   protected cnpjTouched = signal<boolean>(false);
-  protected razaoSocialTouched = signal<boolean>(false);
-  protected nomeFantasiaTouched = signal<boolean>(false);
-  protected contatoTouched = signal<boolean>(false);
-  protected emailTouched = signal<boolean>(false);
-  protected ruaTouched = signal<boolean>(false);
-  protected numeroTouched = signal<boolean>(false);
-  protected bairroTouched = signal<boolean>(false);
-  protected cidadeTouched = signal<boolean>(false);
-  protected estadoTouched = signal<boolean>(false);
-  protected cepTouched = signal<boolean>(false);
+
+  protected isCnpjEquals = computed(() => {
+    const atual = this.buscar()?.cnpj;
+    const novo = this.empresaModel().cnpj.toUpperCase();
+    return atual === novo;
+  });
+
+  protected cnpjEqualsFiedlsError = computed(() => {
+    return (this.cnpjTouched() || this.formSubmitted()) && this.isCnpjEquals();
+  });
 
   protected isCnpjEmpty = computed(() => {
     return this.empresaModel().cnpj.trim().length === 0;
-  });
-  protected isRazaoSocialEmpty = computed(() => {
-    return this.empresaModel().razaoSocial.trim().length === 0;
-  });
-  protected isNomeFantasiaEmpty = computed(() => {
-    return this.empresaModel().nomeFantasia.trim().length === 0;
-  });
-  protected isContatoEmpty = computed(() => {
-    return this.empresaModel().contato.trim().length === 0;
-  });
-  protected isEmailEmpty = computed(() => {
-    return this.empresaModel().email.trim().length === 0;
-  });
-  protected isRuaEmpty = computed(() => {
-    return this.empresaModel().rua.trim().length === 0;
-  });
-  protected isNumeroEmpty = computed(() => {
-    return this.empresaModel().numero.trim().length === 0;
-  });
-  protected isBairroEmpty = computed(() => {
-    return this.empresaModel().bairro.trim().length === 0;
-  });
-  protected isCidadeEmpty = computed(() => {
-    return this.empresaModel().cidade.trim().length === 0;
-  });
-  protected isEstadoEmpty = computed(() => {
-    return this.empresaModel().estado.trim().length === 0;
-  });
-  protected isCepEmpty = computed(() => {
-    return this.empresaModel().cep.trim().length === 0;
   });
 
   protected cnpjEmptyFiedlsError = computed(() => {
     return (this.cnpjTouched() || this.formSubmitted()) && this.isCnpjEmpty();
   });
+  //----------------------------------------------------------------------------------------//
+  protected razaoSocialTouched = signal<boolean>(false);
+
+  protected isRazaoSocialEquals = computed(() => {
+    const atual = this.buscar()?.razaoSocial;
+    const novo = this.empresaModel().razaoSocial.toUpperCase();
+    return atual === novo;
+  });
+
+  protected razaoSocialEqualsFiedlsError = computed(() => {
+    return (this.razaoSocialTouched() || this.formSubmitted()) && this.isRazaoSocialEquals();
+  });
+
+  protected isRazaoSocialEmpty = computed(() => {
+    return this.empresaModel().razaoSocial.trim().length === 0;
+  });
+
   protected razaoSocialEmptyFiedlsError = computed(() => {
     return (this.razaoSocialTouched() || this.formSubmitted()) && this.isRazaoSocialEmpty();
   });
+  //----------------------------------------------------------------------------------------//
+  protected nomeFantasiaTouched = signal<boolean>(false);
+
+  protected isNomeFantasiaEquals = computed(() => {
+    const atual = this.buscar()?.nomeFantasia;
+    const novo = this.empresaModel().nomeFantasia.toUpperCase();
+    return atual === novo;
+  });
+
+  protected nomeFantasiaEqualsFiedlsError = computed(() => {
+    return (this.nomeFantasiaTouched() || this.formSubmitted()) && this.isNomeFantasiaEquals();
+  });
+
+  protected isNomeFantasiaEmpty = computed(() => {
+    return this.empresaModel().nomeFantasia.trim().length === 0;
+  });
+
   protected nomeFantasiaEmptyFiedlsError = computed(() => {
     return (this.nomeFantasiaTouched() || this.formSubmitted()) && this.isNomeFantasiaEmpty();
   });
+  //----------------------------------------------------------------------------------------//
+  protected contatoTouched = signal<boolean>(false);
+
+  protected isContatoEquals = computed(() => {
+    const atual = this.buscar()?.contato;
+    const novo = this.empresaModel().contato.toUpperCase();
+    return atual === novo;
+  });
+
+  protected contatoEqualsFiedlsError = computed(() => {
+    return (this.contatoTouched() || this.formSubmitted()) && this.isContatoEquals();
+  });
+
+  protected isContatoEmpty = computed(() => {
+    return this.empresaModel().contato.trim().length === 0;
+  });
+
   protected contatoEmptyFiedlsError = computed(() => {
     return (this.contatoTouched() || this.formSubmitted()) && this.isContatoEmpty();
   });
+  //----------------------------------------------------------------------------------------//
+  protected emailTouched = signal<boolean>(false);
+
+  protected isEmailEquals = computed(() => {
+    const atual = this.buscar()?.email;
+    const novo = this.empresaModel().email.toUpperCase();
+    return atual === novo;
+  });
+
+  protected emailEqualsFiedlsError = computed(() => {
+    return (this.emailTouched() || this.formSubmitted()) && this.isEmailEquals();
+  });
+
+  protected isEmailEmpty = computed(() => {
+    return this.empresaModel().email.trim().length === 0;
+  });
+
   protected emailEmptyFiedlsError = computed(() => {
     return (this.emailTouched() || this.formSubmitted()) && this.isEmailEmpty();
   });
+  //----------------------------------------------------------------------------------------//
+  protected ruaTouched = signal<boolean>(false);
+
+  protected isRuaEquals = computed(() => {
+    const atual = this.buscar()?.rua;
+    const novo = this.empresaModel().rua.toUpperCase();
+    return atual === novo;
+  });
+
+  protected ruaEqualsFiedlsError = computed(() => {
+    return (this.ruaTouched() || this.formSubmitted()) && this.isRuaEquals();
+  });
+
+  protected isRuaEmpty = computed(() => {
+    return this.empresaModel().rua.trim().length === 0;
+  });
+
   protected ruaEmptyFiedlsError = computed(() => {
     return (this.ruaTouched() || this.formSubmitted()) && this.isRuaEmpty();
   });
+  //----------------------------------------------------------------------------------------//
+  protected numeroTouched = signal<boolean>(false);
+
+  protected isNumeroEquals = computed(() => {
+    const atual = this.buscar()?.numero;
+    const novo = this.empresaModel().numero.toUpperCase();
+    return atual === novo;
+  });
+
+  protected numeroEqualsFiedlsError = computed(() => {
+    return (this.numeroTouched() || this.formSubmitted()) && this.isNumeroEquals();
+  });
+
+  protected isNumeroEmpty = computed(() => {
+    return this.empresaModel().numero.trim().length === 0;
+  });
+
   protected numeroEmptyFiedlsError = computed(() => {
     return (this.numeroTouched() || this.formSubmitted()) && this.isNumeroEmpty();
   });
+  //----------------------------------------------------------------------------------------//
+  protected bairroTouched = signal<boolean>(false);
+
+  protected isBairroEquals = computed(() => {
+    const atual = this.buscar()?.bairro;
+    const novo = this.empresaModel().bairro.toUpperCase();
+    return atual === novo;
+  });
+
+  protected bairroEqualsFiedlsError = computed(() => {
+    return (this.bairroTouched() || this.formSubmitted()) && this.isBairroEquals();
+  });
+
+  protected isBairroEmpty = computed(() => {
+    return this.empresaModel().bairro.trim().length === 0;
+  });
+
   protected bairroEmptyFiedlsError = computed(() => {
     return (this.bairroTouched() || this.formSubmitted()) && this.isBairroEmpty();
   });
+  //----------------------------------------------------------------------------------------//
+  protected cidadeTouched = signal<boolean>(false);
+
+  protected isCidadeEquals = computed(() => {
+    const atual = this.buscar()?.cidade;
+    const novo = this.empresaModel().cidade.toUpperCase();
+    return atual === novo;
+  });
+
+  protected cidadeEqualsFiedlsError = computed(() => {
+    return (this.cidadeTouched() || this.formSubmitted()) && this.isCidadeEquals();
+  });
+
+  protected isCidadeEmpty = computed(() => {
+    return this.empresaModel().cidade.trim().length === 0;
+  });
+
   protected cidadeEmptyFiedlsError = computed(() => {
     return (this.cidadeTouched() || this.formSubmitted()) && this.isCidadeEmpty();
   });
+  //----------------------------------------------------------------------------------------//
+  protected estadoTouched = signal<boolean>(false);
+
+  protected isEstadoEquals = computed(() => {
+    const atual = this.buscar()?.estado;
+    const novo = this.empresaModel().estado.toUpperCase();
+    return atual === novo;
+  });
+
+  protected estadoEqualsFiedlsError = computed(() => {
+    return (this.estadoTouched() || this.formSubmitted()) && this.isEstadoEquals();
+  });
+
+  protected isEstadoEmpty = computed(() => {
+    return this.empresaModel().estado.trim().length === 0;
+  });
+
   protected estadoEmptyFiedlsError = computed(() => {
     return (this.estadoTouched() || this.formSubmitted()) && this.isEstadoEmpty();
   });
-  protected cepEmptyFiedlsError = computed(() => {
-    return (this.razaoSocialTouched() || this.formSubmitted()) && this.isRazaoSocialEmpty();
+  //----------------------------------------------------------------------------------------//
+  protected cepTouched = signal<boolean>(false);
+
+  protected isCepEquals = computed(() => {
+    const atual = this.buscar()?.estado;
+    const novo = this.empresaModel().estado.toUpperCase();
+    return atual === novo;
   });
 
+  protected cepEqualsFiedlsError = computed(() => {
+    return (this.cepTouched() || this.formSubmitted()) && this.isCepEquals();
+  });
+
+  protected isCepEmpty = computed(() => {
+    return this.empresaModel().cep.trim().length === 0;
+  });
+
+  protected cepEmptyFiedlsError = computed(() => {
+    return (this.cepTouched() || this.formSubmitted()) && this.isCepEmpty();
+  });
+  //----------------------------------------------------------------------------------------//
   protected isFormValid = computed(() => {
-    const cnpjOk = !this.cnpjEmptyFiedlsError();
-    const razaoSocialOk = !this.razaoSocialEmptyFiedlsError();
-    const nomeFantasiaOk = !this.nomeFantasiaEmptyFiedlsError();
-    const contatoOk = !this.contatoEmptyFiedlsError();
-    const emailOk = !this.emailEmptyFiedlsError();
-    const ruaOk = !this.ruaEmptyFiedlsError();
-    const numeroOk = !this.numeroEmptyFiedlsError();
-    const bairroOk = !this.bairroEmptyFiedlsError();
-    const cidadeOk = !this.cidadeEmptyFiedlsError();
-    const estadoOk = !this.estadoEmptyFiedlsError();
-    const cepOk = !this.cepEmptyFiedlsError();
-    const dadosOk = [
-      cnpjOk,
-      razaoSocialOk,
-      nomeFantasiaOk,
-      contatoOk,
-      emailOk,
-      ruaOk,
-      numeroOk,
-      bairroOk,
-      cidadeOk,
-      estadoOk,
-      cepOk,
-    ];
+    const cnpjOk = !this.cnpjEmptyFiedlsError() && !this.cnpjEqualsFiedlsError();
+    const razaoSocialOk =
+      !this.razaoSocialEmptyFiedlsError() && !this.razaoSocialEqualsFiedlsError();
+    const nomeFantasiaOk =
+      !this.nomeFantasiaEmptyFiedlsError() && !this.nomeFantasiaEqualsFiedlsError();
+    const contatoOk = !this.contatoEmptyFiedlsError() && !this.contatoEqualsFiedlsError();
+    const emailOk = !this.emailEmptyFiedlsError() && !this.emailEqualsFiedlsError();
+    const ruaOk = !this.ruaEmptyFiedlsError() && !this.ruaEqualsFiedlsError();
+    const numeroOk = !this.numeroEmptyFiedlsError() && !this.numeroEqualsFiedlsError();
+    const bairroOk = !this.bairroEmptyFiedlsError() && !this.bairroEqualsFiedlsError();
+    const cidadeOk = !this.cidadeEmptyFiedlsError() && !this.cidadeEqualsFiedlsError();
+    const estadoOk = !this.estadoEmptyFiedlsError() && !this.estadoEqualsFiedlsError();
+    const cepOk = !this.cepEmptyFiedlsError() && !this.cepEqualsFiedlsError();
+    const touchedOk = this.touchedSubmitted();
+    const dadosOk =
+      cnpjOk &&
+      razaoSocialOk &&
+      nomeFantasiaOk &&
+      contatoOk &&
+      emailOk &&
+      ruaOk &&
+      numeroOk &&
+      bairroOk &&
+      cidadeOk &&
+      estadoOk &&
+      cepOk &&
+      touchedOk;
+
+    console.log(dadosOk);
     return dadosOk;
   });
-
+  //----------------------------------------------------------------------------------------//
   protected onBlur(field: Field): void {
+    if (field) this.touchedSubmitted.set(true);
     if (field === 'cnpj') this.cnpjTouched.set(true);
-    if (field === 'razaoSocial') this.cnpjTouched.set(true);
-    if (field === 'nomeFantasia') this.cnpjTouched.set(true);
-    if (field === 'contato') this.cnpjTouched.set(true);
-    if (field === 'email') this.cnpjTouched.set(true);
-    if (field === 'rua') this.cnpjTouched.set(true);
-    if (field === 'numero') this.cnpjTouched.set(true);
-    if (field === 'bairro') this.cnpjTouched.set(true);
-    if (field === 'cidade') this.cnpjTouched.set(true);
-    if (field === 'estado') this.cnpjTouched.set(true);
-    if (field === 'cep') this.cnpjTouched.set(true);
+    if (field === 'razaoSocial') this.razaoSocialTouched.set(true);
+    if (field === 'nomeFantasia') this.nomeFantasiaTouched.set(true);
+    if (field === 'contato') this.contatoTouched.set(true);
+    if (field === 'email') this.emailTouched.set(true);
+    if (field === 'rua') this.ruaTouched.set(true);
+    if (field === 'numero') this.numeroTouched.set(true);
+    if (field === 'bairro') this.bairroTouched.set(true);
+    if (field === 'cidade') this.cidadeTouched.set(true);
+    if (field === 'estado') this.estadoTouched.set(true);
+    if (field === 'cep') this.cepTouched.set(true);
+  }
+
+  protected getField(field: keyof EmpresaData) {
+    return this.empresaModel()[field] ?? '';
+  }
+
+  protected setField(field: keyof EmpresaData, value: string): void {
+    this.empresaModel.update((model) => ({ ...model, [field]: value }));
   }
 
   protected onInput(field: keyof EmpresaData, value: string): void {
@@ -202,6 +359,9 @@ export class Empresa {
     }
     if (operacao === 'cadastrar') {
       this.resetForm();
+    }
+    if (operacao === 'inicial') {
+      this.buscar.set(null);
     }
     this.operacaoEstado.set(operacao);
   }
@@ -275,13 +435,12 @@ export class Empresa {
       .pipe(switchMap(() => this.carregar()))
       .subscribe({
         next: () => {
-          this.carregar();
           this.resetForm();
           this.mudarOperacao('inicial');
         },
         error: (err: any) => {
-          console.error('Erro ao cadastrar perfil:', err);
-          alert('Falha ao cadastrar perfil. Tente novamente.');
+          console.error('Erro ao cadastrar empresa:', err);
+          alert('Falha ao cadastrar empresa. Tente novamente.');
         },
       });
   }

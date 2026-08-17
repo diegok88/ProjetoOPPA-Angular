@@ -78,7 +78,8 @@ export class LoginUser {
     event.preventDefault();
     this.formSubmitted.set(true);
     if (!this.isFormValid()) {
-      console.warn('Formulário inválido - não enviar');
+      alert('Formulário inválido - não enviar');
+      this.formSubmitted.set(false);
       return;
     }
     this.auth.login(this.loginModel()).subscribe({
