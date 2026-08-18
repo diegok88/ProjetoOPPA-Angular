@@ -3,6 +3,7 @@ import { roleGuard } from './const/role.guard';
 import { AccessDenied } from './modules/access-denied/access-denied';
 import { DashboardUser } from './modules/dashboard-user/dashboard-user';
 import { LoginUser } from './modules/login-user/login-user';
+import { DialogoConfimar } from './components/dialogo-confimar/dialogo-confimar';
 
 export const routes: Routes = [
   {

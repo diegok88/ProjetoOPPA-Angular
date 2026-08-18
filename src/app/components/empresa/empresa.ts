@@ -6,6 +6,7 @@ import { EmpresaService } from '../../services/empresa.service';
 import { EmpresaData } from '../../interfaces/empresa-data.interface';
 import { FormsModule } from '@angular/forms';
 import { NgxMaskDirective } from 'ngx-mask';
+import { DialogConfirmarService } from '../../services/dialog-confirmar.service';
 
 type Operacao = 'inicial' | 'cadastrar' | 'registro';
 type Registro = 'informacao' | 'atualizar' | 'inativar' | 'eliminar' | 'auditoria';
@@ -29,6 +30,7 @@ type Field =
   styleUrl: './empresa.scss',
 })
 export class Empresa {
+  private confirmarService = inject(DialogConfirmarService);
   private empresaService = inject(EmpresaService);
   private auditoriaService = inject(AuditoriaService);
 
@@ -339,6 +341,11 @@ export class Empresa {
     this.empresaModel.update((model) => ({ ...model, [field]: value }));
   }
 
+  protected counterStatus(status: boolean) {
+    const contador = this.listar().filter((item) => item.status === status);
+    return contador.length;
+  }
+
   ngOnInit(): void {
     this.carregar().subscribe();
   }
@@ -430,18 +437,21 @@ export class Empresa {
       alert('Formulário inválido - não enviar');
       return;
     }
-    this.empresaService
-      .cadastrar(this.empresaModel())
+
+    const empresa = this.empresaModel();
+
+    this.confirmarService
+      .confirmar({
+        titulo: 'Nova Empresa',
+        mensagem: `Deseja confirmar o cadastro da empresa ${empresa.nomeFantasia.toUpperCase()}?`,
+        acao: () => this.empresaService.cadastrar(empresa),
+      })
       .pipe(switchMap(() => this.carregar()))
-      .subscribe({
-        next: () => {
+      .subscribe((confirmado) => {
+        if (confirmado) {
           this.resetForm();
           this.mudarOperacao('inicial');
-        },
-        error: (err: any) => {
-          console.error('Erro ao cadastrar empresa:', err);
-          alert('Falha ao cadastrar empresa. Tente novamente.');
-        },
+        }
       });
   }
 

@@ -1,0 +1,32 @@
+<!-- Sobreposição do fundo -->
+<section class="modal-backdrop" (click)="fecharModal(false)"></section>
+<!-- Card do modal -->
+<section class="modal-card">
+  <!-- Cabeçalho -->
+  <header class="modal-header">
+    <h2>{{ data.titulo }}</h2>
+    <button class="btn-close" (click)="fecharModal(true)">X</button>
+  </header>
+  <!-- Corpo -->
+  <main class="modal-main">
+    <span>{{ data.mensagem }}</span>
+    @if (erro()) {
+      @for (item of erro(); track item) {
+        <div class="alert-error">⚠️ {{ item }}</div>
+      }
+    }
+  </main>
+  <!-- Rodapé com botões -->
+  <footer class="modal-footer">
+    <button class="btn btn-secondary" (click)="fecharModal(false)" [disabled]="carregando()">
+      Cancelar
+    </button>
+    <button class="btn btn-primary" (click)="onConfirmar()" [disabled]="carregando()">
+      @if (carregando()) {
+        <span class="spinner"></span> Processando...
+      } @else {
+        Confirmar
+      }
+    </button>
+  </footer>
+</section>
