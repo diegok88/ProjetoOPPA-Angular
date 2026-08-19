@@ -278,7 +278,7 @@
                   </span>
                 </div>
               </div>
-              <button type="submit" class="operacao-botao" [disabled]="!isFormValid()">
+              <button type="submit" class="operacao-botao" [disabled]="isFormValid()">
                 Cadastrar
               </button>
             </form>
@@ -732,7 +732,7 @@
                           <span class="info-value">{{ buscar()?.status }}</span>
                         </div>
                       </div>
-                      <button type="submit" class="operacao-botao" [disabled]="!isFormValid()">
+                      <button type="submit" class="operacao-botao" [disabled]="isFormValid()">
                         Atualizar
                       </button>
                     </form>

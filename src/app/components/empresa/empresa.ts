@@ -59,7 +59,7 @@ export class Empresa {
 
   protected formSubmitted = signal<boolean>(false);
 
-  protected touchedSubmitted = signal<boolean>(false);
+  protected touchedSubmitted = signal<boolean>(true);
   //----------------------------------------------------------------------------------------//
   protected cnpjTouched = signal<boolean>(false);
 
@@ -282,40 +282,45 @@ export class Empresa {
   });
   //----------------------------------------------------------------------------------------//
   protected isFormValid = computed(() => {
-    const cnpjOk = !this.cnpjEmptyFiedlsError() && !this.cnpjEqualsFiedlsError();
-    const razaoSocialOk =
-      !this.razaoSocialEmptyFiedlsError() && !this.razaoSocialEqualsFiedlsError();
-    const nomeFantasiaOk =
-      !this.nomeFantasiaEmptyFiedlsError() && !this.nomeFantasiaEqualsFiedlsError();
-    const contatoOk = !this.contatoEmptyFiedlsError() && !this.contatoEqualsFiedlsError();
-    const emailOk = !this.emailEmptyFiedlsError() && !this.emailEqualsFiedlsError();
-    const ruaOk = !this.ruaEmptyFiedlsError() && !this.ruaEqualsFiedlsError();
-    const numeroOk = !this.numeroEmptyFiedlsError() && !this.numeroEqualsFiedlsError();
-    const bairroOk = !this.bairroEmptyFiedlsError() && !this.bairroEqualsFiedlsError();
-    const cidadeOk = !this.cidadeEmptyFiedlsError() && !this.cidadeEqualsFiedlsError();
-    const estadoOk = !this.estadoEmptyFiedlsError() && !this.estadoEqualsFiedlsError();
-    const cepOk = !this.cepEmptyFiedlsError() && !this.cepEqualsFiedlsError();
-    const touchedOk = this.touchedSubmitted();
-    const dadosOk =
-      cnpjOk &&
-      razaoSocialOk &&
-      nomeFantasiaOk &&
-      contatoOk &&
-      emailOk &&
-      ruaOk &&
-      numeroOk &&
-      bairroOk &&
-      cidadeOk &&
-      estadoOk &&
-      cepOk &&
-      touchedOk;
+    if (!this.formSubmitted) {
+      const cnpjOk = this.cnpjEmptyFiedlsError() || this.cnpjEqualsFiedlsError();
+      const razaoSocialOk =
+        this.razaoSocialEmptyFiedlsError() || this.razaoSocialEqualsFiedlsError();
+      const nomeFantasiaOk =
+        this.nomeFantasiaEmptyFiedlsError() || this.nomeFantasiaEqualsFiedlsError();
+      const contatoOk = this.contatoEmptyFiedlsError() || this.contatoEqualsFiedlsError();
+      const emailOk = this.emailEmptyFiedlsError() || this.emailEqualsFiedlsError();
+      const ruaOk = this.ruaEmptyFiedlsError() || this.ruaEqualsFiedlsError();
+      const numeroOk = this.numeroEmptyFiedlsError() || this.numeroEqualsFiedlsError();
+      const bairroOk = this.bairroEmptyFiedlsError() || this.bairroEqualsFiedlsError();
+      const cidadeOk = this.cidadeEmptyFiedlsError() || this.cidadeEqualsFiedlsError();
+      const estadoOk = this.estadoEmptyFiedlsError() || this.estadoEqualsFiedlsError();
+      const cepOk = this.cepEmptyFiedlsError() || this.cepEqualsFiedlsError();
+      const touchedOk = this.touchedSubmitted();
+      console.log('touchedOk: ', touchedOk);
 
-    console.log(dadosOk);
-    return dadosOk;
+      const dadosOk =
+        cnpjOk ||
+        razaoSocialOk ||
+        nomeFantasiaOk ||
+        contatoOk ||
+        emailOk ||
+        ruaOk ||
+        numeroOk ||
+        bairroOk ||
+        cidadeOk ||
+        estadoOk ||
+        cepOk ||
+        touchedOk;
+
+      return dadosOk;
+    }
+
+    return false;
   });
   //----------------------------------------------------------------------------------------//
   protected onBlur(field: Field): void {
-    if (field) this.touchedSubmitted.set(true);
+    if (field) this.touchedSubmitted.set(false);
     if (field === 'cnpj') this.cnpjTouched.set(true);
     if (field === 'razaoSocial') this.razaoSocialTouched.set(true);
     if (field === 'nomeFantasia') this.nomeFantasiaTouched.set(true);
@@ -433,7 +438,7 @@ export class Empresa {
   protected cadastrar(event: Event): void {
     event.preventDefault();
     this.formSubmitted.set(true);
-    if (!this.isFormValid()) {
+    if (this.isFormValid()) {
       alert('Formulário inválido - não enviar');
       return;
     }
@@ -446,11 +451,11 @@ export class Empresa {
         mensagem: `Deseja confirmar o cadastro da empresa ${empresa.nomeFantasia.toUpperCase()}?`,
         acao: () => this.empresaService.cadastrar(empresa),
       })
-      .pipe(switchMap(() => this.carregar()))
       .subscribe((confirmado) => {
         if (confirmado) {
           this.resetForm();
           this.mudarOperacao('inicial');
+          this.carregar().subscribe();
         }
       });
   }
@@ -458,10 +463,28 @@ export class Empresa {
   protected atualizar(event: Event): void {
     event.preventDefault();
     this.formSubmitted.set(true);
-    if (!this.isFormValid()) {
+    if (this.isFormValid()) {
       alert('Formulário inválido - não enviar');
       return;
     }
+
+    const empresa = this.empresaModel();
+    const id = this.buscar()?.id;
+
+    this.confirmarService
+      .confirmar({
+        titulo: 'Atualizar Empresa',
+        mensagem: `Deseja confirmar a atualização da empresa ${empresa.nomeFantasia.toUpperCase()}?`,
+        acao: () => this.empresaService.atualizar(id!, empresa),
+      })
+      .subscribe((confirmado) => {
+        if (confirmado) {
+          this.resetForm();
+          this.mudarOperacao('registro', id!);
+          this.carregar().subscribe();
+        }
+      });
+    /*
     this.empresaService
       .atualizar(this.buscar()!.id!, this.empresaModel())
       .pipe(switchMap(() => this.carregar()))
@@ -474,7 +497,7 @@ export class Empresa {
           console.error('Erro ao atualizar perfil:', err);
           alert('Falha ao atualizar perfil. Tente novamente.');
         },
-      });
+      }); */
   }
 
   protected inativar(event: Event): void {
@@ -548,5 +571,6 @@ export class Empresa {
     this.estadoTouched.set(false);
     this.cepTouched.set(false);
     this.formSubmitted.set(false);
+    this.touchedSubmitted.set(true);
   }
 }
