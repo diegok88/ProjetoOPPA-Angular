@@ -1,1 +1,22 @@
-<p>dialogo-finalizar works!</p>
+<div class="modal-backdrop"></div>
+<div class="modal-card">
+  <div class="modal-container">
+    <header class="modal-header">
+      <img class="modal-image" [src]="data.icone" alt="Sucesso" />
+    </header>
+    <main class="modal-main">
+      <h2>{{ data.titulo }}</h2>
+      <span>{{ data.mensagem }}</span>
+      <span>{{ data.operacao }}</span>
+      @if (!erro()) {
+        @for (item of erro(); track item) {
+          <span>item</span>
+        }
+      }
+    </main>
+  </div>
+
+  <footer class="modal-footer">
+    <button class="modal-btn" (click)="fechar()">OK</button>
+  </footer>
+</div>

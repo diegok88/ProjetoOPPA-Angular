@@ -5,7 +5,9 @@ import { AuditoriaData } from '../../interfaces/auditoria-data.interface';
 import { EmpresaData } from '../../interfaces/empresa-data.interface';
 import { AuditoriaService } from '../../services/auditoria.service';
 import { DialogConfirmarService } from '../../services/dialog-confirmar.service';
+import { DialogFinalizarService } from '../../services/dialog-finalizar.service';
 import { EmpresaService } from '../../services/empresa.service';
+import { DialogoConfimar } from '../dialogo-confimar/dialogo-confimar';
 
 type Operacao = 'inicial' | 'cadastrar' | 'registro';
 type Registro = 'informacao' | 'atualizar' | 'inativar' | 'eliminar' | 'auditoria';
@@ -30,6 +32,8 @@ type Field =
 })
 export class Empresa {
   private confirmarService = inject(DialogConfirmarService);
+  private finalizarService = inject(DialogFinalizarService);
+  private dialogoFinalizar = inject(DialogoConfimar);
   private empresaService = inject(EmpresaService);
   private auditoriaService = inject(AuditoriaService);
 
@@ -442,10 +446,24 @@ export class Empresa {
         acao: () => this.empresaService.cadastrar(empresa),
       })
       .subscribe((confirmado) => {
+        console.log(confirmado);
         if (confirmado) {
           this.resetForm();
           this.mudarOperacao('inicial');
           this.carregar().subscribe();
+          this.finalizarService.finalizar({
+            icone: '/icons/check_circle_84.png',
+            operacao: empresa.nomeFantasia,
+            titulo: 'Sucesso!',
+            mensagem: 'Cadastrado com exíto.',
+          });
+        } else {
+          this.finalizarService.finalizar({
+            icone: '/icons/cancel_84.png',
+            operacao: empresa.nomeFantasia,
+            titulo: 'Erro!',
+            mensagem: 'Falha no cadastro.',
+          });
         }
       });
   }

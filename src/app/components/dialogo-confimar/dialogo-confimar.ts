@@ -1,7 +1,7 @@
-import { Component, inject, signal } from '@angular/core';
-import { DialogoConfirmarData } from '../../interfaces/dialogo-confirmar.interface';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
+import { Component, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
+import { DialogoConfirmarData } from '../../interfaces/dialogo-confirmar.interface';
 
 @Component({
   selector: 'app-dialogo-confimar',
@@ -15,11 +15,12 @@ export class DialogoConfimar {
   private dialogRef = inject(DialogRef<boolean>);
 
   public carregando = signal<boolean>(false);
-  public erro = signal<string[] | null>(null);
+  private erroSignal = signal<string[] | null>(null);
+  public erroMensagem = this.erroSignal.asReadonly();
 
   async onConfirmar() {
     this.carregando.set(true);
-    this.erro.set(null);
+    this.erroSignal.set(null);
 
     try {
       const acaoFn = this.data.acao();
@@ -37,11 +38,11 @@ export class DialogoConfimar {
       this.carregando.set(false);
 
       if (Array.isArray(error)) {
-        this.erro.set(error);
+        this.erroSignal.set(error);
       } else if (typeof error === 'string') {
-        this.erro.set([error]);
+        this.erroSignal.set([error]);
       } else {
-        this.erro.set(['Erro inesperado.']);
+        this.erroSignal.set(['Erro inesperado.']);
       }
     }
   }
@@ -51,3 +52,12 @@ export class DialogoConfimar {
     this.dialogRef.close(confirmado);
   }
 }
+
+/*
+script html
+@if (erro()) {
+      @for (item of erro(); track item) {
+        <div class="alert-error">⚠️ {{ item }}</div>
+      }
+    }
+*/

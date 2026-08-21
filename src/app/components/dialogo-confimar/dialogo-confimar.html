@@ -10,11 +10,7 @@
   <!-- Corpo -->
   <main class="modal-main">
     <span>{{ data.mensagem }}</span>
-    @if (erro()) {
-      @for (item of erro(); track item) {
-        <div class="alert-error">⚠️ {{ item }}</div>
-      }
-    }
+    <!--script do erros-->
   </main>
   <!-- Rodapé com botões -->
   <footer class="modal-footer">
