@@ -1,7 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgxMaskDirective } from 'ngx-mask';
-import { switchMap } from 'rxjs';
 import { AuditoriaData } from '../../interfaces/auditoria-data.interface';
 import { EmpresaData } from '../../interfaces/empresa-data.interface';
 import { AuditoriaService } from '../../services/auditoria.service';
@@ -337,10 +336,6 @@ export class Empresa {
     this.empresaModel.update((model) => ({ ...model, [field]: value }));
   }
 
-  protected onInput(field: keyof EmpresaData, value: string): void {
-    this.empresaModel.update((model) => ({ ...model, [field]: value }));
-  }
-
   protected counterStatus(status: boolean) {
     const contador = this.listar().filter((item) => item.status === status);
     return contador.length;
@@ -488,19 +483,21 @@ export class Empresa {
       alert('Perfil já está inativo!');
       return;
     }
-    this.empresaService
-      .inativar(this.buscar()!.id!)
-      .pipe(switchMap(() => this.carregar()))
-      .subscribe({
-        next: () => {
-          this.carregar();
-          this.carregarRegistro(this.buscar()!.id!);
-          this.mudarOperacao('registro', this.buscar()!.id!);
-        },
-        error: (err: any) => {
-          console.error('Erro ao inativar o perfil:', err);
-          alert('Falha ao inativar perfil. Tente novamente.');
-        },
+
+    const empresa = this.empresaModel();
+    const id = this.buscar()?.id;
+
+    this.confirmarService
+      .confirmar({
+        titulo: 'Inativar Empresa',
+        mensagem: `Deseja confirmar a inativação da empresa ${empresa.nomeFantasia.toUpperCase()}?`,
+        acao: () => this.empresaService.inativar(id!),
+      })
+      .subscribe((confirmado) => {
+        if (confirmado) {
+          this.mudarOperacao('registro', id!);
+          this.carregar().subscribe();
+        }
       });
   }
 
@@ -511,18 +508,21 @@ export class Empresa {
       alert('Perfil não está inativo!');
       return;
     }
-    this.empresaService
-      .deletar(this.buscar()!.id!)
-      .pipe(switchMap(() => this.carregar()))
-      .subscribe({
-        next: () => {
-          this.carregar();
+
+    const empresa = this.empresaModel();
+    const id = this.buscar()?.id;
+
+    this.confirmarService
+      .confirmar({
+        titulo: 'Eliminar Empresa',
+        mensagem: `Deseja confirmar a eliminação da empresa ${empresa.nomeFantasia.toUpperCase()}`,
+        acao: () => this.empresaService.deletar(id!),
+      })
+      .subscribe((confirmado) => {
+        if (confirmado) {
           this.mudarOperacao('inicial');
-        },
-        error: (err: any) => {
-          console.error('Erro ao eliminar o perfil:', err);
-          alert('Falha ao eliminar o perfil. Tente novamente.');
-        },
+          this.carregar().subscribe();
+        }
       });
   }
 

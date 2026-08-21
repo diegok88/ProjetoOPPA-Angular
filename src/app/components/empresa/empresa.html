@@ -661,7 +661,7 @@
                                 name="cidade"
                                 placeholder="Insira a cidade da empresa"
                                 [ngModel]="getField('cidade')"
-                                (ngModelChange)="onInput('cidade', $event)"
+                                (ngModelChange)="setField('cidade', $event)"
                                 (blur)="onBlur('cidade')"
                                 autocomplete="off"
                               />
@@ -913,7 +913,7 @@
                             <th class="operacao-coluna">Registrado Por Id</th>
                           </tr>
                         </thead>
-                        <tbody class="operacao-tbody">
+                        <tbody class="operacao-tbody auditoria">
                           @for (item of listarAuditoria(); track item.id) {
                             <tr class="operacao-hover">
                               <td class="operacao-dado">{{ item.acao }}</td>
