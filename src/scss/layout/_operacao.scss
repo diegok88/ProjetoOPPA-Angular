@@ -175,6 +175,19 @@
   flex-direction: column;
 }
 
+.container-imagem {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+.image-eliminar {
+  width: 250px;
+}
+
 .operacao-inicial,
 .operacao-cadastrar,
 .operacao-registro {

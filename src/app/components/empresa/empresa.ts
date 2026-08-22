@@ -646,3 +646,62 @@ export class Empresa {
     this.touchedSubmitted.set(true);
   }
 }
+
+/*
+                        <div class="form-info">
+                          <span class="info-label">Id:</span>
+                          <span class="info-value">{{ buscar()?.id }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Código:</span>
+                          <span class="info-value">{{ buscar()?.codigo }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Cnpj:</span>
+                          <span class="info-value">{{ buscar()?.cnpj }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Razão Social:</span>
+                          <span class="info-value">{{ buscar()?.razaoSocial }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Nome Fantasia:</span>
+                          <span class="info-value">{{ buscar()?.nomeFantasia }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Contato:</span>
+                          <span class="info-value">{{ buscar()?.contato }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Email:</span>
+                          <span class="info-value">{{ buscar()?.email }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Rua:</span>
+                          <span class="info-value">{{ buscar()?.rua }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Número:</span>
+                          <span class="info-value">{{ buscar()?.numero }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Bairro:</span>
+                          <span class="info-value">{{ buscar()?.bairro }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Cidade:</span>
+                          <span class="info-value">{{ buscar()?.cidade }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Estado:</span>
+                          <span class="info-value">{{ buscar()?.estado }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Cep:</span>
+                          <span class="info-value">{{ buscar()?.cep }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Status:</span>
+                          <span class="info-value">{{ buscar()?.status }}</span>
+                        </div>
+*/
