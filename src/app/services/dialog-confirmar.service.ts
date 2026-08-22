@@ -10,18 +10,20 @@ export class DialogConfirmarService {
   private dialog = inject(Dialog);
 
   confirmar<T>(config: {
+    icone: string;
     titulo: string;
     mensagem: string;
     acao: () => Observable<T> | Promise<T>;
-  }): Observable<boolean> {
-    const dialogRef = this.dialog.open<boolean>(DialogoConfimar, {
+  }): Observable<string> {
+    const dialogRef = this.dialog.open<string>(DialogoConfimar, {
       data: {
+        icone: config.icone,
         titulo: config.titulo,
         mensagem: config.mensagem,
         acao: config.acao,
       },
       disableClose: true,
     });
-    return dialogRef.closed as Observable<boolean>;
+    return dialogRef.closed as Observable<string>;
   }
 }

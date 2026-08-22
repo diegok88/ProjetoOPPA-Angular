@@ -1,23 +1,28 @@
 <!-- Sobreposição do fundo -->
-<section class="modal-backdrop" (click)="fecharModal(false)"></section>
+<section class="modal-backdrop" (click)="fecharModal('cancelado')"></section>
 <!-- Card do modal -->
 <section class="modal-card">
-  <!-- Cabeçalho -->
-  <header class="modal-header">
-    <h2>{{ data.titulo }}</h2>
-    <button class="btn-close" (click)="fecharModal(true)">X</button>
-  </header>
-  <!-- Corpo -->
-  <main class="modal-main">
-    <span>{{ data.mensagem }}</span>
-    <!--script do erros-->
-  </main>
+  <div class="modal-container">
+    <!-- Cabeçalho -->
+    <header class="modal-header">
+      <img class=".modal-image" [src]="data.icone" alt="adicionar" />
+    </header>
+    <!-- Corpo -->
+    <main class="modal-main">
+      <h2>{{ data.titulo }}</h2>
+      <span>{{ data.mensagem }}</span>
+    </main>
+  </div>
   <!-- Rodapé com botões -->
   <footer class="modal-footer">
-    <button class="btn btn-secondary" (click)="fecharModal(false)" [disabled]="carregando()">
+    <button
+      class="modal-btn btn-secondary"
+      (click)="fecharModal('cancelado')"
+      [disabled]="carregando()"
+    >
       Cancelar
     </button>
-    <button class="btn btn-primary" (click)="onConfirmar()" [disabled]="carregando()">
+    <button class="modal-btn btn-primary" (click)="onConfirmar()" [disabled]="carregando()">
       @if (carregando()) {
         <span class="spinner"></span> Processando...
       } @else {

@@ -7,7 +7,6 @@ import { AuditoriaService } from '../../services/auditoria.service';
 import { DialogConfirmarService } from '../../services/dialog-confirmar.service';
 import { DialogFinalizarService } from '../../services/dialog-finalizar.service';
 import { EmpresaService } from '../../services/empresa.service';
-import { DialogoConfimar } from '../dialogo-confimar/dialogo-confimar';
 
 type Operacao = 'inicial' | 'cadastrar' | 'registro';
 type Registro = 'informacao' | 'atualizar' | 'inativar' | 'eliminar' | 'auditoria';
@@ -33,7 +32,6 @@ type Field =
 export class Empresa {
   private confirmarService = inject(DialogConfirmarService);
   private finalizarService = inject(DialogFinalizarService);
-  private dialogoFinalizar = inject(DialogoConfimar);
   private empresaService = inject(EmpresaService);
   private auditoriaService = inject(AuditoriaService);
 
@@ -441,28 +439,37 @@ export class Empresa {
 
     this.confirmarService
       .confirmar({
+        icone: '/icons/add_circle_84.png',
         titulo: 'Nova Empresa',
         mensagem: `Deseja confirmar o cadastro da empresa ${empresa.nomeFantasia.toUpperCase()}?`,
         acao: () => this.empresaService.cadastrar(empresa),
       })
       .subscribe((confirmado) => {
         console.log(confirmado);
-        if (confirmado) {
+        if (confirmado === 'finalizado') {
           this.resetForm();
           this.mudarOperacao('inicial');
           this.carregar().subscribe();
           this.finalizarService.finalizar({
             icone: '/icons/check_circle_84.png',
-            operacao: empresa.nomeFantasia,
+            operacao: empresa.nomeFantasia.toLocaleUpperCase(),
             titulo: 'Sucesso!',
             mensagem: 'Cadastrado com exíto.',
+          });
+        } else if (confirmado === 'erro') {
+          this.finalizarService.finalizar({
+            icone: '/icons/error_84.png',
+            operacao: empresa.nomeFantasia.toLocaleUpperCase(),
+            titulo: 'Erro!',
+            mensagem: 'Falha no cadastro.',
+            erros: this.finalizarService.ultimosErros(),
           });
         } else {
           this.finalizarService.finalizar({
             icone: '/icons/cancel_84.png',
-            operacao: empresa.nomeFantasia,
-            titulo: 'Erro!',
-            mensagem: 'Falha no cadastro.',
+            operacao: empresa.nomeFantasia.toLocaleUpperCase(),
+            titulo: 'Cancelado!',
+            mensagem: 'Operação de cadastro cancelada.',
           });
         }
       });
@@ -481,15 +488,37 @@ export class Empresa {
 
     this.confirmarService
       .confirmar({
+        icone: '/icons/change_circle_84.png',
         titulo: 'Atualizar Empresa',
         mensagem: `Deseja confirmar a atualização da empresa ${empresa.nomeFantasia.toUpperCase()}?`,
         acao: () => this.empresaService.atualizar(id!, empresa),
       })
       .subscribe((confirmado) => {
-        if (confirmado) {
+        if (confirmado === 'finalizado') {
           this.resetForm();
           this.mudarOperacao('registro', id!);
           this.carregar().subscribe();
+          this.finalizarService.finalizar({
+            icone: '/icons/check_circle_84.png',
+            operacao: empresa.nomeFantasia,
+            titulo: 'Sucesso!',
+            mensagem: 'Atualizado com exíto.',
+          });
+        } else if (confirmado === 'erro') {
+          this.finalizarService.finalizar({
+            icone: '/icons/error_84.png',
+            operacao: empresa.nomeFantasia.toLocaleUpperCase(),
+            titulo: 'Erro!',
+            mensagem: 'Falha no atualização.',
+            erros: this.finalizarService.ultimosErros(),
+          });
+        } else {
+          this.finalizarService.finalizar({
+            icone: '/icons/cancel_84.png',
+            operacao: empresa.nomeFantasia.toLocaleUpperCase(),
+            titulo: 'Cancelado!',
+            mensagem: 'Operação de atualização cancelada.',
+          });
         }
       });
   }
@@ -507,14 +536,36 @@ export class Empresa {
 
     this.confirmarService
       .confirmar({
+        icone: '/icons/block_84.png',
         titulo: 'Inativar Empresa',
         mensagem: `Deseja confirmar a inativação da empresa ${empresa.nomeFantasia.toUpperCase()}?`,
         acao: () => this.empresaService.inativar(id!),
       })
       .subscribe((confirmado) => {
-        if (confirmado) {
+        if (confirmado === 'finalizado') {
           this.mudarOperacao('registro', id!);
           this.carregar().subscribe();
+          this.finalizarService.finalizar({
+            icone: '/icons/check_circle_84.png',
+            operacao: empresa.nomeFantasia,
+            titulo: 'Sucesso!',
+            mensagem: 'Inativação com exíto.',
+          });
+        } else if (confirmado === 'erro') {
+          this.finalizarService.finalizar({
+            icone: '/icons/error_84.png',
+            operacao: empresa.nomeFantasia.toLocaleUpperCase(),
+            titulo: 'Erro!',
+            mensagem: 'Falha no inativação.',
+            erros: this.finalizarService.ultimosErros(),
+          });
+        } else {
+          this.finalizarService.finalizar({
+            icone: '/icons/cancel_84.png',
+            operacao: empresa.nomeFantasia.toLocaleUpperCase(),
+            titulo: 'Cancelado!',
+            mensagem: 'Operação de inativação cancelada.',
+          });
         }
       });
   }
@@ -532,14 +583,36 @@ export class Empresa {
 
     this.confirmarService
       .confirmar({
+        icone: '/icons/delete_84.png',
         titulo: 'Eliminar Empresa',
-        mensagem: `Deseja confirmar a eliminação da empresa ${empresa.nomeFantasia.toUpperCase()}`,
+        mensagem: `Deseja confirmar a eliminação da empresa ${empresa.nomeFantasia.toUpperCase()}?`,
         acao: () => this.empresaService.deletar(id!),
       })
       .subscribe((confirmado) => {
-        if (confirmado) {
+        if (confirmado === 'finalizado') {
           this.mudarOperacao('inicial');
           this.carregar().subscribe();
+          this.finalizarService.finalizar({
+            icone: '/icons/check_circle_84.png',
+            operacao: empresa.nomeFantasia,
+            titulo: 'Sucesso!',
+            mensagem: 'Eliminação com exíto.',
+          });
+        } else if (confirmado === 'erro') {
+          this.finalizarService.finalizar({
+            icone: '/icons/error_84.png',
+            operacao: empresa.nomeFantasia.toLocaleUpperCase(),
+            titulo: 'Erro!',
+            mensagem: 'Falha na eliminação.',
+            erros: this.finalizarService.ultimosErros(),
+          });
+        } else {
+          this.finalizarService.finalizar({
+            icone: '/icons/cancel_84.png',
+            operacao: empresa.nomeFantasia.toLocaleUpperCase(),
+            titulo: 'Cancelado!',
+            mensagem: 'Operação de eliminação cancelada.',
+          });
         }
       });
   }

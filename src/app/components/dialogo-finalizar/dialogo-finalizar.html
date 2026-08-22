@@ -8,9 +8,9 @@
       <h2>{{ data.titulo }}</h2>
       <span>{{ data.mensagem }}</span>
       <span>{{ data.operacao }}</span>
-      @if (!erro()) {
-        @for (item of erro(); track item) {
-          <span>item</span>
+      @if (data.erros) {
+        @for (item of data.erros; track item) {
+          <span>{{ item }}</span>
         }
       }
     </main>

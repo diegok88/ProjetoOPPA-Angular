@@ -32,11 +32,13 @@
 
   .operacao-tbody {
     display: block;
-    max-height: 660px;
     overflow-y: scroll;
   }
 
   .operacao-tbody {
+    &.lista {
+      max-height: 660px;
+    }
     &.auditoria {
       max-height: 600px;
     }
@@ -64,6 +66,16 @@
       width: 50%;
     }
   }
+  .operacao-coluna:nth-child(1),
+  .operacao-dado:nth-child(1) {
+    width: 15%;
+  }
+
+  .operacao-coluna:nth-child(3),
+  .operacao-dado:nth-child(3) {
+    width: 15%;
+  }
+
   .operacao-hover:hover {
     background-color: rgba(255, 255, 255, 0.1);
     cursor: default;
@@ -180,7 +192,7 @@
   }
 }
 
-@media (max-height: 730px) {
+@media (max-height: 750px) {
   .operacao-container {
     height: 90%;
   }
@@ -191,6 +203,9 @@
 
   .operacao-tabela {
     .operacao-tbody {
+      &.lista {
+        max-height: 484px;
+      }
       &.auditoria {
         max-height: 378px;
       }
