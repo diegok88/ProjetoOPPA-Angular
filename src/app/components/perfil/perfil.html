@@ -7,7 +7,7 @@
         <thead>
           <tr>
             <th class="operacao-coluna">Código</th>
-            <th class="operacao-coluna">Descrição</th>
+            <th class="operacao-coluna centro">Descrição</th>
             <th class="operacao-coluna">Ação</th>
           </tr>
         </thead>
@@ -15,7 +15,7 @@
           @for (item of listar(); track item.id) {
             <tr class="operacao-hover">
               <td class="operacao-dado">{{ item?.codigo }}</td>
-              <td class="operacao-dado">{{ item?.descricao }}</td>
+              <td class="operacao-dado centro">{{ item?.descricao }}</td>
               <td class="operacao-dado">
                 <img
                   class="operacao-icone"
@@ -36,6 +36,11 @@
             <img class="operacao-img" src="images/profile.png" alt="Perfil" />
             <span class="operacao-texto">Cadastrar um novo perfil?</span>
             <button class="operacao-botao" (click)="mudarOperacao('cadastrar')">Clique aqui</button>
+            <div class="dados-inicial">
+              <span>Total de Perfis: {{ listar().length }}</span>
+              <span>Total de Ativas: {{ counterStatus(true) }}</span>
+              <span>Total de Inativas: {{ counterStatus(false) }}</span>
+            </div>
           </section>
         }
         @case ('cadastrar') {
@@ -58,8 +63,8 @@
                     id="descricao"
                     name="descricao"
                     placeholder="Insira a descrição do perfil"
-                    [ngModel]="perfilModel().descricao"
-                    (ngModelChange)="onInput('descricao', $event)"
+                    [ngModel]="getField('descricao')"
+                    (ngModelChange)="setField('descricao', $event)"
                     (blur)="onBlur('descricao')"
                     autocomplete="off"
                   />
@@ -73,7 +78,9 @@
                   </span>
                 </div>
               </div>
-              <button type="submit" class="operacao-botao">Cadastrar</button>
+              <button type="submit" class="operacao-botao" [disabled]="isFormValid()">
+                Cadastrar
+              </button>
             </form>
           </section>
         }
@@ -199,8 +206,8 @@
                                 id="descricao"
                                 name="descricao"
                                 placeholder="Insira a descrição do perfil"
-                                [ngModel]="perfilModel().descricao"
-                                (ngModelChange)="onInput('descricao', $event)"
+                                [ngModel]="getField('descricao')"
+                                (ngModelChange)="setField('descricao', $event)"
                                 (blur)="onBlur('descricao')"
                                 autocomplete="off"
                               />
@@ -226,7 +233,9 @@
                           <span class="info-value">{{ buscar()?.status }}</span>
                         </div>
                       </div>
-                      <button type="submit" class="operacao-botao">Atualizar</button>
+                      <button type="submit" class="operacao-botao" [disabled]="isFormValid()">
+                        Atualizar
+                      </button>
                     </form>
                   </div>
                 </div>
@@ -244,23 +253,9 @@
                   </div>
                   <div class="registro-inativar">
                     <form (ngSubmit)="inativar($event)" class="operacao-forms">
-                      <div class="container-info">
-                        <div class="form-info">
-                          <span class="info-label">Id:</span>
-                          <span class="info-value">{{ buscar()?.id }}</span>
-                        </div>
-                        <div class="form-info">
-                          <span class="info-label">Código:</span>
-                          <span class="info-value">{{ buscar()?.codigo }}</span>
-                        </div>
-                        <div class="form-info">
-                          <span class="info-label">Descrição:</span>
-                          <span class="info-value">{{ buscar()?.descricao }}</span>
-                        </div>
-                        <div class="form-info">
-                          <span class="info-label">Status:</span>
-                          <span class="info-value">{{ buscar()?.status }}</span>
-                        </div>
+                      <div class="container-imagem">
+                        <img class="image-eliminar" src="images/prohibited.png" alt="Lixeira" />
+                        <span>Deseja inativar a perfil {{ buscar()?.descricao }}?</span>
                       </div>
                       <button type="submit" class="operacao-botao">Inativar</button>
                     </form>
@@ -280,23 +275,9 @@
                   </div>
                   <div class="registro-eliminar">
                     <form (ngSubmit)="eliminar($event)" class="operacao-forms">
-                      <div class="container-info">
-                        <div class="form-info">
-                          <span class="info-label">Id:</span>
-                          <span class="info-value">{{ buscar()?.id }}</span>
-                        </div>
-                        <div class="form-info">
-                          <span class="info-label">Código:</span>
-                          <span class="info-value">{{ buscar()?.codigo }}</span>
-                        </div>
-                        <div class="form-info">
-                          <span class="info-label">Descrição:</span>
-                          <span class="info-value">{{ buscar()?.descricao }}</span>
-                        </div>
-                        <div class="form-info">
-                          <span class="info-label">Status:</span>
-                          <span class="info-value">{{ buscar()?.status }}</span>
-                        </div>
+                      <div class="container-imagem">
+                        <img class="image-eliminar" src="images/trash.png" alt="Lixeira" />
+                        <span>Deseja eliminar a empresa {{ buscar()?.descricao }}?</span>
                       </div>
                       <button type="submit" class="operacao-botao">Eliminar</button>
                     </form>
@@ -330,7 +311,9 @@
                             <tr class="operacao-hover">
                               <td class="operacao-dado">{{ item.acao }}</td>
                               <td class="operacao-dado">
-                                <span (click)="mudarAuditoria(item)">VISUALIZAR</span>
+                                <span (click)="mudarAuditoria(item)" class="operacao-visualizar"
+                                  >VISUALIZAR</span
+                                >
                               </td>
                               <td class="operacao-dado">{{ item.dataHora }}</td>
                               <td class="operacao-dado">{{ item.registradoPorId }}</td>

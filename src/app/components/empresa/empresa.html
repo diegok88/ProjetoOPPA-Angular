@@ -810,7 +810,9 @@
                             <tr class="operacao-hover">
                               <td class="operacao-dado">{{ item.acao }}</td>
                               <td class="operacao-dado">
-                                <span (click)="mudarAuditoria(item)">VISUALIZAR</span>
+                                <span (click)="mudarAuditoria(item)" class="operacao-visualizar"
+                                  >VISUALIZAR</span
+                                >
                               </td>
                               <td class="operacao-dado">{{ item.dataHora }}</td>
                               <td class="operacao-dado">{{ item.registradoPorId }}</td>

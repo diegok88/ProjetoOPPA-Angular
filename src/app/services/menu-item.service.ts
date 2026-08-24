@@ -1,6 +1,7 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { MenuItem } from '../interfaces/menu-item.interface';
 import { AuthService } from './auth.service';
+import { ROLES_MAP } from '../const/role-map.const';
 
 @Injectable({
   providedIn: 'root',
@@ -13,15 +14,15 @@ export class MenuItemService {
       rotulo: 'Principal',
       icone: 'icons/home.png',
       caminho: 'principal',
-      papeis: ['ASSISTÊNCIA - NIVEL 1', 'ADMINISTRADOR - NIVEL 1'],
+      papeis: [ROLES_MAP.ASN1, ROLES_MAP.ADN1],
     },
     {
       rotulo: 'Gestão',
       icone: 'icons/group.png',
       chave: 'gestao',
-      papeis: ['ASSISTÊNCIA - NIVEL 1', 'ADMINISTRADOR - NIVEL 1'],
+      papeis: [ROLES_MAP.ASN1, ROLES_MAP.ADN1],
       children: [
-        { rotulo: 'Cadastros', icone: 'icons/badge.png', caminho: 'gestao/cadastros' },
+        { rotulo: 'Cadastros', icone: 'icons/badge.png', caminho: 'usuario' },
         {
           rotulo: 'Alocações',
           icone: 'icons/swap_horizontal_circle.png',
@@ -39,7 +40,7 @@ export class MenuItemService {
       rotulo: 'Assistência',
       icone: 'icons/add_box.png',
       chave: 'assistencia',
-      papeis: ['ASSISTÊNCIA - NIVEL 1'],
+      papeis: [ROLES_MAP.ASN1],
       children: [
         { rotulo: 'Perfil', icone: 'icons/assignment_ind.png', caminho: 'perfil' },
         { rotulo: 'Penalidades', icone: 'icons/dangerous.png', caminho: 'assistencia/penalidades' },
@@ -60,7 +61,7 @@ export class MenuItemService {
       rotulo: 'Solicitações',
       icone: 'icons/list_alt.png',
       chave: 'solicitacoes',
-      papeis: ['ASSISTÊNCIA - NIVEL 1', 'ADMINISTRADOR - NIVEL 1'],
+      papeis: [ROLES_MAP.ASN1, ROLES_MAP.ADN1],
       children: [
         { rotulo: 'Escrever', icone: 'icons/box_edit.png', caminho: 'solicitacoes/escrever' },
         { rotulo: 'Enviadas', icone: 'icons/outbox.png', caminho: 'solicitacoes/enviadas' },
@@ -80,7 +81,7 @@ export class MenuItemService {
       rotulo: 'Eficiência',
       icone: 'icons/insert_chart.png',
       chave: 'eficiencia',
-      papeis: ['ASSISTÊNCIA - NIVEL 1', 'ADMINISTRADOR - NIVEL 1'],
+      papeis: [ROLES_MAP.ASN1, ROLES_MAP.ADN1],
       children: [
         {
           rotulo: 'Monitoração',
@@ -99,7 +100,7 @@ export class MenuItemService {
       rotulo: 'Empresa',
       icone: 'icons/factory.png',
       chave: 'empresa',
-      papeis: ['ASSISTÊNCIA - NIVEL 1', 'ADMINISTRADOR - NIVEL 1'],
+      papeis: [ROLES_MAP.ASN1, ROLES_MAP.ADN1],
       children: [
         { rotulo: 'Empresa', icone: 'icons/add_business.png', caminho: 'empresa' },
         { rotulo: 'Setores', icone: 'icons/add_column_right.png', caminho: 'empresa/setores' },
@@ -114,7 +115,7 @@ export class MenuItemService {
       rotulo: 'Ativos',
       icone: 'icons/settings_applications.png',
       chave: 'ativos',
-      papeis: ['ASSISTÊNCIA - NIVEL 1'],
+      papeis: [ROLES_MAP.ASN1],
       children: [
         { rotulo: 'Ativos', icone: 'icons/precision_manufacturing.png', caminho: 'ativos/ativos' },
         { rotulo: 'Tags Ativos', icone: 'icons/manufacturing.png', caminho: 'ativos/tags-ativos' },
@@ -132,7 +133,7 @@ export class MenuItemService {
       rotulo: 'Usuário',
       icone: 'icons/account_box.png',
       chave: 'usuario',
-      papeis: ['ASSISTÊNCIA - NIVEL 1', 'ADMINISTRADOR - NIVEL 1'],
+      papeis: [ROLES_MAP.ASN1, ROLES_MAP.ADN1],
       children: [
         { rotulo: 'Informações', icone: 'icons/id_card.png', caminho: 'usuario/informacoes' },
         { rotulo: 'Trocar senha', icone: 'icons/lock_reset.png', caminho: 'usuario/trocar-senha' },

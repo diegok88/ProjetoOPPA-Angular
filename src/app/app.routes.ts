@@ -3,6 +3,7 @@ import { roleGuard } from './const/role.guard';
 import { AccessDenied } from './modules/access-denied/access-denied';
 import { DashboardUser } from './modules/dashboard-user/dashboard-user';
 import { LoginUser } from './modules/login-user/login-user';
+import { ROLES_MAP } from './const/role-map.const';
 
 export const routes: Routes = [
   {
@@ -18,19 +19,25 @@ export const routes: Routes = [
         path: 'principal',
         loadComponent: () => import('./components/principal/principal').then((m) => m.Principal),
         canActivate: [roleGuard],
-        data: { roles: ['ASSISTÊNCIA - NIVEL 1', 'ADMINISTRADOR - NIVEL 1'] },
+        data: { roles: [ROLES_MAP.ASN1, ROLES_MAP.ADN1] },
+      },
+      {
+        path: 'usuario',
+        loadComponent: () => import('./components/usuario/usuario').then((u) => u.Usuario),
+        canActivate: [roleGuard],
+        data: { roles: [ROLES_MAP.ASN1] },
       },
       {
         path: 'perfil',
         loadComponent: () => import('./components/perfil/perfil').then((m) => m.Perfil),
         canActivate: [roleGuard],
-        data: { roles: ['ASSISTÊNCIA - NIVEL 1'] },
+        data: { roles: [ROLES_MAP.ASN1] },
       },
       {
         path: 'empresa',
         loadComponent: () => import('./components/empresa/empresa').then((m) => m.Empresa),
         canActivate: [roleGuard],
-        data: { roles: ['ASSISTÊNCIA - NIVEL 1'] },
+        data: { roles: [ROLES_MAP.ASN1] },
       },
       //  Adicione aqui as outras subrotas declaradas no MenuService
       {

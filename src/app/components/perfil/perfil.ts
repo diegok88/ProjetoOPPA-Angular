@@ -5,9 +5,12 @@ import { PerfilData } from '../../interfaces/perfil-data.interface';
 import { AuditoriaService } from '../../services/auditoria.service';
 import { PerfilService } from '../../services/perfil.service';
 import { AuditoriaData } from '../../interfaces/auditoria-data.interface';
+import { DialogConfirmarService } from '../../services/dialog-confirmar.service';
+import { DialogFinalizarService } from '../../services/dialog-finalizar.service';
 
 type Operacao = 'inicial' | 'cadastrar' | 'registro';
 type Registro = 'informacao' | 'atualizar' | 'inativar' | 'eliminar' | 'auditoria';
+type Field = 'descricao';
 
 @Component({
   selector: 'app-perfil',
@@ -16,6 +19,8 @@ type Registro = 'informacao' | 'atualizar' | 'inativar' | 'eliminar' | 'auditori
   styleUrl: './perfil.scss',
 })
 export class Perfil implements OnInit {
+  private confirmarService = inject(DialogConfirmarService);
+  private finalizarService = inject(DialogFinalizarService);
   private perfilService = inject(PerfilService);
   private auditoriaService = inject(AuditoriaService);
 
@@ -31,10 +36,11 @@ export class Perfil implements OnInit {
   protected perfilModel = signal<PerfilData>({ descricao: '' });
 
   protected formSubmitted = signal<boolean>(false);
+
+  protected touchedSubmitted = signal<boolean>(true);
+  //-------------------------------------------------------------------------------------//
   protected descricaoTouched = signal<boolean>(false);
-  protected isDescricaoEmpty = computed(() => {
-    return this.perfilModel().descricao.trim().length === 0;
-  });
+
   protected isDescricaoEquals = computed(() => {
     const des = this.perfilModel().descricao.toUpperCase();
     const atualizaIgual = des === this.buscar()?.descricao;
@@ -42,25 +48,41 @@ export class Perfil implements OnInit {
     return atualizaIgual || registroIgual;
   });
 
-  protected descricaoEmptyFiedlsError = computed(() => {
-    return (this.descricaoTouched() || this.formSubmitted()) && this.isDescricaoEmpty();
-  });
-
   protected descricaoEqualsFiedlsError = computed(() => {
     return (this.descricaoTouched() || this.formSubmitted()) && this.isDescricaoEquals();
   });
 
+  protected isDescricaoEmpty = computed(() => {
+    return this.perfilModel().descricao.trim().length === 0;
+  });
+
+  protected descricaoEmptyFiedlsError = computed(() => {
+    return (this.descricaoTouched() || this.formSubmitted()) && this.isDescricaoEmpty();
+  });
+  //-------------------------------------------------------------------------------------//
   protected isFormValid = computed(() => {
-    const descricaoOk = !this.descricaoEmptyFiedlsError() && !this.descricaoEqualsFiedlsError();
-    return descricaoOk;
+    const descricaoOk = this.descricaoEmptyFiedlsError() && this.descricaoEqualsFiedlsError();
+    const touchedOk = this.touchedSubmitted();
+    const dadosOk = descricaoOk || touchedOk;
+    return dadosOk;
   });
 
   protected onBlur(field: 'descricao'): void {
+    if (field) this.touchedSubmitted.set(false);
     if (field === 'descricao') this.descricaoTouched.set(true);
   }
 
-  protected onInput(field: keyof PerfilData, value: string): void {
+  protected getField(field: keyof PerfilData) {
+    return this.perfilModel()[field] ?? '';
+  }
+
+  protected setField(field: keyof PerfilData, value: string): void {
     this.perfilModel.update((model) => ({ ...model, [field]: value }));
+  }
+
+  protected counterStatus(status: boolean) {
+    const contador = this.listar().filter((item) => item.status === status);
+    return contador.length;
   }
 
   ngOnInit(): void {
@@ -123,45 +145,96 @@ export class Perfil implements OnInit {
   protected cadastrar(event: Event): void {
     event.preventDefault();
     this.formSubmitted.set(true);
-    if (!this.isFormValid()) {
+    if (this.isFormValid()) {
       alert('Formulário inválido - não enviar');
       return;
     }
-    this.perfilService
-      .cadastrar(this.perfilModel())
-      .pipe(switchMap(() => this.carregar()))
-      .subscribe({
-        next: () => {
-          this.carregar();
+
+    const perfil = this.perfilModel();
+
+    this.confirmarService
+      .confirmar({
+        icone: '/icons/add_circle_84.png',
+        titulo: 'Novo Perfil',
+        mensagem: `Deseja confirmar o cadastro do perfil ${perfil.descricao.toUpperCase()}?`,
+        acao: () => this.perfilService.cadastrar(perfil),
+      })
+      .subscribe((confirmado) => {
+        console.log(confirmado);
+        if (confirmado === 'finalizado') {
           this.resetForm();
           this.mudarOperacao('inicial');
-        },
-        error: (err: any) => {
-          console.error('Erro ao cadastrar perfil:', err);
-          alert('Falha ao cadastrar perfil. Tente novamente.');
-        },
+          this.carregar().subscribe();
+          this.finalizarService.finalizar({
+            icone: '/icons/check_circle_84.png',
+            operacao: perfil.descricao.toLocaleUpperCase(),
+            titulo: 'Sucesso!',
+            mensagem: 'Cadastrado com exíto.',
+          });
+        } else if (confirmado === 'erro') {
+          this.finalizarService.finalizar({
+            icone: '/icons/error_84.png',
+            operacao: perfil.descricao.toLocaleUpperCase(),
+            titulo: 'Erro!',
+            mensagem: 'Falha no cadastro.',
+            erros: this.finalizarService.ultimosErros(),
+          });
+        } else {
+          this.finalizarService.finalizar({
+            icone: '/icons/cancel_84.png',
+            operacao: perfil.descricao.toLocaleUpperCase(),
+            titulo: 'Cancelado!',
+            mensagem: 'Operação de cadastro cancelada.',
+          });
+        }
       });
   }
 
   protected atualizar(event: Event): void {
     event.preventDefault();
     this.formSubmitted.set(true);
-    if (!this.isFormValid()) {
+    if (this.isFormValid()) {
       alert('Formulário inválido - não enviar');
       return;
     }
-    this.perfilService
-      .atualizar(this.buscar()!.id!, this.perfilModel())
-      .pipe(switchMap(() => this.carregar()))
-      .subscribe({
-        next: () => {
+
+    const perfil = this.perfilModel();
+    const id = this.buscar()?.id;
+
+    this.confirmarService
+      .confirmar({
+        icone: '/icons/change_circle_84.png',
+        titulo: 'Atualizar Perfil',
+        mensagem: `Deseja confirmar a atualização da perfil ${perfil.descricao.toUpperCase()}?`,
+        acao: () => this.perfilService.atualizar(id!, perfil),
+      })
+      .subscribe((confirmado) => {
+        if (confirmado === 'finalizado') {
           this.resetForm();
-          this.mudarOperacao('registro', this.buscar()!.id!);
-        },
-        error: (err: any) => {
-          console.error('Erro ao atualizar perfil:', err);
-          alert('Falha ao atualizar perfil. Tente novamente.');
-        },
+          this.mudarOperacao('registro', id!);
+          this.carregar().subscribe();
+          this.finalizarService.finalizar({
+            icone: '/icons/check_circle_84.png',
+            operacao: perfil.descricao,
+            titulo: 'Sucesso!',
+            mensagem: 'Atualizado com exíto.',
+          });
+        } else if (confirmado === 'erro') {
+          this.finalizarService.finalizar({
+            icone: '/icons/error_84.png',
+            operacao: perfil.descricao.toLocaleUpperCase(),
+            titulo: 'Erro!',
+            mensagem: 'Falha no atualização.',
+            erros: this.finalizarService.ultimosErros(),
+          });
+        } else {
+          this.finalizarService.finalizar({
+            icone: '/icons/cancel_84.png',
+            operacao: perfil.descricao.toLocaleUpperCase(),
+            titulo: 'Cancelado!',
+            mensagem: 'Operação de atualização cancelada.',
+          });
+        }
       });
   }
 
@@ -172,19 +245,43 @@ export class Perfil implements OnInit {
       alert('Perfil já está inativo!');
       return;
     }
-    this.perfilService
-      .inativar(this.buscar()!.id!)
-      .pipe(switchMap(() => this.carregar()))
-      .subscribe({
-        next: () => {
-          this.carregar();
-          this.carregarRegistro(this.buscar()!.id!);
-          this.mudarOperacao('registro', this.buscar()!.id!);
-        },
-        error: (err: any) => {
-          console.error('Erro ao inativar o perfil:', err);
-          alert('Falha ao inativar perfil. Tente novamente.');
-        },
+
+    const perfil = this.perfilModel();
+    const id = this.buscar()?.id;
+
+    this.confirmarService
+      .confirmar({
+        icone: '/icons/block_84.png',
+        titulo: 'Inativar Perfil',
+        mensagem: `Deseja confirmar a inativação da perfil ${perfil.descricao.toUpperCase()}?`,
+        acao: () => this.perfilService.inativar(id!),
+      })
+      .subscribe((confirmado) => {
+        if (confirmado === 'finalizado') {
+          this.mudarOperacao('registro', id!);
+          this.carregar().subscribe();
+          this.finalizarService.finalizar({
+            icone: '/icons/check_circle_84.png',
+            operacao: perfil.descricao,
+            titulo: 'Sucesso!',
+            mensagem: 'Inativação com exíto.',
+          });
+        } else if (confirmado === 'erro') {
+          this.finalizarService.finalizar({
+            icone: '/icons/error_84.png',
+            operacao: perfil.descricao.toLocaleUpperCase(),
+            titulo: 'Erro!',
+            mensagem: 'Falha no inativação.',
+            erros: this.finalizarService.ultimosErros(),
+          });
+        } else {
+          this.finalizarService.finalizar({
+            icone: '/icons/cancel_84.png',
+            operacao: perfil.descricao.toLocaleUpperCase(),
+            titulo: 'Cancelado!',
+            mensagem: 'Operação de inativação cancelada.',
+          });
+        }
       });
   }
 
@@ -195,18 +292,43 @@ export class Perfil implements OnInit {
       alert('Perfil não está inativo!');
       return;
     }
-    this.perfilService
-      .deletar(this.buscar()!.id!)
-      .pipe(switchMap(() => this.carregar()))
-      .subscribe({
-        next: () => {
-          this.carregar();
+
+    const perfil = this.perfilModel();
+    const id = this.buscar()?.id;
+
+    this.confirmarService
+      .confirmar({
+        icone: '/icons/delete_84.png',
+        titulo: 'Eliminar Perfil',
+        mensagem: `Deseja confirmar a eliminação da perfil ${perfil.descricao.toUpperCase()}?`,
+        acao: () => this.perfilService.deletar(id!),
+      })
+      .subscribe((confirmado) => {
+        if (confirmado === 'finalizado') {
           this.mudarOperacao('inicial');
-        },
-        error: (err: any) => {
-          console.error('Erro ao eliminar o perfil:', err);
-          alert('Falha ao eliminar o perfil. Tente novamente.');
-        },
+          this.carregar().subscribe();
+          this.finalizarService.finalizar({
+            icone: '/icons/check_circle_84.png',
+            operacao: perfil.descricao,
+            titulo: 'Sucesso!',
+            mensagem: 'Eliminação com exíto.',
+          });
+        } else if (confirmado === 'erro') {
+          this.finalizarService.finalizar({
+            icone: '/icons/error_84.png',
+            operacao: perfil.descricao.toLocaleUpperCase(),
+            titulo: 'Erro!',
+            mensagem: 'Falha na eliminação.',
+            erros: this.finalizarService.ultimosErros(),
+          });
+        } else {
+          this.finalizarService.finalizar({
+            icone: '/icons/cancel_84.png',
+            operacao: perfil.descricao.toLocaleUpperCase(),
+            titulo: 'Cancelado!',
+            mensagem: 'Operação de eliminação cancelada.',
+          });
+        }
       });
   }
 
@@ -214,5 +336,6 @@ export class Perfil implements OnInit {
     this.perfilModel.set({ descricao: '' });
     this.descricaoTouched.set(false);
     this.formSubmitted.set(false);
+    this.touchedSubmitted.set(true);
   }
 }

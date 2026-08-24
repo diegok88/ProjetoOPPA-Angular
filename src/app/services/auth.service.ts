@@ -24,7 +24,7 @@ export class AuthService {
       console.log('Não reconhece perfil!');
       return null;
     }
-    return ROLES_MAP[perfil.desPerfil];
+    return perfil.desPerfil;
   });
 
   login(credencial: LoginData): Observable<AuthResponse> {
