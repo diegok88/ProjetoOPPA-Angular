@@ -6,8 +6,10 @@ export interface UsuarioData {
   dataAdmissao?: Date;
   dataDesligamento?: Date | null;
   perfilId?: string;
+  desPerfil?: string | null;
   turno: string;
   escala: string;
-  empresaId: string;
+  empresaId?: string;
+  desEmpresa?: string | null;
   status?: boolean;
 }

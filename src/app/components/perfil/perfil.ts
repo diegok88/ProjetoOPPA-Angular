@@ -1,6 +1,5 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { switchMap } from 'rxjs';
 import { PerfilData } from '../../interfaces/perfil-data.interface';
 import { AuditoriaService } from '../../services/auditoria.service';
 import { PerfilService } from '../../services/perfil.service';
@@ -67,7 +66,7 @@ export class Perfil implements OnInit {
     return dadosOk;
   });
 
-  protected onBlur(field: 'descricao'): void {
+  protected onBlur(field: Field): void {
     if (field) this.touchedSubmitted.set(false);
     if (field === 'descricao') this.descricaoTouched.set(true);
   }

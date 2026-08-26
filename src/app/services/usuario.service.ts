@@ -30,6 +30,7 @@ export class UsuarioService {
     return this.http.get<UsuarioData[]>(this.apiUrl).pipe(
       tap((dados) => {
         this.usuarioSignal.set(dados);
+        console.log(this.usuario());
       }),
       catchError((error) => throwError(() => error)),
     );
