@@ -2,14 +2,14 @@ export interface UsuarioData {
   id?: string;
   cracha?: number;
   nome: string;
-  dataNascimento: Date;
-  dataAdmissao?: Date;
+  dataNascimento: Date | null;
+  dataAdmissao?: Date | null;
   dataDesligamento?: Date | null;
-  perfilId?: string;
+  perfilId?: string | null;
   desPerfil?: string | null;
   turno: string;
   escala: string;
-  empresaId?: string;
+  empresaId?: string | null;
   desEmpresa?: string | null;
   status?: boolean;
 }

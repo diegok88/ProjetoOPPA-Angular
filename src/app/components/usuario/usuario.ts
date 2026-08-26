@@ -1,12 +1,15 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { FlatpickrDirective, provideFlatpickrDefaults } from 'angularx-flatpickr';
+import { Portuguese } from 'flatpickr/dist/l10n/pt';
+import { Instance } from 'flatpickr/dist/types/instance';
+import { AuditoriaData } from '../../interfaces/auditoria-data.interface';
+import { UsuarioData } from '../../interfaces/usuario-data.interface';
+import { AuditoriaService } from '../../services/auditoria.service';
 import { DialogConfirmarService } from '../../services/dialog-confirmar.service';
 import { DialogFinalizarService } from '../../services/dialog-finalizar.service';
 import { PerfilService } from '../../services/perfil.service';
-import { AuditoriaService } from '../../services/auditoria.service';
 import { UsuarioService } from '../../services/usuario.service';
-import { UsuarioData } from '../../interfaces/usuario-data.interface';
-import { AuditoriaData } from '../../interfaces/auditoria-data.interface';
-import { FormsModule } from '@angular/forms';
 
 type Operacao = 'inicial' | 'cadastrar' | 'registro';
 type Registro = 'informacao' | 'atualizar' | 'inativar' | 'eliminar' | 'auditoria';
@@ -17,7 +20,8 @@ type Turno = 'MANHA' | 'TARDE' | 'NOITE' | 'COMERCIAL';
 
 @Component({
   selector: 'app-usuario',
-  imports: [FormsModule],
+  imports: [FormsModule, FlatpickrDirective],
+  providers: [provideFlatpickrDefaults()],
   templateUrl: './usuario.html',
   styleUrl: './usuario.scss',
 })
@@ -39,13 +43,38 @@ export class Usuario {
 
   protected usuarioModel = signal<UsuarioData>({
     nome: '',
-    dataNascimento: new Date(),
+    dataNascimento: null,
     dataAdmissao: new Date(),
     perfilId: '',
     turno: '' as Turno,
     escala: '' as Escala,
     empresaId: '',
   });
+
+  flatpickrConfig = {
+    dateFormat: 'd/m/Y',
+    locale: Portuguese,
+    defaultDate: null,
+    allowInput: true,
+    onReady: (selectedDates: Date[], dateStr: string, instance: Instance) => {
+      const footer = instance.calendarContainer.querySelector('.flatpickr-footer');
+      if (footer) {
+        footer.innerHTML = '';
+        const hojeBtn = document.createElement('button');
+        hojeBtn.textContent = 'Hoje';
+        hojeBtn.className = 'flatpickr-btn';
+        hojeBtn.onclick = () => instance.setDate(new Date());
+
+        const limparBtn = document.createElement('button');
+        limparBtn.textContent = 'Limpar';
+        limparBtn.className = 'flatpickr-btn';
+        limparBtn.onclick = () => instance.clear();
+
+        footer.appendChild(hojeBtn);
+        footer.appendChild(limparBtn);
+      }
+    },
+  };
 
   protected formSubmitted = signal<boolean>(false);
 
@@ -223,13 +252,41 @@ export class Usuario {
     if (field === 'turno') this.turnoTouched.set(true);
     if (field === 'empresaId') this.empresaIdTouched.set(true);
   }
-
+  /*
+  getter e setter adaptados ao tipo DATE.
+  */
   protected getField(field: keyof UsuarioData) {
-    return this.usuarioModel()[field] ?? '';
+    const value = this.usuarioModel()[field];
+    if (field === 'dataAdmissao' || field === 'dataNascimento') {
+      if (value instanceof Date) {
+        const ano = value.getFullYear();
+        const mes = String(value.getMonth() + 1).padStart(2, '0');
+        const dia = String(value.getDate()).padStart(2, '0');
+        return `${ano}-${mes}-${dia}`;
+      }
+      return null;
+    }
+    return value ?? '';
   }
 
   protected setField(field: keyof UsuarioData, value: string): void {
-    this.usuarioModel.update((model) => ({ ...model, [field]: value }));
+    this.usuarioModel.update((model: UsuarioData) => {
+      const atualizar: Partial<UsuarioData> = {};
+      switch (field) {
+        case 'dataAdmissao':
+          atualizar.dataAdmissao = value ? new Date(value + 'T00:00:00') : null;
+          break;
+        case 'dataNascimento':
+          atualizar.dataNascimento = value ? new Date(value + 'T00:00:00') : null;
+          break;
+        case 'nome':
+        case 'perfilId':
+        case 'empresaId':
+          atualizar[field] = value;
+          break;
+      }
+      return { ...model, ...atualizar };
+    });
   }
 
   protected counterStatus(status: boolean) {
@@ -503,8 +560,8 @@ export class Usuario {
   private resetForm(): void {
     this.usuarioModel.set({
       nome: '',
-      dataNascimento: new Date(),
-      dataAdmissao: new Date(),
+      dataNascimento: null,
+      dataAdmissao: null,
       perfilId: '',
       turno: '' as Turno,
       escala: '' as Escala,
