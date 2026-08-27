@@ -1,6 +1,7 @@
 import { Directive, ElementRef, forwardRef, inject, input, OnDestroy, OnInit } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import flatpickr from 'flatpickr';
+import { Portuguese } from 'flatpickr/dist/l10n/pt';
 import { Instance } from 'flatpickr/dist/types/instance';
 
 @Directive({
@@ -24,7 +25,11 @@ export class FlatpickrDirective implements OnInit, OnDestroy, ControlValueAccess
   ngOnInit(): void {
     const defaultConfig = {
       dateFormat: 'd/m/Y',
+      locale: Portuguese,
+      className: 'meu-calendario',
+      defaultDate: null,
       allowInput: true,
+      monthSelectorType: 'static',
       onChange: (selectedDates: Date[]) => {
         const val = selectedDates.length ? selectedDates[0] : null;
         this.onChange(val);
@@ -32,7 +37,7 @@ export class FlatpickrDirective implements OnInit, OnDestroy, ControlValueAccess
       },
       onClose: () => this.onTouched(),
     };
-    const finalConfig = { ...defaultConfig, ...this.config };
+    const finalConfig = { ...defaultConfig, ...this.config() };
     this.instance = flatpickr(this.el.nativeElement, finalConfig);
   }
   ngOnDestroy(): void {

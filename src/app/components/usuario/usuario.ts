@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuditoriaData } from '../../interfaces/auditoria-data.interface';
 import { UsuarioData } from '../../interfaces/usuario-data.interface';
@@ -6,11 +6,10 @@ import { AuditoriaService } from '../../services/auditoria.service';
 import { DialogConfirmarService } from '../../services/dialog-confirmar.service';
 import { DialogFinalizarService } from '../../services/dialog-finalizar.service';
 import { PerfilService } from '../../services/perfil.service';
-
 import { UsuarioService } from '../../services/usuario.service';
-import { FlatpickrDirective } from '../../directives/flatpickr.directive';
-import Portuguese from 'flatpickr/dist/l10n/pt.js';
+
 import { Instance } from 'flatpickr/dist/types/instance';
+import { FlatpickrDirective } from '../../directives/flatpickr.directive';
 
 type Operacao = 'inicial' | 'cadastrar' | 'registro';
 type Registro = 'informacao' | 'atualizar' | 'inativar' | 'eliminar' | 'auditoria';
@@ -24,6 +23,7 @@ type Turno = 'MANHA' | 'TARDE' | 'NOITE' | 'COMERCIAL';
   imports: [FormsModule, FlatpickrDirective],
   templateUrl: './usuario.html',
   styleUrl: './usuario.scss',
+  encapsulation: ViewEncapsulation.None,
 })
 export class Usuario {
   private confirmarService = inject(DialogConfirmarService);
@@ -51,28 +51,31 @@ export class Usuario {
     empresaId: '',
   });
 
+  /*Configuração do calendário*/
   flatpickrConfig = {
-    dateFormat: 'd/m/Y',
-    locale: Portuguese,
-    defaultDate: null,
-    allowInput: true,
     onReady: (selectedDates: Date[], dateStr: string, instance: Instance) => {
-      const footer = instance.calendarContainer.querySelector('.flatpickr-footer');
-      if (footer) {
-        footer.innerHTML = '';
-        const hojeBtn = document.createElement('button');
-        hojeBtn.textContent = 'Hoje';
-        hojeBtn.className = 'flatpickr-btn';
-        hojeBtn.onclick = () => instance.setDate(new Date());
-
-        const limparBtn = document.createElement('button');
-        limparBtn.textContent = 'Limpar';
-        limparBtn.className = 'flatpickr-btn';
-        limparBtn.onclick = () => instance.clear();
-
-        footer.appendChild(hojeBtn);
-        footer.appendChild(limparBtn);
+      let footer = instance.calendarContainer.querySelector('.flatpickr-footer');
+      if (!footer) {
+        footer = document.createElement('div');
+        footer.className = 'flatpickr-footer';
+        instance.calendarContainer.appendChild(footer);
       }
+
+      // 2. Limpa e adiciona os botões
+      footer.innerHTML = '';
+
+      const hojeBtn = document.createElement('button');
+      hojeBtn.textContent = 'Hoje';
+      hojeBtn.className = 'flatpickr-btn';
+      hojeBtn.onclick = () => instance.setDate(new Date());
+
+      const limparBtn = document.createElement('button');
+      limparBtn.textContent = 'Limpar';
+      limparBtn.className = 'flatpickr-btn';
+      limparBtn.onclick = () => instance.clear();
+
+      footer.appendChild(hojeBtn);
+      footer.appendChild(limparBtn);
     },
   };
 
@@ -128,9 +131,11 @@ export class Usuario {
   protected dataAdmissaoTouched = signal<boolean>(false);
 
   protected isDataAdmissaooEquals = computed(() => {
-    const des = this.usuarioModel().dataAdmissao;
-    const atualizaIgual = des === this.buscar()?.dataAdmissao;
-    return atualizaIgual;
+    const atual = this.usuarioModel().dataAdmissao;
+    const buscar = this.buscar()?.dataAdmissao;
+    if (atual === buscar) return true;
+    if (!atual || !buscar) return false;
+    return atual.getTime() === buscar.getTime();
   });
 
   protected dataAdmissaoEqualsFiedlsError = computed(() => {
@@ -138,7 +143,9 @@ export class Usuario {
   });
 
   protected isDataAdmissaoEmpty = computed(() => {
-    return this.usuarioModel().dataAdmissao;
+    return (
+      this.usuarioModel().dataAdmissao === null || this.usuarioModel().dataAdmissao === undefined
+    );
   });
 
   protected dataAdmissaoEmptyFiedlsError = computed(() => {

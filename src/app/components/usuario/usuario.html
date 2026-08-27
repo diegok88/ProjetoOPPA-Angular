@@ -57,52 +57,79 @@
               />
             </div>
             <form (ngSubmit)="cadastrar($event)" class="operacao-forms">
-              <div class="form-group">
-                <label for="nome" class="form-label">Nome:</label>
-                <div class="form-wrapper">
-                  <input
-                    type="text"
-                    id="nome"
-                    name="nome"
-                    placeholder="Insira o nome do usuário"
-                    [ngModel]="getField('nome')"
-                    (ngModelChange)="setField('nome', $event)"
-                    (blur)="onBlur('nome')"
-                    autocomplete="off"
-                  />
+              <div class="container-forms">
+                <div class="form-group">
+                  <label for="nome" class="form-label">Nome:</label>
+                  <div class="form-wrapper">
+                    <input
+                      type="text"
+                      id="nome"
+                      name="nome"
+                      placeholder="Insira o nome do usuário"
+                      [ngModel]="getField('nome')"
+                      (ngModelChange)="setField('nome', $event)"
+                      (blur)="onBlur('nome')"
+                      autocomplete="off"
+                    />
+                  </div>
+                  <div class="error-container">
+                    <span class="error-message" [class.show]="nomeEmptyFiedlsError()">
+                      O nome é obrigatório
+                    </span>
+                    <span class="error-message" [class.show]="nomeEqualsFiedlsError()">
+                      A nome igual a cadastrada.
+                    </span>
+                  </div>
                 </div>
-                <div class="error-container">
-                  <span class="error-message" [class.show]="nomeEmptyFiedlsError()">
-                    O nome é obrigatório
-                  </span>
-                  <span class="error-message" [class.show]="nomeEqualsFiedlsError()">
-                    A nome igual a cadastrada.
-                  </span>
+                <div class="form-group">
+                  <label for="dataNascimento" class="form-label">Data de Nascimento:</label>
+                  <div class="form-wrapper">
+                    <input
+                      type="text"
+                      id="dataNascimento"
+                      name="dataNascimento"
+                      appFlatpickr
+                      [config]="flatpickrConfig"
+                      placeholder="Insira a data de nascimento do usuário"
+                      [ngModel]="getField('dataNascimento')"
+                      (ngModelChange)="setField('dataNascimento', $event)"
+                      (blur)="onBlur('dataNascimento')"
+                      autocomplete="off"
+                    />
+                  </div>
+                  <div class="error-container">
+                    <span class="error-message" [class.show]="dataNascimentoEmptyFiedlsError()">
+                      O data de nascimento é obrigatório
+                    </span>
+                    <span class="error-message" [class.show]="dataNascimentoEqualsFiedlsError()">
+                      A data de nascimento igual a cadastrada.
+                    </span>
+                  </div>
                 </div>
-              </div>
-              <div class="form-group">
-                <label for="dataNascimento" class="form-label">Data de Nascimento:</label>
-                <div class="form-wrapper">
-                  <input
-                    type="text"
-                    id="dataNascimento"
-                    name="dataNascimento"
-                    appFlatpickr
-                    [config]="flatpickrConfig"
-                    placeholder="Insira a data de nascimento do usuário"
-                    [ngModel]="getField('dataNascimento')"
-                    (ngModelChange)="setField('dataNascimento', $event)"
-                    (blur)="onBlur('dataNascimento')"
-                    autocomplete="off"
-                  />
-                </div>
-                <div class="error-container">
-                  <span class="error-message" [class.show]="dataNascimentoEmptyFiedlsError()">
-                    O data de nascimento é obrigatório
-                  </span>
-                  <span class="error-message" [class.show]="dataNascimentoEqualsFiedlsError()">
-                    A data de nascimento igual a cadastrada.
-                  </span>
+                <div class="form-group">
+                  <label for="dataAdmissao" class="form-label">Data de Admissão:</label>
+                  <div class="form-wrapper">
+                    <input
+                      type="text"
+                      id="dataAdmissao"
+                      name="dataAdmissao"
+                      appFlatpickr
+                      [config]="flatpickrConfig"
+                      placeholder="Insira a data de admissão do usuário"
+                      [ngModel]="getField('dataAdmissao')"
+                      (ngModelChange)="setField('dataAdmissao', $event)"
+                      (blur)="onBlur('dataAdmissao')"
+                      autocomplete="off"
+                    />
+                  </div>
+                  <div class="error-container">
+                    <span class="error-message" [class.show]="dataAdmissaoEmptyFiedlsError()">
+                      O data de admissão é obrigatório
+                    </span>
+                    <span class="error-message" [class.show]="dataAdmissaoEqualsFiedlsError()">
+                      A data de admissão igual a cadastrada.
+                    </span>
+                  </div>
                 </div>
               </div>
               <button type="submit" class="operacao-botao" [disabled]="isFormValid()">

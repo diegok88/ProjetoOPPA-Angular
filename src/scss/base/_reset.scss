@@ -31,3 +31,90 @@ p {
   font-weight: 400;
   font-size: 0.8em;
 }
+
+/* styles.scss - arquivo global */
+/* Seus estilos personalizados para calendários com a classe 'meu-calendario' */
+.flatpickr-calendar {
+  background: var(--color-secondary) !important; /* fundo escuro */
+  border-radius: 12px !important;
+  box-shadow: 0 8px 24px var(--color-shadow-01) !important;
+
+  &.open {
+    width: auto;
+    border: 1px solid var(--color-white);
+    padding: 10px;
+  }
+
+  /* Cabeçalho do mês (ex: "Agosto 2026") */
+  .flatpickr-month {
+    color: var(--color-white) !important;
+    font-size: 14px !important;
+    font-weight: bold !important;
+  }
+  /* Icones arrow no lado do ano */
+  .flatpickr-current-month .numInputWrapper span.arrowUp:after {
+    border-bottom-color: var(--color-white);
+  }
+
+  .flatpickr-current-month .numInputWrapper span.arrowDown:after {
+    border-top-color: var(--color-white);
+  }
+
+  /* Dias da semana (Dom, Seg, Ter...) */
+  .flatpickr-weekday {
+    color: #f1c40f !important; /* amarelo */
+    font-weight: bold !important;
+    font-size: 14px !important;
+    text-transform: uppercase !important;
+  }
+
+  /* Números dos dias */
+  .flatpickr-day {
+    color: var(--color-white) !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    border-radius: 4px !important;
+  }
+
+  /* Dia selecionado */
+  .flatpickr-day.selected {
+    background: var(--color-negative) !important;
+    color: var(--color-white) !important;
+    border-color: var(--color-negative) !important;
+  }
+
+  /* Dia atual (hoje) */
+  .flatpickr-day.today {
+    border-color: var(--color-yellow) !important;
+  }
+
+  /* Hover dos dias */
+  .flatpickr-day:not(.selected):hover {
+    background: var(--color-cancel) !important;
+    color: var(--color-white) !important;
+  }
+
+  /* Setas de navegação (prev/next) */
+  .flatpickr-prev-month svg,
+  .flatpickr-next-month svg {
+    fill: var(--color-white) !important;
+  }
+
+  /* Footer (botões Hoje/Limpar) */
+  .flatpickr-footer .flatpickr-btn {
+    background: transparent !important;
+    color: var(--color-action) !important;
+    border: 1px solid var(--color-action) !important;
+    border-radius: 8px !important;
+    padding: 5px 15px !important;
+    margin: 3px !important;
+    cursor: pointer !important;
+    font-weight: bold !important;
+    transition: all 0.2s !important;
+  }
+
+  .flatpickr-footer .flatpickr-btn:hover {
+    background: #3498db !important;
+    color: var(--color-white) !important;
+  }
+}
