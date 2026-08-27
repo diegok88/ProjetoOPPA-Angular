@@ -60,7 +60,7 @@ export class Perfil implements OnInit {
   });
   //-------------------------------------------------------------------------------------//
   protected isFormValid = computed(() => {
-    const descricaoOk = this.descricaoEmptyFiedlsError() && this.descricaoEqualsFiedlsError();
+    const descricaoOk = this.descricaoEmptyFiedlsError() || this.descricaoEqualsFiedlsError();
     const touchedOk = this.touchedSubmitted();
     const dadosOk = descricaoOk || touchedOk;
     return dadosOk;

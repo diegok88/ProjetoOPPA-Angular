@@ -87,7 +87,7 @@
                     type="text"
                     id="dataNascimento"
                     name="dataNascimento"
-                    mwlFlatpickr
+                    appFlatpickr
                     [config]="flatpickrConfig"
                     placeholder="Insira a data de nascimento do usuário"
                     [ngModel]="getField('dataNascimento')"
@@ -97,11 +97,11 @@
                   />
                 </div>
                 <div class="error-container">
-                  <span class="error-message" [class.show]="nomeEmptyFiedlsError()">
-                    O nome é obrigatório
+                  <span class="error-message" [class.show]="dataNascimentoEmptyFiedlsError()">
+                    O data de nascimento é obrigatório
                   </span>
-                  <span class="error-message" [class.show]="nomeEqualsFiedlsError()">
-                    A nome igual a cadastrada.
+                  <span class="error-message" [class.show]="dataNascimentoEqualsFiedlsError()">
+                    A data de nascimento igual a cadastrada.
                   </span>
                 </div>
               </div>

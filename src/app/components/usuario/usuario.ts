@@ -1,15 +1,16 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { FlatpickrDirective, provideFlatpickrDefaults } from 'angularx-flatpickr';
-import { Portuguese } from 'flatpickr/dist/l10n/pt';
-import { Instance } from 'flatpickr/dist/types/instance';
 import { AuditoriaData } from '../../interfaces/auditoria-data.interface';
 import { UsuarioData } from '../../interfaces/usuario-data.interface';
 import { AuditoriaService } from '../../services/auditoria.service';
 import { DialogConfirmarService } from '../../services/dialog-confirmar.service';
 import { DialogFinalizarService } from '../../services/dialog-finalizar.service';
 import { PerfilService } from '../../services/perfil.service';
+
 import { UsuarioService } from '../../services/usuario.service';
+import { FlatpickrDirective } from '../../directives/flatpickr.directive';
+import Portuguese from 'flatpickr/dist/l10n/pt.js';
+import { Instance } from 'flatpickr/dist/types/instance';
 
 type Operacao = 'inicial' | 'cadastrar' | 'registro';
 type Registro = 'informacao' | 'atualizar' | 'inativar' | 'eliminar' | 'auditoria';
@@ -21,7 +22,6 @@ type Turno = 'MANHA' | 'TARDE' | 'NOITE' | 'COMERCIAL';
 @Component({
   selector: 'app-usuario',
   imports: [FormsModule, FlatpickrDirective],
-  providers: [provideFlatpickrDefaults()],
   templateUrl: './usuario.html',
   styleUrl: './usuario.scss',
 })
@@ -103,9 +103,11 @@ export class Usuario {
   protected dataNascimentoTouched = signal<boolean>(false);
 
   protected isDataNascimentoEquals = computed(() => {
-    const des = this.usuarioModel().dataNascimento;
-    const atualizaIgual = des === this.buscar()?.dataNascimento;
-    return atualizaIgual;
+    const atual = this.usuarioModel().dataNascimento;
+    const buscar = this.buscar()?.dataNascimento;
+    if (atual === buscar) return true;
+    if (!atual || !buscar) return false;
+    return atual.getTime() === buscar.getTime();
   });
 
   protected dataNascimentoEqualsFiedlsError = computed(() => {
@@ -113,7 +115,10 @@ export class Usuario {
   });
 
   protected isDataNascimentoEmpty = computed(() => {
-    return this.usuarioModel().dataNascimento;
+    return (
+      this.usuarioModel().dataNascimento === null ||
+      this.usuarioModel().dataNascimento === undefined
+    );
   });
 
   protected dataNascimentoEmptyFiedlsError = computed(() => {
@@ -221,16 +226,17 @@ export class Usuario {
   });
   //-------------------------------------------------------------------------------------//
   protected isFormValid = computed(() => {
-    const nomeOk = this.nomeEmptyFiedlsError() && this.nomeEqualsFiedlsError();
+    const nomeOk = this.nomeEmptyFiedlsError() || this.nomeEqualsFiedlsError();
     const dataNascimentoOk =
-      this.dataNascimentoEqualsFiedlsError() && this.dataNascimentoEmptyFiedlsError();
+      this.dataNascimentoEqualsFiedlsError() || this.dataNascimentoEmptyFiedlsError();
     const dataAdmissaoOk =
-      this.dataAdmissaoEqualsFiedlsError() && this.dataAdmissaoEmptyFiedlsError();
-    const perfilIdOk = this.perfilIdEqualsFiedlsError() && this.perfilIdEmptyFiedlsError();
-    const escalaOk = this.escalaEqualsFiedlsError() && this.escalaEmptyFiedlsError();
-    const turnoOk = this.turnoEqualsFiedlsError() && this.turnoEmptyFiedlsError();
-    const empresaOk = this.empresaIdEqualsFiedlsError() && this.empresaIdEmptyFiedlsError();
+      this.dataAdmissaoEqualsFiedlsError() || this.dataAdmissaoEmptyFiedlsError();
+    const perfilIdOk = this.perfilIdEqualsFiedlsError() || this.perfilIdEmptyFiedlsError();
+    const escalaOk = this.escalaEqualsFiedlsError() || this.escalaEmptyFiedlsError();
+    const turnoOk = this.turnoEqualsFiedlsError() || this.turnoEmptyFiedlsError();
+    const empresaOk = this.empresaIdEqualsFiedlsError() || this.empresaIdEmptyFiedlsError();
     const touchedOk = this.touchedSubmitted();
+    console.log(dataNascimentoOk);
     const dadosOk =
       nomeOk ||
       dataNascimentoOk ||
@@ -238,7 +244,9 @@ export class Usuario {
       perfilIdOk ||
       escalaOk ||
       turnoOk ||
+      empresaOk ||
       touchedOk;
+    console.log(dadosOk);
     return dadosOk;
   });
 
@@ -264,25 +272,40 @@ export class Usuario {
         const dia = String(value.getDate()).padStart(2, '0');
         return `${ano}-${mes}-${dia}`;
       }
+      if (typeof value === 'string' && value.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
+        const parts = value.split('/');
+        return `${parts[2]}-${parts[1]}-${parts[0]}`;
+      }
       return null;
     }
     return value ?? '';
   }
 
-  protected setField(field: keyof UsuarioData, value: string): void {
+  protected setField(field: keyof UsuarioData, value: string | Date | null): void {
     this.usuarioModel.update((model: UsuarioData) => {
       const atualizar: Partial<UsuarioData> = {};
       switch (field) {
         case 'dataAdmissao':
-          atualizar.dataAdmissao = value ? new Date(value + 'T00:00:00') : null;
+        case 'dataNascimento': {
+          let dateValue: Date | null = null;
+          if (value instanceof Date) {
+            dateValue = value;
+          } else if (typeof value === 'string') {
+            if (value.match(/^\d{4}-\d{2}-\d{2}/)) {
+              const parts = value.split('T')[0].split('-');
+              dateValue = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+            } else if (value.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
+              const parts = value.split('/');
+              dateValue = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
+            }
+          }
+          atualizar[field] = dateValue;
           break;
-        case 'dataNascimento':
-          atualizar.dataNascimento = value ? new Date(value + 'T00:00:00') : null;
-          break;
+        }
         case 'nome':
         case 'perfilId':
         case 'empresaId':
-          atualizar[field] = value;
+          atualizar[field] = value as string;
           break;
       }
       return { ...model, ...atualizar };
@@ -568,6 +591,7 @@ export class Usuario {
       empresaId: '',
     });
     this.nomeTouched.set(false);
+    this.dataNascimentoTouched.set(false);
     this.formSubmitted.set(false);
     this.touchedSubmitted.set(true);
   }
