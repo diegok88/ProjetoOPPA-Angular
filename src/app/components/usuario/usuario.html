@@ -131,6 +131,30 @@
                     </span>
                   </div>
                 </div>
+                <div class="form-group">
+                  <label for="escala" class="form-label">Escala:</label>
+                  <div class="form-wrapper">
+                    <select
+                      name="escala"
+                      id="escala"
+                      [ngModel]="getField('escala')"
+                      (ngModelChange)="setField('escala', $event)"
+                    >
+                      <option value="" disabled>Selecione a escala</option>
+                      @for (item of escalas; track item) {
+                        <option [value]="item">{{ item }}</option>
+                      }
+                    </select>
+                  </div>
+                  <div class="error-container">
+                    <span class="error-message" [class.show]="dataAdmissaoEmptyFiedlsError()">
+                      O data de admissão é obrigatório
+                    </span>
+                    <span class="error-message" [class.show]="dataAdmissaoEqualsFiedlsError()">
+                      A data de admissão igual a cadastrada.
+                    </span>
+                  </div>
+                </div>
               </div>
               <button type="submit" class="operacao-botao" [disabled]="isFormValid()">
                 Cadastrar

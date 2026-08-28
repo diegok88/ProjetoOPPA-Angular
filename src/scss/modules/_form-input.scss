@@ -83,6 +83,21 @@
           font-size: 300;
         }
       }
+
+      select {
+        flex: 1;
+        min-width: 0;
+        border: none;
+        outline: none;
+        background: transparent;
+        color: var(--color-white);
+        font-size: 14px;
+      }
+
+      option {
+        background-color: var(--color-secondary);
+        color: var(--color-white);
+      }
     }
     .error {
       border-color: var(--color-negative);

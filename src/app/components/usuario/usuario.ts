@@ -18,6 +18,9 @@ type Field =
 type Escala = 'A' | 'B' | 'C' | 'D';
 type Turno = 'MANHA' | 'TARDE' | 'NOITE' | 'COMERCIAL';
 
+const ESCALAS = ['A', 'B', 'C', 'D'] as const;
+const TURNOS = ['MANHA', 'TARDE', 'NOITE', 'COMERCIAL'] as const;
+
 @Component({
   selector: 'app-usuario',
   imports: [FormsModule, FlatpickrDirective],
@@ -36,6 +39,8 @@ export class Usuario {
   protected readonly buscar = signal<UsuarioData | null>(null);
   protected readonly listarAuditoria = this.auditoriaService.auditoria;
   protected readonly buscarAuditoria = signal<AuditoriaData | null>(null);
+
+  protected escalas = ESCALAS;
 
   protected operacaoEstado = signal<string>('inicial');
   protected registroEstado = signal<string>('informacao');
