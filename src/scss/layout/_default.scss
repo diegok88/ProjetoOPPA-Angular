@@ -1,9 +1,10 @@
 .default {
   display: grid;
-  margin: 10px;
+  padding: 10px;
   height: 100vh;
+  box-sizing: border-box;
 
-  grid-template-rows: 50px 1fr 50px;
+  grid-template-rows: 50px 1fr 30px;
   grid-template-areas:
     'header'
     'main'
@@ -14,7 +15,7 @@
     width: 100%;
 
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
   }
   main {
@@ -22,12 +23,13 @@
     width: 100%;
 
     display: flex;
-    justify-content: center;
     align-items: center;
-    flex-direction: column;
   }
   footer {
     grid-area: footer;
-    text-align: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 }

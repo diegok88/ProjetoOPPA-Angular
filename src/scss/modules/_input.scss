@@ -1,0 +1,35 @@
+@use '@angular/material' as mat;
+
+:root {
+  @include mat.form-field-overrides(
+    (
+      container-height: 45px,
+      container-text-font: var(--font-primary),
+      outlined-container-shape: var(--border-radius),
+      outlined-outline-color: var(--color-white),
+      outlined-outline-width: 2px,
+      outlined-hover-outline-color: var(--color-action),
+      outlined-focus-outline-color: var(--color-action),
+      outlined-focus-outline-width: 2px,
+      outlined-input-text-color: var(--color-white),
+      outlined-label-text-color: var(--color-white),
+      outlined-input-text-placeholder-color: var(--color-placeholder),
+      leading-icon-color: var(--color-white),
+      trailing-icon-color: var(--color-white),
+      outlined-focus-label-text-color: var(--color-white),
+      outlined-hover-label-text-color: var(--color-white),
+    )
+  );
+}
+
+.mat-mdc-form-field.mat-form-field-appearance-outline {
+  .mdc-text-field--outlined {
+    width: 450px;
+    background-color: transparent;
+    border-radius: 10px;
+  }
+}
+
+.mat-mdc-form-field-subscript-wrapper {
+  margin-top: 5px;
+}

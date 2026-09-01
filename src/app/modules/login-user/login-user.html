@@ -1,19 +1,21 @@
 <div class="default">
   <header class="default-header">
-    <img class="logo-header" src="images/logoOPPA-1.png" alt="logo" />
-    <span class="voltar-header">
-      <p class="texto-header">Inicial</p>
-    </span>
+    <button matButton="outlined">Retorna</button>
   </header>
   <main class="default-main">
-    <div class="container-login">
+    <section class="container-logo">
       <img class="logo" src="images/logoOPPA-2.png" alt="logo" />
+    </section>
+    <section class="container-form">
+      <h2>Login</h2>
       <form (ngSubmit)="onSubmit($event)">
-        <div class="form-group">
-          <label for="cracha">Crachá:</label>
-          <div class="input-wrapper">
-            <img class="icon" src="icons/badge.png" alt="cracha" loading="lazy" />
+        <div class="group-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Crachá</mat-label>
+            <mat-icon matPrefix>badge</mat-icon>
+            <!-- Icone do lado esquerdo -->
             <input
+              matInput
               type="text"
               id="cracha"
               name="cracha"
@@ -25,22 +27,22 @@
               maxlength="5"
               autocomplete="off"
             />
-          </div>
-          <div class="error-container">
-            <span class="error-message" [class.show]="badgeErrorNumber()"
-              >Apenas números são permitidos</span
-            >
-            <span class="error-message" [class.show]="badgeEmptyFieldError()"
-              >O crachá é obrigatório</span
-            >
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="senha">Senha:</label>
-          <div class="input-wrapper">
-            <img class="icon" src="icons/lock.png" alt="cracha" loading="lazy" />
+            <mat-hint>
+              <span class="error-message" [class.show]="badgeErrorNumber()"
+                >Apenas números são permitidos</span
+              >
+              <span class="error-message" [class.show]="badgeEmptyFieldError()"
+                >O crachá é obrigatório</span
+              >
+            </mat-hint>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Senha</mat-label>
+            <mat-icon matPrefix>key</mat-icon>
             <input
-              [type]="showPassword() ? 'text' : 'password'"
+              matInput
+              [type]="hide() ? 'password' : 'text'"
+              placeholder="Digite sua senha"
               id="senha"
               name="senha"
               placeholder="Insira a sua senha"
@@ -50,26 +52,27 @@
               [class.error]="passwordEmptyFieldError()"
               autocomplete="new-password"
             />
-            <img
-              class="icon"
-              [src]="showPassword() ? 'icons/visibility_off.png' : 'icons/visibility.png'"
-              alt="visivel"
-              loading="lazy"
-              (click)="togglePasswordVisibility()"
-              style="cursor: pointer"
-            />
-          </div>
-          <div class="error-container">
-            <span class="error-message" [class.show]="passwordEmptyFieldError()">
-              A senha é obrigatória
-            </span>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="codEmpresa">Empresa:</label>
-          <div class="input-wrapper">
-            <img class="icon" src="/icons/factory.png" alt="empresa" loading="lazy" />
+            <button
+              matIconButton
+              matSuffix
+              (click)="clickEvent($event)"
+              [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="hide()"
+            >
+              <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-hint>
+              <span class="error-message" [class.show]="passwordEmptyFieldError()">
+                A senha é obrigatória
+              </span>
+            </mat-hint>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Empresa</mat-label>
+            <mat-icon matPrefix>badge</mat-icon>
+            <!-- Icone do lado esquerdo -->
             <input
+              matInput
               type="text"
               id="codEmpresa"
               name="codEmpresa"
@@ -82,22 +85,30 @@
               [class.error]="enterpriceErrorNumber() || enterpriceEmptyFieldError()"
               autocomplete="off"
             />
-          </div>
-          <div class="error-container">
-            <span class="error-message" [class.show]="enterpriceErrorNumber()"
-              >Apenas números são permitidos</span
-            >
-            <span class="error-message" [class.show]="enterpriceEmptyFieldError()"
-              >O código da empresa é obrigatório</span
-            >
-          </div>
+            <mat-hint>
+              <span class="error-message" [class.show]="enterpriceErrorNumber()"
+                >Apenas números são permitidos</span
+              >
+              <span class="error-message" [class.show]="enterpriceEmptyFieldError()"
+                >O código da empresa é obrigatório</span
+              >
+            </mat-hint>
+          </mat-form-field>
         </div>
-        <button type="submit" class="btn btn-enter" [disabled]="formSubmitted()">Entrar</button>
+        <button matButton="outlined" class="btn-enter" type="submit" [disabled]="formSubmitted()">Entrar</button>
       </form>
-    </div>
+    </section>
   </main>
   <footer class="default-footer">
-    <p class="texto-footer">Desenvolvido por DDK</p>
+    <section class="separate">
+      <img class="icon-brand" src="icons/at.png" alt="@" />
+      <p class="texto-footer">OPPA System. Todos os direitos reservados.</p>
+    </section>
+    <section class="separate">
+      <img class="icon-social" src="icons/facebook.png" alt="facebook" />
+      <img class="icon-social" src="icons/instagram.png" alt="instagram" />
+      <img class="icon-social" src="icons/linkedin.png" alt="linkedin" />
+    </section>
   </footer>
 </div>
 <!--

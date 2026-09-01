@@ -3,10 +3,13 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginData } from '../../interfaces/login-data.interface';
 import { AuthService } from '../../services/auth.service';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-login-user',
-  imports: [FormsModule],
+  imports: [FormsModule, MatButtonModule, MatInputModule, MatIconModule],
   templateUrl: './login-user.html',
   styleUrl: './login-user.scss',
 })
@@ -17,6 +20,7 @@ export class LoginUser {
   protected loginModel = signal<LoginData>({ cracha: '', senha: '', codEmpresa: '' });
   // Armazena valor boleano para visualização da senha
   protected showPassword = signal<boolean>(false);
+  protected hide = signal(true);
   // Estados de controle de toque/interação do usuário
   protected bagdeTouched = signal<boolean>(false);
   protected passwordTouched = signal<boolean>(false);
@@ -72,6 +76,11 @@ export class LoginUser {
   // Função de visualização da senha
   protected togglePasswordVisibility(): void {
     this.showPassword.update((value) => !value);
+  }
+
+  clickEvent(event: MouseEvent) {
+    this.hide.set(!this.hide());
+    event.stopPropagation();
   }
   // Função de confirmação do login
   protected onSubmit(event: Event): void {

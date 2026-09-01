@@ -1,0 +1,19 @@
+@use '@angular/material' as mat;
+
+:root {
+  @include mat.button-overrides(
+    (
+      outlined-container-height: 40px,
+      outlined-horizontal-padding: 40px,
+      outlined-icon-spacing: 8px,
+      outlined-label-text-size: 16px,
+      outlined-container-shape: var(--border-radius),
+      outlined-outline-color: var(--color-white),
+      outlined-outline-width: 2px,
+      outlined-label-text-color: var(--color-white),
+      outlined-label-text-font: var(--font-primary),
+      outlined-ripple-color: var(--color-action),
+      outlined-state-layer-color: var(--color-action),
+    )
+  );
+}
