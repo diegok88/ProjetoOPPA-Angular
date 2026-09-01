@@ -1,26 +1,27 @@
 // DASHBOARD
-.dashboard {
+.container-dashboard {
   display: grid;
+  height: 100%;
   gap: 10px;
-  margin: 10px;
-  height: 100vh;
+  box-sizing: border-box;
+  padding: var(--padding-default);
 
-  grid-template-columns: auto 1fr 1fr;
-  grid-template-rows: 50px 1fr 50px;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 50px 1fr 30px;
   grid-template-areas:
-    'header header header'
-    'aside main main'
-    'footer footer footer';
-  header {
+    'header header'
+    'aside main'
+    'footer footer';
+  .container-header {
     grid-area: header;
   }
-  aside {
+  .container-aside {
     grid-area: aside;
   }
-  main {
+  .container-main {
     grid-area: main;
   }
-  footer {
+  .container-footer {
     grid-area: footer;
   }
 }

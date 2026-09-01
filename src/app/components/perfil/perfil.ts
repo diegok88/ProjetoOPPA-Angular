@@ -6,6 +6,8 @@ import { PerfilService } from '../../services/perfil.service';
 import { AuditoriaData } from '../../interfaces/auditoria-data.interface';
 import { DialogConfirmarService } from '../../services/dialog-confirmar.service';
 import { DialogFinalizarService } from '../../services/dialog-finalizar.service';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 type Operacao = 'inicial' | 'cadastrar' | 'registro';
 type Registro = 'informacao' | 'atualizar' | 'inativar' | 'eliminar' | 'auditoria';
@@ -13,7 +15,7 @@ type Field = 'descricao';
 
 @Component({
   selector: 'app-perfil',
-  imports: [FormsModule],
+  imports: [FormsModule, MatIconModule, MatButtonModule],
   templateUrl: './perfil.html',
   styleUrl: './perfil.scss',
 })

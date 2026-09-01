@@ -17,12 +17,12 @@
               <td class="operacao-dado">{{ item?.codigo }}</td>
               <td class="operacao-dado centro">{{ item?.descricao }}</td>
               <td class="operacao-dado">
-                <img
-                  class="operacao-icone"
-                  src="icons/more_horiz.png"
-                  alt="Ação"
+                <mat-icon
+                  fontSet="material-symbols-outlined"
                   (click)="mudarOperacao('registro', item.id)"
-                />
+                  style="cursor: pointer"
+                  >more_horiz</mat-icon
+                >
               </td>
             </tr>
           }
@@ -35,8 +35,15 @@
           <section class="operacao-inicial">
             <img class="operacao-img" src="images/team.png" alt="Perfil" />
             <span class="operacao-texto">Cadastrar um novo perfil?</span>
-            <button class="operacao-botao" (click)="mudarOperacao('cadastrar')">Clique aqui</button>
+            <button
+              matButton="outlined"
+              class="operacao-button"
+              (click)="mudarOperacao('cadastrar')"
+            >
+              Clique aqui
+            </button>
             <div class="dados-inicial">
+              
               <span>Total de Perfis: {{ listar().length }}</span>
               <span>Total de Ativas: {{ counterStatus(true) }}</span>
               <span>Total de Inativas: {{ counterStatus(false) }}</span>

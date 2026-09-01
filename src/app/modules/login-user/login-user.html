@@ -1,14 +1,12 @@
 <div class="default">
-  <header class="default-header">
-    <button matButton="outlined">Retorna</button>
-  </header>
+  <header class="default-header"></header>
   <main class="default-main">
     <section class="container-logo">
       <img class="logo" src="images/logoOPPA-2.png" alt="logo" />
     </section>
     <section class="container-form">
-      <h2>Login</h2>
       <form (ngSubmit)="onSubmit($event)">
+        <h2>Login</h2>
         <div class="group-form">
           <mat-form-field appearance="outline">
             <mat-label>Crachá</mat-label>
@@ -95,7 +93,10 @@
             </mat-hint>
           </mat-form-field>
         </div>
-        <button matButton="outlined" class="btn-enter" type="submit" [disabled]="formSubmitted()">Entrar</button>
+        <button matButton="outlined" class="btn-enter" type="submit" [disabled]="formSubmitted()">
+          Entrar
+        </button>
+        <button matButton="outlined">Pagina Inicial</button>
       </form>
     </section>
   </main>
