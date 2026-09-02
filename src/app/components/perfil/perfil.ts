@@ -8,6 +8,8 @@ import { DialogConfirmarService } from '../../services/dialog-confirmar.service'
 import { DialogFinalizarService } from '../../services/dialog-finalizar.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { ListPerfil } from './operation/list-perfil/list-perfil';
+import { InicialPerfil } from './operation/inicial-perfil/inicial-perfil';
 
 type Operacao = 'inicial' | 'cadastrar' | 'registro';
 type Registro = 'informacao' | 'atualizar' | 'inativar' | 'eliminar' | 'auditoria';
@@ -15,7 +17,7 @@ type Field = 'descricao';
 
 @Component({
   selector: 'app-perfil',
-  imports: [FormsModule, MatIconModule, MatButtonModule],
+  imports: [FormsModule, MatIconModule, MatButtonModule, ListPerfil, InicialPerfil],
   templateUrl: './perfil.html',
   styleUrl: './perfil.scss',
 })
@@ -79,11 +81,6 @@ export class Perfil implements OnInit {
 
   protected setField(field: keyof PerfilData, value: string): void {
     this.perfilModel.update((model) => ({ ...model, [field]: value }));
-  }
-
-  protected counterStatus(status: boolean) {
-    const contador = this.listar().filter((item) => item.status === status);
-    return contador.length;
   }
 
   ngOnInit(): void {
@@ -340,3 +337,45 @@ export class Perfil implements OnInit {
     this.touchedSubmitted.set(true);
   }
 }
+/*
+<table class="operacao-tabela">
+        <thead>
+          <tr>
+            <th class="operacao-coluna">Código</th>
+            <th class="operacao-coluna centro">Descrição</th>
+            <th class="operacao-coluna">Ação</th>
+          </tr>
+        </thead>
+        <tbody class="operacao-tbody">
+          @for (item of listar(); track item.id) {
+            <tr class="operacao-hover">
+              <td class="operacao-dado">{{ item?.codigo }}</td>
+              <td class="operacao-dado centro">{{ item?.descricao }}</td>
+              <td class="operacao-dado">
+                <mat-icon
+                  fontSet="material-symbols-outlined"
+                  (click)="mudarOperacao('registro', item.id)"
+                  style="cursor: pointer"
+                  >more_horiz</mat-icon
+                >
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <img class="operacao-img" src="images/team.png" alt="Perfil" />
+            <span class="operacao-texto">Cadastrar um novo perfil?</span>
+            <button
+              matButton="outlined"
+              class="operacao-button"
+              (click)="mudarOperacao('cadastrar')"
+            >
+              Clique aqui
+            </button>
+            <div class="dados-inicial">
+              <span>Total de Perfis: {{ listar().length }}</span>
+              <span>Total de Ativas: {{ counterStatus(true) }}</span>
+              <span>Total de Inativas: {{ counterStatus(false) }}</span>
+            </div>
+*/

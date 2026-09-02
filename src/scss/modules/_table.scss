@@ -1,0 +1,53 @@
+@use '@angular/material' as mat;
+
+:root {
+  @include mat.table-overrides(
+    (
+      header-headline-color: var(--color-white),
+      header-headline-font: var(--font-primary),
+      header-headline-size: 14px,
+      header-headline-line-height: 0,
+      header-headline-weight: 600,
+      header-headline-tracking: 1px,
+      header-container-height: 40px,
+      row-item-label-text-color: var(--color-white),
+      row-item-outline-width: 2px,
+      row-item-outline-color: var(--color-white),
+      row-item-label-text-font: var(--font-primary),
+      row-item-label-text-size: 13px,
+      row-item-label-text-line-height: 0,
+      row-item-label-text-tracking: 1px,
+      row-item-label-text-weight: 400,
+      row-item-container-height: 40px,
+    )
+  );
+}
+th.mat-mdc-header-cell,
+td.mdc-data-table__cell {
+  text-align: center !important;
+  padding: 0 !important;
+}
+
+table.mat-mdc-table {
+  display: block;
+  border-collapse: collapse;
+}
+
+thead,
+tr.mat-mdc-row {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  white-space: nowrap;
+}
+
+tr.mat-mdc-row:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  cursor: default;
+}
+
+tbody.mdc-data-table__content {
+  display: block;
+  overflow-y: scroll;
+  height: 451px;
+}

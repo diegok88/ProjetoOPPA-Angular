@@ -3,52 +3,14 @@
   <section class="operacao-container">
     <div class="operacao-lista">
       <span>Lista de Perfis</span>
-      <table class="operacao-tabela">
-        <thead>
-          <tr>
-            <th class="operacao-coluna">Código</th>
-            <th class="operacao-coluna centro">Descrição</th>
-            <th class="operacao-coluna">Ação</th>
-          </tr>
-        </thead>
-        <tbody class="operacao-tbody">
-          @for (item of listar(); track item.id) {
-            <tr class="operacao-hover">
-              <td class="operacao-dado">{{ item?.codigo }}</td>
-              <td class="operacao-dado centro">{{ item?.descricao }}</td>
-              <td class="operacao-dado">
-                <mat-icon
-                  fontSet="material-symbols-outlined"
-                  (click)="mudarOperacao('registro', item.id)"
-                  style="cursor: pointer"
-                  >more_horiz</mat-icon
-                >
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
+      <app-list-perfil (abrirRegistro)="mudarOperacao('registro', $event)"></app-list-perfil>
     </div>
     <div class="operacao-acao">
       @switch (operacaoEstado()) {
         @case ('inicial') {
-          <section class="operacao-inicial">
-            <img class="operacao-img" src="images/team.png" alt="Perfil" />
-            <span class="operacao-texto">Cadastrar um novo perfil?</span>
-            <button
-              matButton="outlined"
-              class="operacao-button"
-              (click)="mudarOperacao('cadastrar')"
-            >
-              Clique aqui
-            </button>
-            <div class="dados-inicial">
-              
-              <span>Total de Perfis: {{ listar().length }}</span>
-              <span>Total de Ativas: {{ counterStatus(true) }}</span>
-              <span>Total de Inativas: {{ counterStatus(false) }}</span>
-            </div>
-          </section>
+          <app-inicial-perfil
+            (abrirCadastro)="mudarOperacao('cadastrar')"
+          ></app-inicial-perfil>
         }
         @case ('cadastrar') {
           <section class="operacao-cadastrar">
