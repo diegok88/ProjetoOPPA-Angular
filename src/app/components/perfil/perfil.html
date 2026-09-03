@@ -8,9 +8,7 @@
     <div class="operacao-acao">
       @switch (operacaoEstado()) {
         @case ('inicial') {
-          <app-inicial-perfil
-            (abrirCadastro)="mudarOperacao('cadastrar')"
-          ></app-inicial-perfil>
+          <app-inicial-perfil (abrirCadastro)="mudarOperacao('cadastrar')"></app-inicial-perfil>
         }
         @case ('cadastrar') {
           <section class="operacao-cadastrar">
@@ -23,34 +21,7 @@
                 (click)="mudarOperacao('inicial')"
               />
             </div>
-            <form (ngSubmit)="cadastrar($event)" class="operacao-forms">
-              <div class="form-group">
-                <label for="descricao" class="form-label">Descrição:</label>
-                <div class="form-wrapper">
-                  <input
-                    type="text"
-                    id="descricao"
-                    name="descricao"
-                    placeholder="Insira a descrição do perfil"
-                    [ngModel]="getField('descricao')"
-                    (ngModelChange)="setField('descricao', $event)"
-                    (blur)="onBlur('descricao')"
-                    autocomplete="off"
-                  />
-                </div>
-                <div class="error-container">
-                  <span class="error-message" [class.show]="descricaoEmptyFiedlsError()">
-                    O descrição é obrigatório
-                  </span>
-                  <span class="error-message" [class.show]="descricaoEqualsFiedlsError()">
-                    A descrição igual a cadastrada.
-                  </span>
-                </div>
-              </div>
-              <button type="submit" class="operacao-botao" [disabled]="isFormValid()">
-                Cadastrar
-              </button>
-            </form>
+            <app-form-perfil (onMudarOperacao)="mudarOperacao('inicial')"></app-form-perfil>
           </section>
         }
         @case ('registro') {

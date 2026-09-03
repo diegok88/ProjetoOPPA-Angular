@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ListPerfil } from './operation/list-perfil/list-perfil';
 import { InicialPerfil } from './operation/inicial-perfil/inicial-perfil';
+import { FormPerfil } from './operation/form-perfil/form-perfil';
 
 type Operacao = 'inicial' | 'cadastrar' | 'registro';
 type Registro = 'informacao' | 'atualizar' | 'inativar' | 'eliminar' | 'auditoria';
@@ -17,7 +18,7 @@ type Field = 'descricao';
 
 @Component({
   selector: 'app-perfil',
-  imports: [FormsModule, MatIconModule, MatButtonModule, ListPerfil, InicialPerfil],
+  imports: [FormsModule, MatIconModule, MatButtonModule, ListPerfil, InicialPerfil, FormPerfil],
   templateUrl: './perfil.html',
   styleUrl: './perfil.scss',
 })
@@ -95,7 +96,7 @@ export class Perfil implements OnInit {
     return this.auditoriaService.listar(field, query);
   }
 
-  protected mudarOperacao(operacao: Operacao, item?: string): void {
+  protected mudarOperacao(operacao: Operacao, item?: string, event?: Event): void {
     if (operacao === 'registro') {
       this.registroEstado.set('informacao');
       this.resetForm();
@@ -378,4 +379,33 @@ export class Perfil implements OnInit {
               <span>Total de Ativas: {{ counterStatus(true) }}</span>
               <span>Total de Inativas: {{ counterStatus(false) }}</span>
             </div>
+
+            <form (ngSubmit)="cadastrar($event)" class="operacao-forms">
+              <div class="form-group">
+                <label for="descricao" class="form-label">Descrição:</label>
+                <div class="form-wrapper">
+                  <input
+                    type="text"
+                    id="descricao"
+                    name="descricao"
+                    placeholder="Insira a descrição do perfil"
+                    [ngModel]="getField('descricao')"
+                    (ngModelChange)="setField('descricao', $event)"
+                    (blur)="onBlur('descricao')"
+                    autocomplete="off"
+                  />
+                </div>
+                <div class="error-container">
+                  <span class="error-message" [class.show]="descricaoEmptyFiedlsError()">
+                    O descrição é obrigatório
+                  </span>
+                  <span class="error-message" [class.show]="descricaoEqualsFiedlsError()">
+                    A descrição igual a cadastrada.
+                  </span>
+                </div>
+              </div>
+              <button type="submit" class="operacao-botao" [disabled]="isFormValid()">
+                Cadastrar
+              </button>
+            </form>
 */

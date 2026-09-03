@@ -1,13 +1,23 @@
 // MAIN
 .default-main {
-  justify-content: space-between;
+  justify-content: center;
 }
 
+.container-login,
 .container-logo,
-.container-form {
+.container-form,
+.container-button {
   display: flex;
   align-items: center;
   box-sizing: border-box;
+}
+
+.container-login {
+  width: 80%;
+  padding: 50px 0;
+  border: 2px solid var(--color-white);
+  border-radius: var(--border-radius);
+  background: var(--color-secondary);
 }
 
 .container-logo {
@@ -15,8 +25,10 @@
   box-sizing: border-box;
   width: 50%;
 
+  border-right: 2px solid var(--color-white);
+
   .logo {
-    width: 450px;
+    width: 400px;
   }
 }
 
@@ -26,31 +38,22 @@
   flex-direction: column;
   color: var(--color-white);
 
-  form {
-    background: var(--color-secondary);
-    border: 2px solid var(--color-white);
-    border-radius: var(--border-radius);
-    padding: 20px;
+  h2 {
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 80px;
   }
 
-  form,
   .group-form {
     width: auto;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-
-    h2 {
-      font-size: 3rem;
-      text-align: center;
-      margin-bottom: 100px;
-    }
   }
 
-  .btn-enter {
-    margin-top: 50px;
-    margin-bottom: 10px;
+  .container-button {
+    gap: 30px;
   }
 }
 

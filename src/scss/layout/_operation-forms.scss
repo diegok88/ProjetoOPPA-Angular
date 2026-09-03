@@ -1,0 +1,13 @@
+.operacao-forms,
+.operacao-group {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.operacao-forms {
+  justify-content: space-between;
+  overflow-y: scroll;
+}
+.operacao-group {
+  justify-content: center;
+}
