@@ -1,21 +1,21 @@
-import { Component, inject, OnInit, output } from '@angular/core';
-import { PerfilService } from '../../../../services/perfil.service';
-import { MatTableModule } from '@angular/material/table';
-import { MatIconModule } from '@angular/material/icon';
+import { Component, input, OnInit, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
+import { PerfilData } from '../../../../interfaces/perfil-data.interface';
 
 @Component({
   selector: 'app-list-perfil',
   imports: [MatTableModule, MatIconModule, MatButtonModule],
   template: `
-    <table mat-table [dataSource]="listar()">
+    <table mat-table [dataSource]="listaPerfil()">
       <ng-container matColumnDef="codigo">
         <th mat-header-cell *matHeaderCellDef>Codigo</th>
-        <td mat-cell *matCellDef="let element">{{ element.codigo }}</td>
+        <td mat-cell *matCellDef="let element">{{ element?.codigo }}</td>
       </ng-container>
       <ng-container matColumnDef="descricao">
         <th mat-header-cell *matHeaderCellDef>Descrição</th>
-        <td mat-cell *matCellDef="let element">{{ element.descricao }}</td>
+        <td mat-cell *matCellDef="let element">{{ element?.descricao }}</td>
       </ng-container>
       <ng-container matColumnDef="acao">
         <th mat-header-cell *matHeaderCellDef>Ação</th>
@@ -42,20 +42,13 @@ import { MatButtonModule } from '@angular/material/button';
   `,
 })
 export class ListPerfil implements OnInit {
-  private perfilService = inject(PerfilService);
-
-  protected readonly listar = this.perfilService.perfil;
-
   protected displayedColumns: string[] = ['codigo', 'descricao', 'acao'];
 
+  public listaPerfil = input<PerfilData[] | []>([]);
   public abrirRegistro = output<string>();
 
   ngOnInit(): void {
-    this.carregar().subscribe();
-  }
-
-  protected carregar() {
-    return this.perfilService.listar();
+    this.listaPerfil();
   }
 
   protected onAbrirRegistro(id: string): void {

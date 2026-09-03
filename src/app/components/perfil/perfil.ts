@@ -1,16 +1,18 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { AuditoriaData } from '../../interfaces/auditoria-data.interface';
 import { PerfilData } from '../../interfaces/perfil-data.interface';
 import { AuditoriaService } from '../../services/auditoria.service';
-import { PerfilService } from '../../services/perfil.service';
-import { AuditoriaData } from '../../interfaces/auditoria-data.interface';
 import { DialogConfirmarService } from '../../services/dialog-confirmar.service';
 import { DialogFinalizarService } from '../../services/dialog-finalizar.service';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { ListPerfil } from './operation/list-perfil/list-perfil';
-import { InicialPerfil } from './operation/inicial-perfil/inicial-perfil';
+import { PerfilService } from '../../services/perfil.service';
 import { FormPerfil } from './operation/form-perfil/form-perfil';
+import { InfoPerfil } from './operation/info-perfil/info-perfil';
+import { InicialPerfil } from './operation/inicial-perfil/inicial-perfil';
+import { ListPerfil } from './operation/list-perfil/list-perfil';
 
 type Operacao = 'inicial' | 'cadastrar' | 'registro';
 type Registro = 'informacao' | 'atualizar' | 'inativar' | 'eliminar' | 'auditoria';
@@ -18,7 +20,16 @@ type Field = 'descricao';
 
 @Component({
   selector: 'app-perfil',
-  imports: [FormsModule, MatIconModule, MatButtonModule, ListPerfil, InicialPerfil, FormPerfil],
+  imports: [
+    FormsModule,
+    MatIconModule,
+    MatButtonModule,
+    MatListModule,
+    ListPerfil,
+    InicialPerfil,
+    FormPerfil,
+    InfoPerfil,
+  ],
   templateUrl: './perfil.html',
   styleUrl: './perfil.scss',
 })
@@ -408,4 +419,27 @@ export class Perfil implements OnInit {
                 Cadastrar
               </button>
             </form>
+
+            <div class="registro-informacao">
+                    <form class="operacao-forms">
+                      <div class="container-info">
+                        <div class="form-info">
+                          <span class="info-label">Id:</span>
+                          <span class="info-value">{{ buscar()?.id }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Código:</span>
+                          <span class="info-value">{{ buscar()?.codigo }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Descrição:</span>
+                          <span class="info-value">{{ buscar()?.descricao }}</span>
+                        </div>
+                        <div class="form-info">
+                          <span class="info-label">Status:</span>
+                          <span class="info-value">{{ buscar()?.status }}</span>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
 */

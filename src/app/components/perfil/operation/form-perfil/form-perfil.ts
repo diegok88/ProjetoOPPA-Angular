@@ -4,10 +4,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { PerfilService } from '../../../../services/perfil.service';
 import { PerfilData } from '../../../../interfaces/perfil-data.interface';
 import { DialogConfirmarService } from '../../../../services/dialog-confirmar.service';
 import { DialogFinalizarService } from '../../../../services/dialog-finalizar.service';
+import { PerfilService } from '../../../../services/perfil.service';
 
 type Field = 'descricao';
 
@@ -15,19 +15,44 @@ type Field = 'descricao';
   selector: 'app-form-perfil',
   imports: [FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule],
   template: `
-    <form class="operacao-forms">
+    <form class="operacao-forms" (ngSubmit)="cadastrar($event)">
       <section class="operacao-group">
         <mat-form-field appearance="outline">
           <mat-label>Descrição</mat-label>
-          <input matInput type="text" />
-          @if (true) {
-            <button matSuffix matIconButton aria-label="Clear">
+          <input
+            matInput
+            type="text"
+            id="descricao"
+            name="descricao"
+            placeholder="Insira a descrição do perfil"
+            [ngModel]="getField('descricao')"
+            (ngModelChange)="setField('descricao', $event)"
+            (blur)="onBlur('descricao')"
+            autocomplete="off"
+          />
+          @if (getField('descricao')) {
+            <!-- PARA O BOTÃO NÃO SER SUBMETIDO IGUAL A DO CADASTRAR O MESMO DEVE SER TIPADO - type="button" -->
+            <button
+              matSuffix
+              matIconButton
+              type="button"
+              aria-label="Clear"
+              (click)="clearField('descricao')"
+            >
               <mat-icon>close</mat-icon>
             </button>
           }
+          <mat-hint>
+            <span class="error-message" [class.show]="descricaoEmptyFiedlsError()">
+              O descrição é obrigatório
+            </span>
+            <span class="error-message" [class.show]="descricaoEqualsFiedlsError()">
+              A descrição igual a cadastrada.
+            </span>
+          </mat-hint>
         </mat-form-field>
       </section>
-      <button matButton="outlined" type="submit">Cadastrar</button>
+      <button matButton="outlined" type="submit" [disabled]="isFormValid()">Cadastrar</button>
     </form>
   `,
   styles: ``,
@@ -140,6 +165,21 @@ export class FormPerfil {
         }
       });
   }
+  /* FUNÇÃO DE LIMPEZA DO CAMPO */
+  protected clearField(field: keyof PerfilData) {
+    this.perfilModel.update((current) => {
+      const emptyValue = this.getEmptyValue(current[field]);
+      return { ...current, [field]: emptyValue };
+    });
+  }
+  /* FUNÇÃO PARA IDENTIFICAR O TIPO DE DADOS O CAMPO PERTENCE */
+  private getEmptyValue(value: any): any {
+    if (typeof value === 'string') return '';
+    if (typeof value === 'number') return 0;
+    if (typeof value === 'boolean') return false;
+    if (value instanceof Date) return null; // ou new Date()
+    return null;
+  }
 
   private resetForm(): void {
     this.perfilModel.set({ descricao: '' });
@@ -148,9 +188,3 @@ export class FormPerfil {
     this.touchedSubmitted.set(true);
   }
 }
-
-/*
-(ngSubmit)="cadastrar($event)"
-[disabled]="formSubmitted()"
-
-*/

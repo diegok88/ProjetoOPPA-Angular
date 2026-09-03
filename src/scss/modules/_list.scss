@@ -1,0 +1,43 @@
+@use '@angular/material' as mat;
+
+:root {
+  @include mat.list-overrides(
+    (
+      list-item-container-shape: var(--border-radius),
+      list-item-container-color: var(--color-third),
+      list-item-label-text-font: var(--font-primary),
+      list-item-label-text-size: 20px,
+    )
+  );
+}
+
+.mdc-list {
+  padding: 10px 0 !important;
+}
+
+.mat-mdc-list-base {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.mat-mdc-list-item {
+  width: 450px !important;
+}
+.mat-mdc-list-item-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.list-label {
+  width: 0 !important;
+  font-size: 18px;
+}
+
+.list-label {
+  width: 0 !important;
+  font-size: 18px;
+}

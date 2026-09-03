@@ -1,4 +1,5 @@
-app-form-perfil {
+app-form-perfil,
+app-info-perfil {
   height: 100%;
 }
 
@@ -157,6 +158,7 @@ app-form-perfil {
   align-items: center;
   justify-content: space-between;
   padding-bottom: 10px;
+  border-bottom: 2px solid var(--color-white);
 }
 
 .operacao-registro {

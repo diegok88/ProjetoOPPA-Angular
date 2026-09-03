@@ -3,7 +3,10 @@
   <section class="operacao-container">
     <div class="operacao-lista">
       <span>Lista de Perfis</span>
-      <app-list-perfil (abrirRegistro)="mudarOperacao('registro', $event)"></app-list-perfil>
+      <app-list-perfil
+        [listaPerfil]="listar()"
+        (abrirRegistro)="mudarOperacao('registro', $event)"
+      ></app-list-perfil>
     </div>
     <div class="operacao-acao">
       @switch (operacaoEstado()) {
@@ -91,28 +94,7 @@
                       (click)="mudarOperacao('inicial')"
                     />
                   </div>
-                  <div class="registro-informacao">
-                    <form class="operacao-forms">
-                      <div class="container-info">
-                        <div class="form-info">
-                          <span class="info-label">Id:</span>
-                          <span class="info-value">{{ buscar()?.id }}</span>
-                        </div>
-                        <div class="form-info">
-                          <span class="info-label">Código:</span>
-                          <span class="info-value">{{ buscar()?.codigo }}</span>
-                        </div>
-                        <div class="form-info">
-                          <span class="info-label">Descrição:</span>
-                          <span class="info-value">{{ buscar()?.descricao }}</span>
-                        </div>
-                        <div class="form-info">
-                          <span class="info-label">Status:</span>
-                          <span class="info-value">{{ buscar()?.status }}</span>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
+                  <app-info-perfil [infoPerfil]="buscar()"></app-info-perfil>
                 </div>
               }
               @case ('atualizar') {
