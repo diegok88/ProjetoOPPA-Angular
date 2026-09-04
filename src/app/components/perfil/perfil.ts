@@ -13,10 +13,25 @@ import { FormPerfil } from './operation/form-perfil/form-perfil';
 import { InfoPerfil } from './operation/info-perfil/info-perfil';
 import { InicialPerfil } from './operation/inicial-perfil/inicial-perfil';
 import { ListPerfil } from './operation/list-perfil/list-perfil';
+import {
+  OperationMap,
+  OperationType,
+  RecordMap,
+  RecordType,
+} from '../../const/operation-map.const';
 
-type Operacao = 'inicial' | 'cadastrar' | 'registro';
-type Registro = 'informacao' | 'atualizar' | 'inativar' | 'eliminar' | 'auditoria';
 type Field = 'descricao';
+
+const INICIALIZAR_PERFIL: PerfilData = {
+  id: '',
+  codigo: undefined,
+  descricao: '',
+  status: undefined,
+};
+
+const INICIALIZAR_FORMS: PerfilData = {
+  descricao: '',
+};
 
 @Component({
   selector: 'app-perfil',
@@ -44,11 +59,12 @@ export class Perfil implements OnInit {
   protected readonly listarAuditoria = this.auditoriaService.auditoria;
   protected readonly buscarAuditoria = signal<AuditoriaData | null>(null);
 
-  protected operacaoEstado = signal<string>('inicial');
-  protected registroEstado = signal<string>('informacao');
+  protected operacaoEstado = signal<string>(OperationMap.INICIAL);
+  protected registroEstado = signal<string>(RecordMap.INFORMACAO);
   protected auditoriaEstado = signal<boolean>(true);
 
-  protected perfilModel = signal<PerfilData>({ descricao: '' });
+  /* FINALIZAR OS CRUD E APAGAR */
+  protected perfilModel = signal<PerfilData>({ ...INICIALIZAR_FORMS });
 
   protected formSubmitted = signal<boolean>(false);
 
@@ -75,6 +91,8 @@ export class Perfil implements OnInit {
     return (this.descricaoTouched() || this.formSubmitted()) && this.isDescricaoEmpty();
   });
   //-------------------------------------------------------------------------------------//
+
+  /* FINALIZAR OS CRUD E APAGAR */
   protected isFormValid = computed(() => {
     const descricaoOk = this.descricaoEmptyFiedlsError() || this.descricaoEqualsFiedlsError();
     const touchedOk = this.touchedSubmitted();
@@ -82,15 +100,18 @@ export class Perfil implements OnInit {
     return dadosOk;
   });
 
+  /* FINALIZAR OS CRUD E APAGAR */
   protected onBlur(field: Field): void {
     if (field) this.touchedSubmitted.set(false);
     if (field === 'descricao') this.descricaoTouched.set(true);
   }
 
+  /* FINALIZAR OS CRUD E APAGAR */
   protected getField(field: keyof PerfilData) {
     return this.perfilModel()[field] ?? '';
   }
 
+  /* FINALIZAR OS CRUD E APAGAR */
   protected setField(field: keyof PerfilData, value: string): void {
     this.perfilModel.update((model) => ({ ...model, [field]: value }));
   }
@@ -107,20 +128,21 @@ export class Perfil implements OnInit {
     return this.auditoriaService.listar(field, query);
   }
 
-  protected mudarOperacao(operacao: Operacao, item?: string, event?: Event): void {
-    if (operacao === 'registro') {
-      this.registroEstado.set('informacao');
+  protected mudarOperacao(operacao: OperationType, item?: string, event?: Event): void {
+    if (operacao === OperationMap.REGISTRO) {
+      this.registroEstado.set(RecordMap.INFORMACAO);
       this.resetForm();
       if (item) this.carregarRegistro(item);
     }
-    if (operacao === 'cadastrar') {
+    if (operacao === OperationMap.CADASTRAR) {
       this.resetForm();
     }
+    this.buscar.set({ ...INICIALIZAR_PERFIL });
     this.operacaoEstado.set(operacao);
   }
 
-  protected mudarRegistro(registro: Registro): void {
-    if (registro === 'atualizar') {
+  protected mudarRegistro(registro: RecordType): void {
+    if (registro === RecordMap.ATUALIZAR) {
       this.resetForm();
       this.perfilModel.set({ descricao: this.buscar()!.descricao });
     }
@@ -151,7 +173,7 @@ export class Perfil implements OnInit {
       },
     });
   }
-
+  /* FINALIZAR OS CRUD E APAGAR */
   protected cadastrar(event: Event): void {
     event.preventDefault();
     this.formSubmitted.set(true);
@@ -199,7 +221,7 @@ export class Perfil implements OnInit {
         }
       });
   }
-
+  /* FINALIZAR OS CRUD E APAGAR */
   protected atualizar(event: Event): void {
     event.preventDefault();
     this.formSubmitted.set(true);
@@ -247,7 +269,7 @@ export class Perfil implements OnInit {
         }
       });
   }
-
+  /* FINALIZAR OS CRUD E APAGAR */
   protected inativar(event: Event): void {
     event.preventDefault();
     this.formSubmitted.set(true);
@@ -343,103 +365,12 @@ export class Perfil implements OnInit {
   }
 
   private resetForm(): void {
-    this.perfilModel.set({ descricao: '' });
+    this.perfilModel.set({ ...INICIALIZAR_FORMS });
     this.descricaoTouched.set(false);
     this.formSubmitted.set(false);
     this.touchedSubmitted.set(true);
   }
 }
 /*
-<table class="operacao-tabela">
-        <thead>
-          <tr>
-            <th class="operacao-coluna">Código</th>
-            <th class="operacao-coluna centro">Descrição</th>
-            <th class="operacao-coluna">Ação</th>
-          </tr>
-        </thead>
-        <tbody class="operacao-tbody">
-          @for (item of listar(); track item.id) {
-            <tr class="operacao-hover">
-              <td class="operacao-dado">{{ item?.codigo }}</td>
-              <td class="operacao-dado centro">{{ item?.descricao }}</td>
-              <td class="operacao-dado">
-                <mat-icon
-                  fontSet="material-symbols-outlined"
-                  (click)="mudarOperacao('registro', item.id)"
-                  style="cursor: pointer"
-                  >more_horiz</mat-icon
-                >
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
 
-      <img class="operacao-img" src="images/team.png" alt="Perfil" />
-            <span class="operacao-texto">Cadastrar um novo perfil?</span>
-            <button
-              matButton="outlined"
-              class="operacao-button"
-              (click)="mudarOperacao('cadastrar')"
-            >
-              Clique aqui
-            </button>
-            <div class="dados-inicial">
-              <span>Total de Perfis: {{ listar().length }}</span>
-              <span>Total de Ativas: {{ counterStatus(true) }}</span>
-              <span>Total de Inativas: {{ counterStatus(false) }}</span>
-            </div>
-
-            <form (ngSubmit)="cadastrar($event)" class="operacao-forms">
-              <div class="form-group">
-                <label for="descricao" class="form-label">Descrição:</label>
-                <div class="form-wrapper">
-                  <input
-                    type="text"
-                    id="descricao"
-                    name="descricao"
-                    placeholder="Insira a descrição do perfil"
-                    [ngModel]="getField('descricao')"
-                    (ngModelChange)="setField('descricao', $event)"
-                    (blur)="onBlur('descricao')"
-                    autocomplete="off"
-                  />
-                </div>
-                <div class="error-container">
-                  <span class="error-message" [class.show]="descricaoEmptyFiedlsError()">
-                    O descrição é obrigatório
-                  </span>
-                  <span class="error-message" [class.show]="descricaoEqualsFiedlsError()">
-                    A descrição igual a cadastrada.
-                  </span>
-                </div>
-              </div>
-              <button type="submit" class="operacao-botao" [disabled]="isFormValid()">
-                Cadastrar
-              </button>
-            </form>
-
-            <div class="registro-informacao">
-                    <form class="operacao-forms">
-                      <div class="container-info">
-                        <div class="form-info">
-                          <span class="info-label">Id:</span>
-                          <span class="info-value">{{ buscar()?.id }}</span>
-                        </div>
-                        <div class="form-info">
-                          <span class="info-label">Código:</span>
-                          <span class="info-value">{{ buscar()?.codigo }}</span>
-                        </div>
-                        <div class="form-info">
-                          <span class="info-label">Descrição:</span>
-                          <span class="info-value">{{ buscar()?.descricao }}</span>
-                        </div>
-                        <div class="form-info">
-                          <span class="info-label">Status:</span>
-                          <span class="info-value">{{ buscar()?.status }}</span>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
 */
