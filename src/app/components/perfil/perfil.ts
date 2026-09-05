@@ -20,6 +20,7 @@ import {
   RecordType,
 } from '../../const/operation-map.const';
 import { ProcessPerfil } from './operation/process-perfil/process-perfil';
+import { AuditPerfil } from './operation/audit-perfil/audit-perfil';
 
 type Field = 'descricao';
 
@@ -46,6 +47,7 @@ const INICIALIZAR_FORMS: PerfilData = {
     FormPerfil,
     InfoPerfil,
     ProcessPerfil,
+    AuditPerfil,
   ],
   templateUrl: './perfil.html',
   styleUrl: './perfil.scss',
@@ -130,11 +132,13 @@ export class Perfil implements OnInit {
     return this.auditoriaService.listar(field, query);
   }
 
-  protected mudarOperacao(operacao: OperationType, item?: string, event?: Event): void {
+  protected mudarOperacao(operacao: OperationType, item?: string): void {
+    if (!operacao) this.operacaoEstado.set(OperationMap.INICIAL);
     if (operacao === OperationMap.REGISTRO) {
       this.registroEstado.set(RecordMap.INFORMACAO);
-      this.resetForm();
       if (item) this.carregarRegistro(item);
+      else this.operacaoEstado.set(OperationMap.INICIAL);
+      this.resetForm();
     }
     if (operacao === OperationMap.CADASTRAR) {
       this.resetForm();
@@ -170,13 +174,14 @@ export class Perfil implements OnInit {
         if (dado) {
           const field: string = 'registroId';
           this.carregarAuditoria(field, id).subscribe();
+          console.log(this.listarAuditoria());
           this.buscar.set(dado);
           this.perfilModel.set({ descricao: dado.descricao });
         }
       },
     });
   }
-  
+
   /* FINALIZAR OS CRUD E APAGAR */
   protected cadastrar(event: Event): void {
     event.preventDefault();
@@ -320,7 +325,7 @@ export class Perfil implements OnInit {
         }
       });
   }
-
+  /* FINALIZAR OS CRUD E APAGAR */
   protected eliminar(event: Event) {
     event.preventDefault();
     this.formSubmitted.set(true);
@@ -376,5 +381,56 @@ export class Perfil implements OnInit {
   }
 }
 /*
-
+@if (auditoriaEstado()) {
+                      <table class="operacao-tabela">
+                        <thead>
+                          <tr>
+                            <th class="operacao-coluna">Ação</th>
+                            <th class="operacao-coluna">Dados Registrados</th>
+                            <th class="operacao-coluna">Data/Hora</th>
+                            <th class="operacao-coluna">Registrado Por Id</th>
+                          </tr>
+                        </thead>
+                        <tbody class="operacao-tbody">
+                          @for (item of listarAuditoria(); track item.id) {
+                            <tr class="operacao-hover">
+                              <td class="operacao-dado">{{ item.acao }}</td>
+                              <td class="operacao-dado">
+                                <span (click)="mudarAuditoria(item)" class="operacao-visualizar"
+                                  >VISUALIZAR</span
+                                >
+                              </td>
+                              <td class="operacao-dado">{{ item.dataHora }}</td>
+                              <td class="operacao-dado">{{ item.registradoPorId }}</td>
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    } @else {
+                      <form class="operacao-forms">
+                        <div class="container-info">
+                          <div class="form-info">
+                            <span class="info-label">Ação:</span>
+                            <span class="info-value">{{ buscarAuditoria()?.acao }}</span>
+                          </div>
+                          <div class="form-info">
+                            <span class="info-label">Dados Registrados:</span>
+                            <span class="info-value-1">{{
+                              buscarAuditoria()?.dadosRegistrados
+                            }}</span>
+                          </div>
+                          <div class="form-info">
+                            <span class="info-label">Data/Hora:</span>
+                            <span class="info-value">{{ buscarAuditoria()?.dataHora }}</span>
+                          </div>
+                          <div class="form-info">
+                            <span class="info-label">Registrado Por Id:</span>
+                            <span class="info-value">{{ buscarAuditoria()?.registradoPorId }}</span>
+                          </div>
+                        </div>
+                        <button type="button" (click)="mudarAuditoria()" class="operacao-botao">
+                          Voltar
+                        </button>
+                      </form>
+                    }
 */

@@ -4,13 +4,19 @@ import { DialogConfirmarService } from '../../../../services/dialog-confirmar.se
 import { DialogFinalizarService } from '../../../../services/dialog-finalizar.service';
 import { PerfilService } from '../../../../services/perfil.service';
 import { PerfilData } from '../../../../interfaces/perfil-data.interface';
-import { OperationType, RecordMap, RecordType } from '../../../../const/operation-map.const';
+import {
+  OperationMap,
+  OperationType,
+  RecordMap,
+  RecordType,
+} from '../../../../const/operation-map.const';
 import { DataProcessPerfil } from '../../../../const/data-process.const';
 import { ConfigProcess } from '../../../../interfaces/config-process.interface';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-process-perfil',
-  imports: [MatButtonModule],
+  imports: [FormsModule, MatButtonModule],
   template: `
     <form (ngSubmit)="executar($event)" class="process-operacao">
       <section class="process-group">
@@ -31,8 +37,12 @@ export class ProcessPerfil implements OnInit {
 
   /* SERVIÇO DE COMUNICAÇÃO COM O BACKEND */
   private perfilService = inject(PerfilService);
-  private listaProcesso = DataProcessPerfil;
+
+  /* SIGNAL DE CONFIGURAÇÃO DO TIPO DE PROCESSO */
   protected listaProcessoSignal = signal<ConfigProcess | null>(null);
+
+  /* SIGNAL VALIDAÇÃO DO TIPO DE PROCESSO */
+  private tipoProcesso = signal<RecordType | null>(null);
 
   /* ENTRADA E SAIDA DE DADOS DO COMPONENTE */
   public operacaoAtual = input<OperationType | undefined>();
@@ -40,12 +50,18 @@ export class ProcessPerfil implements OnInit {
   public buscarPerfil = input<PerfilData | null>(null);
   public onMudarOperacao = output<OperationType>();
 
-  /* VALIDAÇÕES DO MODELO */
-  protected formSubmitted = signal<boolean>(false);
-
   /* INICIALIZAR O PROCESSO */
   ngOnInit(): void {
-    this.carregarRegistro(this.registroAtual()!);
+    if (this.buscarPerfil()?.status && this.registroAtual() === RecordMap.STATUS) {
+      this.carregarRegistro(RecordMap.INATIVAR);
+      this.tipoProcesso.set(RecordMap.INATIVAR);
+    } else if (!this.buscarPerfil()?.status && this.registroAtual() === RecordMap.STATUS) {
+      this.carregarRegistro(RecordMap.ATIVAR);
+      this.tipoProcesso.set(RecordMap.ATIVAR);
+    } else {
+      this.carregarRegistro(this.registroAtual()!);
+      this.tipoProcesso.set(RecordMap.ELIMINAR);
+    }
   }
 
   /* FUNÇÃO DE CARREGAMENTO A CADA SERVIÇO CONCLUIDO */
@@ -56,15 +72,11 @@ export class ProcessPerfil implements OnInit {
   /* FUNÇÃO DE INATIVAR, ATIVAR E ELIMINAR */
   protected executar(event: Event): void {
     event.preventDefault();
-    this.formSubmitted.set(true);
-    if (!this.buscarPerfil()?.status) {
-      alert('Perfil já está inativo!');
-      return;
-    }
 
-    const id = this.buscarPerfil()?.id;
+    const id = this.buscarPerfil()!.id;
 
-    if (this.registroAtual()?.includes(RecordMap.ATIVAR)) {
+    if (this.tipoProcesso() === RecordMap.ATIVAR) {
+      console.log('ATIVAR');
       this.confirmarService
         .confirmar({
           icone: '/icons/check_circle_84.png',
@@ -74,13 +86,13 @@ export class ProcessPerfil implements OnInit {
         })
         .subscribe((confirmado) => {
           if (confirmado === 'finalizado') {
-            this.onMudarOperacao.emit('registro');
+            this.onMudarOperacao.emit(OperationMap.REGISTRO);
             this.carregar().subscribe();
             this.finalizarService.finalizar({
               icone: '/icons/check_circle_84.png',
               operacao: this.buscarPerfil()!.descricao,
               titulo: 'Sucesso!',
-              mensagem: 'Ativação com exíto.',
+              mensagem: 'Ativação realizado com exíto.',
             });
           } else if (confirmado === 'erro') {
             this.finalizarService.finalizar({
@@ -101,7 +113,8 @@ export class ProcessPerfil implements OnInit {
         });
     }
 
-    if (this.registroAtual()?.includes(RecordMap.INATIVAR)) {
+    if (this.tipoProcesso() === RecordMap.INATIVAR) {
+      console.log('INATIVAR');
       this.confirmarService
         .confirmar({
           icone: '/icons/block_84.png',
@@ -111,13 +124,13 @@ export class ProcessPerfil implements OnInit {
         })
         .subscribe((confirmado) => {
           if (confirmado === 'finalizado') {
-            this.onMudarOperacao.emit('registro');
+            this.onMudarOperacao.emit(OperationMap.REGISTRO);
             this.carregar().subscribe();
             this.finalizarService.finalizar({
               icone: '/icons/check_circle_84.png',
               operacao: this.buscarPerfil()!.descricao,
               titulo: 'Sucesso!',
-              mensagem: 'Inativação com exíto.',
+              mensagem: 'Inativação realizado com exíto.',
             });
           } else if (confirmado === 'erro') {
             this.finalizarService.finalizar({
@@ -138,7 +151,8 @@ export class ProcessPerfil implements OnInit {
         });
     }
 
-    if (this.registroAtual()?.includes(RecordMap.ELIMINAR)) {
+    if (this.tipoProcesso() === RecordMap.ELIMINAR) {
+      console.log('ELIMINAR');
       this.confirmarService
         .confirmar({
           icone: '/icons/delete_84.png',
@@ -148,13 +162,13 @@ export class ProcessPerfil implements OnInit {
         })
         .subscribe((confirmado) => {
           if (confirmado === 'finalizado') {
-            this.onMudarOperacao.emit('inicial');
+            this.onMudarOperacao.emit(OperationMap.INICIAL);
             this.carregar().subscribe();
             this.finalizarService.finalizar({
               icone: '/icons/check_circle_84.png',
               operacao: this.buscarPerfil()!.descricao,
               titulo: 'Sucesso!',
-              mensagem: 'Eliminação com exíto.',
+              mensagem: 'Eliminação realizado com exíto.',
             });
           } else if (confirmado === 'erro') {
             this.finalizarService.finalizar({
@@ -178,7 +192,7 @@ export class ProcessPerfil implements OnInit {
 
   /* FUNÇÃO DE CARREGAR A TELA DE INATIVAR, ATIVAR E ELIMINAR */
   protected carregarRegistro(registro: RecordType): void {
-    const carregar = this.listaProcesso.find((r) => r.processo === registro)!;
+    const carregar = DataProcessPerfil.find((r) => r.processo === registro)!;
     this.listaProcessoSignal.set(carregar);
   }
 }

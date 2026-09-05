@@ -9,6 +9,7 @@ export type OperationType = (typeof OperationMap)[keyof typeof OperationMap];
 export const RecordMap = {
   INFORMACAO: 'informacao',
   ATUALIZAR: 'atualizar',
+  STATUS: 'status',
   ATIVAR: 'ativar',
   INATIVAR: 'inativar',
   ELIMINAR: 'eliminar',

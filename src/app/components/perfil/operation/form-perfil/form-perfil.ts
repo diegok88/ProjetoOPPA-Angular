@@ -97,7 +97,7 @@ export class FormPerfil implements OnInit {
   public registroAtual = input<RecordType>();
   public listarPerfil = input<PerfilData[] | []>([]);
   public buscarPerfil = input<PerfilData | null>(null);
-  public onMudarOperacao = output();
+  public onMudarOperacao = output<OperationType>();
   /* MODELO DE ENTRADA DE DADOS */
   protected perfilModel = signal<PerfilData>({ descricao: '' });
   /* VALIDAÇÕES DO MODELO */
@@ -168,6 +168,7 @@ export class FormPerfil implements OnInit {
   protected carregar() {
     return this.perfilService.listar();
   }
+
   /* FUNÇÃO DE CADASTRO E ATUALIZAR */
   protected executar(event: Event): void {
     event.preventDefault();
@@ -192,7 +193,7 @@ export class FormPerfil implements OnInit {
           console.log(confirmado);
           if (confirmado === 'finalizado') {
             this.resetForm();
-            this.onMudarOperacao.emit();
+            this.onMudarOperacao.emit(OperationMap.INICIAL);
             this.carregar().subscribe();
             this.finalizarService.finalizar({
               icone: '/icons/check_circle_84.png',
@@ -229,7 +230,7 @@ export class FormPerfil implements OnInit {
         .subscribe((confirmado) => {
           if (confirmado === 'finalizado') {
             this.resetForm();
-            this.onMudarOperacao.emit();
+            this.onMudarOperacao.emit(OperationMap.REGISTRO);
             this.carregar().subscribe();
             this.finalizarService.finalizar({
               icone: '/icons/check_circle_84.png',

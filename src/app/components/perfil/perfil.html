@@ -56,15 +56,15 @@
                 />
                 <span>Atualizar</span>
               </label>
-              <label (click)="mudarRegistro('inativar')">
+              <label (click)="mudarRegistro('status')">
                 <input
                   type="radio"
                   id="valor-3"
                   name="valor-radio"
-                  value="inativar"
+                  value="status"
                   [(ngModel)]="registroEstado"
                 />
-                <span>Status</span>
+                <span>{{ buscar()?.status ? 'Inativar' : 'Ativar' }}</span>
               </label>
               <label (click)="mudarRegistro('eliminar')">
                 <input
@@ -119,11 +119,11 @@
                     [registroAtual]="registroEstado()"
                     [listarPerfil]="listar()"
                     [buscarPerfil]="buscar()"
-                    (onMudarOperacao)="mudarOperacao('registro', buscar()?.id)"
+                    (onMudarOperacao)="mudarOperacao($event, buscar()?.id)"
                   ></app-form-perfil>
                 </div>
               }
-              @case ('inativar') {
+              @case ('ativar') {
                 <div class="registro-container">
                   <div class="operacao-titulo">
                     <span>Inativar o Perfil</span>
@@ -138,7 +138,26 @@
                     [operacaoAtual]="operacaoEstado()"
                     [registroAtual]="registroEstado()"
                     [buscarPerfil]="buscar()"
-                    (onMudarOperacao)="mudarOperacao('inicial', buscar()?.id)"
+                    (onMudarOperacao)="mudarOperacao($event, buscar()?.id)"
+                  ></app-process-perfil>
+                </div>
+              }
+              @case ('status') {
+                <div class="registro-container">
+                  <div class="operacao-titulo">
+                    <span>Inativar o Perfil</span>
+                    <img
+                      class="operacao-voltar"
+                      src="icons/arrow_circle_left.png"
+                      alt="Voltar"
+                      (click)="mudarOperacao('inicial')"
+                    />
+                  </div>
+                  <app-process-perfil
+                    [operacaoAtual]="operacaoEstado()"
+                    [registroAtual]="registroEstado()"
+                    [buscarPerfil]="buscar()"
+                    (onMudarOperacao)="mudarOperacao($event, buscar()?.id)"
                   ></app-process-perfil>
                 </div>
               }
@@ -157,7 +176,7 @@
                     [operacaoAtual]="operacaoEstado()"
                     [registroAtual]="registroEstado()"
                     [buscarPerfil]="buscar()"
-                    (onMudarOperacao)="mudarOperacao('inicial', buscar()?.id)"
+                    (onMudarOperacao)="mudarOperacao($event, buscar()?.id)"
                   ></app-process-perfil>
                 </div>
               }
@@ -172,60 +191,7 @@
                       (click)="mudarOperacao('inicial')"
                     />
                   </div>
-                  <div class="registro-auditoria">
-                    @if (auditoriaEstado()) {
-                      <table class="operacao-tabela">
-                        <thead>
-                          <tr>
-                            <th class="operacao-coluna">Ação</th>
-                            <th class="operacao-coluna">Dados Registrados</th>
-                            <th class="operacao-coluna">Data/Hora</th>
-                            <th class="operacao-coluna">Registrado Por Id</th>
-                          </tr>
-                        </thead>
-                        <tbody class="operacao-tbody">
-                          @for (item of listarAuditoria(); track item.id) {
-                            <tr class="operacao-hover">
-                              <td class="operacao-dado">{{ item.acao }}</td>
-                              <td class="operacao-dado">
-                                <span (click)="mudarAuditoria(item)" class="operacao-visualizar"
-                                  >VISUALIZAR</span
-                                >
-                              </td>
-                              <td class="operacao-dado">{{ item.dataHora }}</td>
-                              <td class="operacao-dado">{{ item.registradoPorId }}</td>
-                            </tr>
-                          }
-                        </tbody>
-                      </table>
-                    } @else {
-                      <form class="operacao-forms">
-                        <div class="container-info">
-                          <div class="form-info">
-                            <span class="info-label">Ação:</span>
-                            <span class="info-value">{{ buscarAuditoria()?.acao }}</span>
-                          </div>
-                          <div class="form-info">
-                            <span class="info-label">Dados Registrados:</span>
-                            <span class="info-value-1">{{
-                              buscarAuditoria()?.dadosRegistrados
-                            }}</span>
-                          </div>
-                          <div class="form-info">
-                            <span class="info-label">Data/Hora:</span>
-                            <span class="info-value">{{ buscarAuditoria()?.dataHora }}</span>
-                          </div>
-                          <div class="form-info">
-                            <span class="info-label">Registrado Por Id:</span>
-                            <span class="info-value">{{ buscarAuditoria()?.registradoPorId }}</span>
-                          </div>
-                        </div>
-                        <button type="button" (click)="mudarAuditoria()" class="operacao-botao">
-                          Voltar
-                        </button>
-                      </form>
-                    }
-                  </div>
+                  <app-audit-perfil [listarAuditoria]="listarAuditoria()"></app-audit-perfil>
                 </div>
               }
             }
