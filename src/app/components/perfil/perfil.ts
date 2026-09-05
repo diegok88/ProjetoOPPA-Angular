@@ -19,6 +19,7 @@ import {
   RecordMap,
   RecordType,
 } from '../../const/operation-map.const';
+import { ProcessPerfil } from './operation/process-perfil/process-perfil';
 
 type Field = 'descricao';
 
@@ -44,6 +45,7 @@ const INICIALIZAR_FORMS: PerfilData = {
     InicialPerfil,
     FormPerfil,
     InfoPerfil,
+    ProcessPerfil,
   ],
   templateUrl: './perfil.html',
   styleUrl: './perfil.scss',
@@ -59,8 +61,8 @@ export class Perfil implements OnInit {
   protected readonly listarAuditoria = this.auditoriaService.auditoria;
   protected readonly buscarAuditoria = signal<AuditoriaData | null>(null);
 
-  protected operacaoEstado = signal<string>(OperationMap.INICIAL);
-  protected registroEstado = signal<string>(RecordMap.INFORMACAO);
+  protected operacaoEstado = signal<OperationType>(OperationMap.INICIAL);
+  protected registroEstado = signal<RecordType>(RecordMap.INFORMACAO);
   protected auditoriaEstado = signal<boolean>(true);
 
   /* FINALIZAR OS CRUD E APAGAR */
@@ -145,6 +147,7 @@ export class Perfil implements OnInit {
     if (registro === RecordMap.ATUALIZAR) {
       this.resetForm();
       this.perfilModel.set({ descricao: this.buscar()!.descricao });
+      this.registroEstado.set(registro);
     }
     this.auditoriaEstado.set(true);
     this.registroEstado.set(registro);
@@ -173,6 +176,7 @@ export class Perfil implements OnInit {
       },
     });
   }
+  
   /* FINALIZAR OS CRUD E APAGAR */
   protected cadastrar(event: Event): void {
     event.preventDefault();

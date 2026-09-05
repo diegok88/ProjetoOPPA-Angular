@@ -6,7 +6,7 @@ import { PerfilData } from '../../../../interfaces/perfil-data.interface';
   selector: 'app-info-perfil',
   imports: [MatListModule],
   template: `
-    <mat-list>
+    <mat-list class="info-operacao">
       <mat-list-item>
         <span matListItemTitle>
           <p class="list-label">Id:</p>

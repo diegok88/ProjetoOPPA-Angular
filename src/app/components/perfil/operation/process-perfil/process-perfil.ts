@@ -12,17 +12,15 @@ import { ConfigProcess } from '../../../../interfaces/config-process.interface';
   selector: 'app-process-perfil',
   imports: [MatButtonModule],
   template: `
-    <div class="registro-inativar">
-      <form (ngSubmit)="executar($event)" class="operacao-forms">
-        <div class="container-imagem">
-          <img class="image-eliminar" [src]="listaProcessoSignal()?.imagem" alt="Lixeira" />
-          <span>{{ listaProcessoSignal()?.mensagem }} {{ buscarPerfil()?.descricao }}?</span>
-        </div>
-        <button matButton="outlined" type="submit">
-          {{ listaProcessoSignal()?.botao }}
-        </button>
-      </form>
-    </div>
+    <form (ngSubmit)="executar($event)" class="process-operacao">
+      <section class="process-group">
+        <img class="image-eliminar" [src]="listaProcessoSignal()?.imagem" alt="Lixeira" />
+        <span>{{ listaProcessoSignal()?.mensagem }} {{ buscarPerfil()?.descricao }}?</span>
+      </section>
+      <button matButton="outlined" type="submit">
+        {{ listaProcessoSignal()?.botao }}
+      </button>
+    </form>
   `,
   styles: ``,
 })
@@ -37,8 +35,8 @@ export class ProcessPerfil implements OnInit {
   protected listaProcessoSignal = signal<ConfigProcess | null>(null);
 
   /* ENTRADA E SAIDA DE DADOS DO COMPONENTE */
-  public operacaoAtual = input<OperationType>();
-  public registroAtual = input<RecordType>();
+  public operacaoAtual = input<OperationType | undefined>();
+  public registroAtual = input<RecordType | undefined>();
   public buscarPerfil = input<PerfilData | null>(null);
   public onMudarOperacao = output<OperationType>();
 
@@ -54,6 +52,7 @@ export class ProcessPerfil implements OnInit {
   protected carregar() {
     return this.perfilService.listar();
   }
+
   /* FUNÇÃO DE INATIVAR, ATIVAR E ELIMINAR */
   protected executar(event: Event): void {
     event.preventDefault();
@@ -65,7 +64,44 @@ export class ProcessPerfil implements OnInit {
 
     const id = this.buscarPerfil()?.id;
 
-    if (this.operacaoAtual()?.includes(RecordMap.INATIVAR)) {
+    if (this.registroAtual()?.includes(RecordMap.ATIVAR)) {
+      this.confirmarService
+        .confirmar({
+          icone: '/icons/check_circle_84.png',
+          titulo: 'Ativar Perfil',
+          mensagem: `Deseja confirmar a ativação da perfil ${this.buscarPerfil()?.descricao.toUpperCase()}?`,
+          acao: () => this.perfilService.ativar(id!),
+        })
+        .subscribe((confirmado) => {
+          if (confirmado === 'finalizado') {
+            this.onMudarOperacao.emit('registro');
+            this.carregar().subscribe();
+            this.finalizarService.finalizar({
+              icone: '/icons/check_circle_84.png',
+              operacao: this.buscarPerfil()!.descricao,
+              titulo: 'Sucesso!',
+              mensagem: 'Ativação com exíto.',
+            });
+          } else if (confirmado === 'erro') {
+            this.finalizarService.finalizar({
+              icone: '/icons/error_84.png',
+              operacao: this.buscarPerfil()!.descricao.toLocaleUpperCase(),
+              titulo: 'Erro!',
+              mensagem: 'Falha no ativação.',
+              erros: this.finalizarService.ultimosErros(),
+            });
+          } else {
+            this.finalizarService.finalizar({
+              icone: '/icons/cancel_84.png',
+              operacao: this.buscarPerfil()!.descricao.toLocaleUpperCase(),
+              titulo: 'Cancelado!',
+              mensagem: 'Operação de ativação cancelada.',
+            });
+          }
+        });
+    }
+
+    if (this.registroAtual()?.includes(RecordMap.INATIVAR)) {
       this.confirmarService
         .confirmar({
           icone: '/icons/block_84.png',
@@ -100,7 +136,9 @@ export class ProcessPerfil implements OnInit {
             });
           }
         });
-    } else if (this.operacaoAtual()?.includes(RecordMap.ELIMINAR)) {
+    }
+
+    if (this.registroAtual()?.includes(RecordMap.ELIMINAR)) {
       this.confirmarService
         .confirmar({
           icone: '/icons/delete_84.png',
@@ -138,6 +176,7 @@ export class ProcessPerfil implements OnInit {
     }
   }
 
+  /* FUNÇÃO DE CARREGAR A TELA DE INATIVAR, ATIVAR E ELIMINAR */
   protected carregarRegistro(registro: RecordType): void {
     const carregar = this.listaProcesso.find((r) => r.processo === registro)!;
     this.listaProcessoSignal.set(carregar);

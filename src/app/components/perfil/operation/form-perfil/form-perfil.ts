@@ -9,6 +9,12 @@ import { DialogConfirmarService } from '../../../../services/dialog-confirmar.se
 import { DialogFinalizarService } from '../../../../services/dialog-finalizar.service';
 import { PerfilService } from '../../../../services/perfil.service';
 import { MatListModule } from '@angular/material/list';
+import {
+  OperationMap,
+  OperationType,
+  RecordMap,
+  RecordType,
+} from '../../../../const/operation-map.const';
 
 type Field = 'descricao';
 
@@ -23,8 +29,8 @@ type Field = 'descricao';
     MatListModule,
   ],
   template: `
-    <form class="operacao-forms" (ngSubmit)="executar($event)">
-      <section class="operacao-group">
+    <form class="forms-operacao" (ngSubmit)="executar($event)">
+      <section class="forms-group">
         @if (isAtualizar()) {
           <mat-list>
             <mat-list-item>
@@ -87,7 +93,8 @@ export class FormPerfil implements OnInit {
   private perfilService = inject(PerfilService);
 
   /* ENTRADA E SAIDA DE DADOS DO COMPONENTE */
-  public operacaoAtual = input<string>('');
+  public operacaoAtual = input<OperationType>();
+  public registroAtual = input<RecordType>();
   public listarPerfil = input<PerfilData[] | []>([]);
   public buscarPerfil = input<PerfilData | null>(null);
   public onMudarOperacao = output();
@@ -104,9 +111,13 @@ export class FormPerfil implements OnInit {
 
   protected isDescricaoEquals = computed(() => {
     const des = this.perfilModel().descricao.toUpperCase();
-    const atualizaIgual = des === this.buscarPerfil()?.descricao;
+    if (this.registroAtual() === RecordMap.ATUALIZAR) {
+      const atualizaIgual = des === this.buscarPerfil()?.descricao;
+      const registroIgual = this.listarPerfil().some((item) => item.descricao === des);
+      return atualizaIgual || registroIgual;
+    }
     const registroIgual = this.listarPerfil().some((item) => item.descricao === des);
-    return atualizaIgual || registroIgual;
+    return registroIgual;
   });
 
   protected descricaoEqualsFiedlsError = computed(() => {
@@ -142,9 +153,14 @@ export class FormPerfil implements OnInit {
   }
   /* INICIALIZADOR DO COMPONENTE */
   ngOnInit(): void {
-    if (this.operacaoAtual() === 'atualizar') {
+    if (
+      this.operacaoAtual() === OperationMap.REGISTRO &&
+      this.registroAtual() === RecordMap.ATUALIZAR
+    ) {
       this.perfilModel.set({ descricao: this.buscarPerfil()!.descricao });
       this.isAtualizar.set(true);
+    } else {
+      this.isAtualizar.set(false);
     }
   }
 

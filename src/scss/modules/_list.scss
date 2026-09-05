@@ -12,7 +12,7 @@
 }
 
 .mdc-list {
-  padding: 10px 0 !important;
+  padding: 0 0 10px 0 !important;
 }
 
 .mat-mdc-list-base {
@@ -40,4 +40,8 @@
 .list-label {
   width: 0 !important;
   font-size: 18px;
+}
+
+.info-operacao {
+  padding-top: 10px !important;
 }

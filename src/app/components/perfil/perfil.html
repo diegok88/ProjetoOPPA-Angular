@@ -25,7 +25,8 @@
               />
             </div>
             <app-form-perfil
-              [operacaoAtual]="'cadastrar'"
+              [operacaoAtual]="operacaoEstado()"
+              [registroAtual]="registroEstado()"
               [listarPerfil]="listar()"
               [buscarPerfil]="buscar()"
               (onMudarOperacao)="mudarOperacao('inicial')"
@@ -63,7 +64,7 @@
                   value="inativar"
                   [(ngModel)]="registroEstado"
                 />
-                <span>Inativar</span>
+                <span>Status</span>
               </label>
               <label (click)="mudarRegistro('eliminar')">
                 <input
@@ -114,7 +115,8 @@
                     />
                   </div>
                   <app-form-perfil
-                    [operacaoAtual]="'atualizar'"
+                    [operacaoAtual]="operacaoEstado()"
+                    [registroAtual]="registroEstado()"
                     [listarPerfil]="listar()"
                     [buscarPerfil]="buscar()"
                     (onMudarOperacao)="mudarOperacao('registro', buscar()?.id)"
@@ -133,9 +135,10 @@
                     />
                   </div>
                   <app-process-perfil
-                    [operacaoAtual]="'cadastrar'"
+                    [operacaoAtual]="operacaoEstado()"
+                    [registroAtual]="registroEstado()"
                     [buscarPerfil]="buscar()"
-                    (onMudarOperacao)="mudarOperacao('inicial', buscar().id)"
+                    (onMudarOperacao)="mudarOperacao('inicial', buscar()?.id)"
                   ></app-process-perfil>
                 </div>
               }
@@ -150,15 +153,12 @@
                       (click)="mudarOperacao('inicial')"
                     />
                   </div>
-                  <div class="registro-eliminar">
-                    <form (ngSubmit)="eliminar($event)" class="operacao-forms">
-                      <div class="container-imagem">
-                        <img class="image-eliminar" src="images/trash.png" alt="Lixeira" />
-                        <span>Deseja eliminar a empresa {{ buscar()?.descricao }}?</span>
-                      </div>
-                      <button type="submit" class="operacao-botao">Eliminar</button>
-                    </form>
-                  </div>
+                  <app-process-perfil
+                    [operacaoAtual]="operacaoEstado()"
+                    [registroAtual]="registroEstado()"
+                    [buscarPerfil]="buscar()"
+                    (onMudarOperacao)="mudarOperacao('inicial', buscar()?.id)"
+                  ></app-process-perfil>
                 </div>
               }
               @case ('auditoria') {

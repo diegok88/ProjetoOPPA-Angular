@@ -1,0 +1,21 @@
+.process-operacao,
+.process-group {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.process-operacao {
+  height: 95%;
+  box-sizing: border-box;
+  justify-content: space-between;
+}
+.process-group {
+  height: 100%;
+  justify-content: center;
+  gap: 30px;
+
+  span {
+    font-family: var(--font-primary);
+    font-size: 20px;
+  }
+}

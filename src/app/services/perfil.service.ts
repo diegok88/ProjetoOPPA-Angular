@@ -26,6 +26,10 @@ export class PerfilService {
     return this.http.patch<PerfilData>(`${this.apiUrl}/deactive/${id}`, {});
   }
 
+  ativar(id: string): Observable<PerfilData> {
+    return this.http.patch<PerfilData>(`${this.apiUrl}/active/${id}`, {});
+  }
+
   deletar(id: string): Observable<PerfilData> {
     return this.http.delete<PerfilData>(`${this.apiUrl}/${id}`);
   }

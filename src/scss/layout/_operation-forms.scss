@@ -1,13 +1,41 @@
-.operacao-forms,
-.operacao-group {
+.forms-operacao,
+.forms-group {
   display: flex;
   align-items: center;
   flex-direction: column;
 }
-.operacao-forms {
+.forms-operacao {
+  height: 95%;
+  box-sizing: border-box;
   justify-content: space-between;
-  overflow-y: scroll;
+  padding-top: 10px;
 }
-.operacao-group {
-  justify-content: center;
+.forms-group {
+  height: 100%;
+  gap: 10px;
+}
+
+.error-message {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity 0.2s ease,
+    visibility 0.2s ease;
+  color: var(--color-negative);
+  font-size: 0.65rem;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.error-message.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+button:disabled {
+  opacity: 0.5;
 }

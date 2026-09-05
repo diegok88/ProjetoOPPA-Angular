@@ -12,6 +12,7 @@ export const RecordMap = {
   ATIVAR: 'ativar',
   INATIVAR: 'inativar',
   ELIMINAR: 'eliminar',
+  AUDITORIA: 'auditoria',
 } as const;
 
 export type RecordType = (typeof RecordMap)[keyof typeof RecordMap];
