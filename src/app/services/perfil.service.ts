@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { RequestHttp } from '../const/requests.const';
-import { PerfilData } from '../interfaces/perfil-data.interface';
+import { PerfilModel } from '../entities/perfil.model';
 
 @Injectable({
   providedIn: 'root',
@@ -11,31 +11,31 @@ export class PerfilService {
   private http = inject(HttpClient);
   private apiUrl = RequestHttp.perfil;
 
-  private perfilSignal = signal<PerfilData[] | []>([]);
+  private perfilSignal = signal<PerfilModel[] | []>([]);
   public perfil = this.perfilSignal.asReadonly();
 
-  cadastrar(dados: PerfilData): Observable<PerfilData> {
-    return this.http.post<PerfilData>(this.apiUrl, dados);
+  cadastrar(dados: PerfilModel): Observable<PerfilModel> {
+    return this.http.post<PerfilModel>(this.apiUrl, dados);
   }
 
-  atualizar(id: string, dados: PerfilData): Observable<PerfilData> {
-    return this.http.patch<PerfilData>(`${this.apiUrl}/${id}`, dados);
+  atualizar(id: string, dados: PerfilModel): Observable<PerfilModel> {
+    return this.http.patch<PerfilModel>(`${this.apiUrl}/${id}`, dados);
   }
 
-  inativar(id: string): Observable<PerfilData> {
-    return this.http.patch<PerfilData>(`${this.apiUrl}/deactive/${id}`, {});
+  inativar(id: string): Observable<PerfilModel> {
+    return this.http.patch<PerfilModel>(`${this.apiUrl}/deactive/${id}`, {});
   }
 
-  ativar(id: string): Observable<PerfilData> {
-    return this.http.patch<PerfilData>(`${this.apiUrl}/active/${id}`, {});
+  ativar(id: string): Observable<PerfilModel> {
+    return this.http.patch<PerfilModel>(`${this.apiUrl}/active/${id}`, {});
   }
 
-  deletar(id: string): Observable<PerfilData> {
-    return this.http.delete<PerfilData>(`${this.apiUrl}/${id}`);
+  deletar(id: string): Observable<PerfilModel> {
+    return this.http.delete<PerfilModel>(`${this.apiUrl}/${id}`);
   }
 
-  listar(): Observable<PerfilData[]> {
-    return this.http.get<PerfilData[]>(this.apiUrl).pipe(
+  listar(): Observable<PerfilModel[]> {
+    return this.http.get<PerfilModel[]>(this.apiUrl).pipe(
       tap((dados) => {
         this.perfilSignal.set(dados);
       }),

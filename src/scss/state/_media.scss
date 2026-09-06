@@ -3,6 +3,10 @@
     height: 90%;
   }
 
+  .operacao-registro {
+    height: 70vh;
+  }
+
   .operacao-cadastrar {
     height: 70vh;
   }
@@ -29,5 +33,13 @@
   .registro-eliminar,
   .registro-auditoria {
     height: 60vh;
+  }
+
+  table.tabela-auditoria tbody.mdc-data-table__content {
+    height: 400px !important;
+  }
+
+  table.tabela-lista tbody.mdc-data-table__content {
+    height: 451px !important;
   }
 }

@@ -3,7 +3,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { DialogConfirmarService } from '../../../../services/dialog-confirmar.service';
 import { DialogFinalizarService } from '../../../../services/dialog-finalizar.service';
 import { PerfilService } from '../../../../services/perfil.service';
-import { PerfilData } from '../../../../interfaces/perfil-data.interface';
 import {
   OperationMap,
   OperationType,
@@ -13,6 +12,7 @@ import {
 import { DataProcessPerfil } from '../../../../const/data-process.const';
 import { ConfigProcess } from '../../../../interfaces/config-process.interface';
 import { FormsModule } from '@angular/forms';
+import { INICIALIZAR_PERFIL_ENTITY, PerfilModel } from '../../../../entities/perfil.model';
 
 @Component({
   selector: 'app-process-perfil',
@@ -21,7 +21,7 @@ import { FormsModule } from '@angular/forms';
     <form (ngSubmit)="executar($event)" class="process-operacao">
       <section class="process-group">
         <img class="image-eliminar" [src]="listaProcessoSignal()?.imagem" alt="Lixeira" />
-        <span>{{ listaProcessoSignal()?.mensagem }} {{ buscarPerfil()?.descricao }}?</span>
+        <span>{{ listaProcessoSignal()?.mensagem }} {{ buscarPerfil().descricao }}?</span>
       </section>
       <button matButton="outlined" type="submit">
         {{ listaProcessoSignal()?.botao }}
@@ -47,7 +47,7 @@ export class ProcessPerfil implements OnInit {
   /* ENTRADA E SAIDA DE DADOS DO COMPONENTE */
   public operacaoAtual = input<OperationType | undefined>();
   public registroAtual = input<RecordType | undefined>();
-  public buscarPerfil = input<PerfilData | null>(null);
+  public buscarPerfil = input<PerfilModel>({ ...INICIALIZAR_PERFIL_ENTITY });
   public onMudarOperacao = output<OperationType>();
 
   /* INICIALIZAR O PROCESSO */

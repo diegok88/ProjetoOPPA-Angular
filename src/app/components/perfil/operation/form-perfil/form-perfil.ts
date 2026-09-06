@@ -4,7 +4,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { PerfilData } from '../../../../interfaces/perfil-data.interface';
 import { DialogConfirmarService } from '../../../../services/dialog-confirmar.service';
 import { DialogFinalizarService } from '../../../../services/dialog-finalizar.service';
 import { PerfilService } from '../../../../services/perfil.service';
@@ -15,8 +14,13 @@ import {
   RecordMap,
   RecordType,
 } from '../../../../const/operation-map.const';
-
-type Field = 'descricao';
+import {
+  INICIALIZAR_PERFIL_ENTITY,
+  INICIALIZAR_PERFIL_FORMS,
+  PerfilMap,
+  PerfilModel,
+  PerfilType,
+} from '../../../../entities/perfil.model';
 
 @Component({
   selector: 'app-form-perfil',
@@ -29,14 +33,14 @@ type Field = 'descricao';
     MatListModule,
   ],
   template: `
-    <form class="forms-operacao" (ngSubmit)="executar($event)">
+    <form class="forms-operacao" (ngSubmit)="executar($event)" [class.resp]="formsResponsive()">
       <section class="forms-group">
         @if (isAtualizar()) {
           <mat-list>
             <mat-list-item>
               <span matListItemTitle>
                 <p class="list-label">Id:</p>
-                <p class="list-data">{{ buscarPerfil()?.id }}</p>
+                <p class="list-data">{{ buscarPerfil().id }}</p>
               </span>
             </mat-list-item>
           </mat-list>
@@ -95,11 +99,16 @@ export class FormPerfil implements OnInit {
   /* ENTRADA E SAIDA DE DADOS DO COMPONENTE */
   public operacaoAtual = input<OperationType>();
   public registroAtual = input<RecordType>();
-  public listarPerfil = input<PerfilData[] | []>([]);
-  public buscarPerfil = input<PerfilData | null>(null);
+  public listarPerfil = input<PerfilModel[] | []>([]);
+  public buscarPerfil = input<PerfilModel>({ ...INICIALIZAR_PERFIL_ENTITY });
   public onMudarOperacao = output<OperationType>();
   /* MODELO DE ENTRADA DE DADOS */
-  protected perfilModel = signal<PerfilData>({ descricao: '' });
+  protected perfilModel = signal<PerfilModel>({ ...INICIALIZAR_PERFIL_FORMS });
+
+  protected formsResponsive = computed(() => {
+    return this.operacaoAtual() === OperationMap.REGISTRO;
+  });
+
   /* VALIDAÇÕES DO MODELO */
   protected isAtualizar = signal<boolean>(false);
 
@@ -139,16 +148,16 @@ export class FormPerfil implements OnInit {
     return dadosOk;
   });
 
-  protected onBlur(field: Field): void {
+  protected onBlur(field: PerfilType): void {
     if (field) this.touchedSubmitted.set(false);
-    if (field === 'descricao') this.descricaoTouched.set(true);
+    if (field === PerfilMap.DESCRICAO) this.descricaoTouched.set(true);
   }
   /* GETTER E SETTER DA ENTIDADE */
-  protected getField(field: keyof PerfilData) {
+  protected getField(field: keyof PerfilModel) {
     return this.perfilModel()[field] ?? '';
   }
 
-  protected setField(field: keyof PerfilData, value: string): void {
+  protected setField(field: keyof PerfilModel, value: string): void {
     this.perfilModel.update((model) => ({ ...model, [field]: value }));
   }
   /* INICIALIZADOR DO COMPONENTE */
@@ -258,7 +267,7 @@ export class FormPerfil implements OnInit {
     }
   }
   /* FUNÇÃO DE LIMPEZA DO CAMPO */
-  protected clearField(field: keyof PerfilData) {
+  protected clearField(field: keyof PerfilModel) {
     this.perfilModel.update((current) => {
       const emptyValue = this.getEmptyValue(current[field]);
       return { ...current, [field]: emptyValue };
@@ -274,7 +283,7 @@ export class FormPerfil implements OnInit {
   }
   /* FUNÇÃO PARA RESETAR TODO O COMPONENTE */
   private resetForm(): void {
-    this.perfilModel.set({ descricao: '' });
+    this.perfilModel.set({ ...INICIALIZAR_PERFIL_FORMS });
     this.descricaoTouched.set(false);
     this.formSubmitted.set(false);
     this.touchedSubmitted.set(true);

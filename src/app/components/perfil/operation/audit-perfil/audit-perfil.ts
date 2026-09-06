@@ -4,13 +4,21 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { AuditoriaData } from '../../../../interfaces/auditoria-data.interface';
 import { MatListModule } from '@angular/material/list';
+import { FormatarDadosRegistradosPipe } from '../../../../pipes/formatar-dados-registrados-pipe';
 
 @Component({
   selector: 'app-audit-perfil',
-  imports: [MatTableModule, MatIconModule, MatButtonModule, MatListModule, MatButtonModule],
+  imports: [
+    MatTableModule,
+    MatIconModule,
+    MatButtonModule,
+    MatListModule,
+    MatButtonModule,
+    FormatarDadosRegistradosPipe,
+  ],
   template: `
     @if (auditoriaEstado()) {
-      <table mat-table [dataSource]="listarAuditoria()">
+      <table mat-table [dataSource]="listarAuditoria()" class="tabela-auditoria">
         <ng-container matColumnDef="acao">
           <th mat-header-cell *matHeaderCellDef>Ação</th>
           <td mat-cell *matCellDef="let element">{{ element?.acao }}</td>
@@ -64,11 +72,11 @@ import { MatListModule } from '@angular/material/list';
           <mat-list-item class="dados-registrados">
             <span matListItemTitle>
               <p>Dados Registrados:</p>
-              <p>{{ buscarAuditoria()?.dadosRegistrados }}</p>
+              <p>{{ buscarAuditoria()?.dadosRegistrados | formatarDadosRegistrados }}</p>
             </span>
           </mat-list-item>
         </mat-list>
-        <button matButton="outlined" type="button">Voltar</button>
+        <button matButton="outlined" (click)="onAbrirRegistro()">Voltar</button>
       </section>
     }
   `,
@@ -89,6 +97,8 @@ import { MatListModule } from '@angular/material/list';
     }
 
     .container-dados {
+      width: 100%;
+      height: 95%;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -102,7 +112,13 @@ import { MatListModule } from '@angular/material/list';
       p {
         white-space: pre-wrap;
         height: auto;
-        widht: auto;
+        width: auto;
+      }
+    }
+
+    @media (max-height: 750px) {
+      .container-dados {
+        height: 94%;
       }
     }
   `,

@@ -1,0 +1,53 @@
+<div class="registro-toogle">
+  <label (click)="mudarRegistro(recordMap.INFORMACAO)">
+    <input
+      type="radio"
+      id="valor-1"
+      name="valor-radio"
+      value="informacao"
+      [checked]="registroAtual() === recordMap.INFORMACAO"
+    />
+    <span>Informação</span>
+  </label>
+  <label (click)="mudarRegistro(recordMap.ATUALIZAR)">
+    <input
+      type="radio"
+      id="valor-2"
+      name="valor-radio"
+      value="atualizar"
+      [checked]="registroAtual() === recordMap.ATUALIZAR"
+    />
+    <span>Atualizar</span>
+  </label>
+  <label (click)="mudarRegistro(recordMap.STATUS)">
+    <input
+      type="radio"
+      id="valor-3"
+      name="valor-radio"
+      value="status"
+      [checked]="registroAtual() === recordMap.STATUS"
+    />
+    <span>{{ buscarStatus() ? 'Inativar' : 'Ativar' }}</span>
+  </label>
+  <label (click)="mudarRegistro(recordMap.ELIMINAR)">
+    <input
+      type="radio"
+      id="valor-4"
+      name="valor-radio"
+      value="eliminar"
+      [checked]="registroAtual() === recordMap.ELIMINAR"
+    />
+    <span>Eliminar</span>
+  </label>
+  <label (click)="mudarRegistro(recordMap.AUDITORIA)">
+    <input
+      type="radio"
+      id="valor-5"
+      name="valor-radio"
+      value="auditoria"
+      [checked]="registroAtual() === recordMap.AUDITORIA"
+    />
+    <span>Auditoria</span>
+  </label>
+  <span class="selected"></span>
+</div>

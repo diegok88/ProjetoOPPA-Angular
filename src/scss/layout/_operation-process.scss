@@ -9,6 +9,13 @@
   box-sizing: border-box;
   justify-content: space-between;
 }
+
+@media (max-height: 750px) {
+  .process-operacao {
+    height: 93%;
+  }
+}
+
 .process-group {
   height: 100%;
   justify-content: center;

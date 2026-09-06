@@ -5,13 +5,15 @@
       <span>Lista de Perfis</span>
       <app-list-perfil
         [listaPerfil]="listar()"
-        (abrirRegistro)="mudarOperacao('registro', $event)"
+        (abrirRegistro)="mudarOperacao(operationMap.REGISTRO, $event)"
       ></app-list-perfil>
     </div>
     <div class="operacao-acao">
       @switch (operacaoEstado()) {
         @case ('inicial') {
-          <app-inicial-perfil (abrirCadastro)="mudarOperacao('cadastrar')"></app-inicial-perfil>
+          <app-inicial-perfil
+            (abrirCadastro)="mudarOperacao(operationMap.CADASTRAR)"
+          ></app-inicial-perfil>
         }
         @case ('cadastrar') {
           <section class="operacao-cadastrar">
@@ -21,7 +23,7 @@
                 class="operacao-voltar"
                 src="icons/arrow_circle_left.png"
                 alt="Voltar"
-                (click)="mudarOperacao('inicial')"
+                (click)="mudarOperacao(operationMap.INICIAL)"
               />
             </div>
             <app-form-perfil
@@ -29,65 +31,17 @@
               [registroAtual]="registroEstado()"
               [listarPerfil]="listar()"
               [buscarPerfil]="buscar()"
-              (onMudarOperacao)="mudarOperacao('inicial')"
+              (onMudarOperacao)="mudarOperacao(operationMap.INICIAL)"
             ></app-form-perfil>
           </section>
         }
         @case ('registro') {
+          <app-toogle
+            [buscarStatus]="buscar().status"
+            [onRegistroAtual]="registroEstado()"
+            (onMudarRegistro)="mudarRegistro($event)"
+          ></app-toogle>
           <section class="operacao-registro">
-            <div class="registro-selecao">
-              <label (click)="mudarRegistro('informacao')">
-                <input
-                  type="radio"
-                  id="valor-1"
-                  name="valor-radio"
-                  value="informacao"
-                  [(ngModel)]="registroEstado"
-                />
-                <span>Informação</span>
-              </label>
-              <label (click)="mudarRegistro('atualizar')">
-                <input
-                  type="radio"
-                  id="valor-2"
-                  name="valor-radio"
-                  value="atualizar"
-                  [(ngModel)]="registroEstado"
-                />
-                <span>Atualizar</span>
-              </label>
-              <label (click)="mudarRegistro('status')">
-                <input
-                  type="radio"
-                  id="valor-3"
-                  name="valor-radio"
-                  value="status"
-                  [(ngModel)]="registroEstado"
-                />
-                <span>{{ buscar()?.status ? 'Inativar' : 'Ativar' }}</span>
-              </label>
-              <label (click)="mudarRegistro('eliminar')">
-                <input
-                  type="radio"
-                  id="valor-4"
-                  name="valor-radio"
-                  value="eliminar"
-                  [(ngModel)]="registroEstado"
-                />
-                <span>Eliminar</span>
-              </label>
-              <label (click)="mudarRegistro('auditoria')">
-                <input
-                  type="radio"
-                  id="valor-5"
-                  name="valor-radio"
-                  value="auditoria"
-                  [(ngModel)]="registroEstado"
-                />
-                <span>Auditoria</span>
-              </label>
-              <span class="selecao"></span>
-            </div>
             @switch (registroEstado()) {
               @case ('informacao') {
                 <div class="registro-container">
@@ -97,7 +51,7 @@
                       class="operacao-voltar"
                       src="icons/arrow_circle_left.png"
                       alt="Voltar"
-                      (click)="mudarOperacao('inicial')"
+                      (click)="mudarOperacao(operationMap.INICIAL)"
                     />
                   </div>
                   <app-info-perfil [infoPerfil]="buscar()"></app-info-perfil>
@@ -111,7 +65,7 @@
                       class="operacao-voltar"
                       src="icons/arrow_circle_left.png"
                       alt="Voltar"
-                      (click)="mudarOperacao('inicial')"
+                      (click)="mudarOperacao(operationMap.INICIAL)"
                     />
                   </div>
                   <app-form-perfil
@@ -119,7 +73,7 @@
                     [registroAtual]="registroEstado()"
                     [listarPerfil]="listar()"
                     [buscarPerfil]="buscar()"
-                    (onMudarOperacao)="mudarOperacao($event, buscar()?.id)"
+                    (onMudarOperacao)="mudarOperacao($event, buscar().id)"
                   ></app-form-perfil>
                 </div>
               }
@@ -131,14 +85,14 @@
                       class="operacao-voltar"
                       src="icons/arrow_circle_left.png"
                       alt="Voltar"
-                      (click)="mudarOperacao('inicial')"
+                      (click)="mudarOperacao(operationMap.INICIAL)"
                     />
                   </div>
                   <app-process-perfil
                     [operacaoAtual]="operacaoEstado()"
                     [registroAtual]="registroEstado()"
                     [buscarPerfil]="buscar()"
-                    (onMudarOperacao)="mudarOperacao($event, buscar()?.id)"
+                    (onMudarOperacao)="mudarOperacao($event, buscar().id)"
                   ></app-process-perfil>
                 </div>
               }
@@ -150,14 +104,14 @@
                       class="operacao-voltar"
                       src="icons/arrow_circle_left.png"
                       alt="Voltar"
-                      (click)="mudarOperacao('inicial')"
+                      (click)="mudarOperacao(operationMap.INICIAL)"
                     />
                   </div>
                   <app-process-perfil
                     [operacaoAtual]="operacaoEstado()"
                     [registroAtual]="registroEstado()"
                     [buscarPerfil]="buscar()"
-                    (onMudarOperacao)="mudarOperacao($event, buscar()?.id)"
+                    (onMudarOperacao)="mudarOperacao($event, buscar().id)"
                   ></app-process-perfil>
                 </div>
               }
@@ -169,14 +123,14 @@
                       class="operacao-voltar"
                       src="icons/arrow_circle_left.png"
                       alt="Voltar"
-                      (click)="mudarOperacao('inicial')"
+                      (click)="mudarOperacao(operationMap.INICIAL)"
                     />
                   </div>
                   <app-process-perfil
                     [operacaoAtual]="operacaoEstado()"
                     [registroAtual]="registroEstado()"
                     [buscarPerfil]="buscar()"
-                    (onMudarOperacao)="mudarOperacao($event, buscar()?.id)"
+                    (onMudarOperacao)="mudarOperacao($event, buscar().id)"
                   ></app-process-perfil>
                 </div>
               }
@@ -188,7 +142,7 @@
                       class="operacao-voltar"
                       src="icons/arrow_circle_left.png"
                       alt="Voltar"
-                      (click)="mudarOperacao('inicial')"
+                      (click)="mudarOperacao(operationMap.INICIAL)"
                     />
                   </div>
                   <app-audit-perfil [listarAuditoria]="listarAuditoria()"></app-audit-perfil>

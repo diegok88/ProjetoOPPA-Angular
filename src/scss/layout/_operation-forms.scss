@@ -5,13 +5,17 @@
   flex-direction: column;
 }
 .forms-operacao {
-  height: 95%;
+  height: 100%;
   box-sizing: border-box;
   justify-content: space-between;
   padding-top: 10px;
 }
+
+.forms-operacao.resp {
+  height: 95%;
+}
+
 .forms-group {
-  height: 100%;
   gap: 10px;
 }
 

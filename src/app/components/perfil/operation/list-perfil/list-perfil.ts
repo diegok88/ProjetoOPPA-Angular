@@ -2,13 +2,13 @@ import { Component, input, OnInit, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
-import { PerfilData } from '../../../../interfaces/perfil-data.interface';
+import { PerfilModel } from '../../../../entities/perfil.model';
 
 @Component({
   selector: 'app-list-perfil',
   imports: [MatTableModule, MatIconModule, MatButtonModule],
   template: `
-    <table mat-table [dataSource]="listaPerfil()">
+    <table mat-table [dataSource]="listaPerfil()" class="tabela-lista">
       <ng-container matColumnDef="codigo">
         <th mat-header-cell *matHeaderCellDef>Codigo</th>
         <td mat-cell *matCellDef="let element">{{ element?.codigo }}</td>
@@ -44,7 +44,7 @@ import { PerfilData } from '../../../../interfaces/perfil-data.interface';
 export class ListPerfil implements OnInit {
   protected displayedColumns: string[] = ['codigo', 'descricao', 'acao'];
 
-  public listaPerfil = input<PerfilData[] | []>([]);
+  public listaPerfil = input<PerfilModel[] | []>([]);
   public abrirRegistro = output<string>();
 
   ngOnInit(): void {

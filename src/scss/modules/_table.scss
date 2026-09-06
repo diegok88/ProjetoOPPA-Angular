@@ -49,5 +49,12 @@ tr.mat-mdc-row:hover {
 tbody.mdc-data-table__content {
   display: block;
   overflow-y: scroll;
-  height: 451px;
+}
+
+table.tabela-auditoria tbody.mdc-data-table__content {
+  height: 550px !important;
+}
+
+table.tabela-lista tbody.mdc-data-table__content {
+  height: 650px !important;
 }
