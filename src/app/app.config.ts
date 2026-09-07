@@ -8,7 +8,7 @@ import {
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import { routes } from './app.routes';
-import { credentialsInterceptor } from './const/credentials-interceptor.const';
+import { credentialsInterceptor } from './constants/credentials-interceptor.const';
 import { provideNgxMask } from 'ngx-mask';
 import { ErrorInterceptorService } from './services/error-interceptor.service';
 

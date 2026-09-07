@@ -13,7 +13,7 @@ import {
   OperationType,
   RecordMap,
   RecordType,
-} from '../../../../const/operation-map.const';
+} from '../../../../constants/operation-map.const';
 import {
   INICIALIZAR_PERFIL_ENTITY,
   INICIALIZAR_PERFIL_FORMS,

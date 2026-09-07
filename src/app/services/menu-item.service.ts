@@ -1,7 +1,7 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { MenuItem } from '../interfaces/menu-item.interface';
 import { AuthService } from './auth.service';
-import { ROLES_MAP } from '../const/role-map.const';
+import { ROLES_MAP } from '../constants/role-map.const';
 
 @Injectable({
   providedIn: 'root',

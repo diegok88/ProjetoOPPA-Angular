@@ -61,3 +61,30 @@ export const INICIALIZAR_EMPRESA_FORMS: EmpresaModel = {
   estado: '',
   cep: '',
 } as const;
+
+export const TOUCHED_EMPRESA_MAP: Record<EmpresaType, string> = {
+  [EmpresaMap.CNPJ]: 'cnpjTouched',
+  [EmpresaMap.RAZAO_SOCIAL]: 'razaoSocialTouched',
+  [EmpresaMap.NOME_FANTASIA]: 'nomeFantasiaTouched',
+  [EmpresaMap.CONTATO]: 'contatoTouched',
+  [EmpresaMap.EMAIL]: 'emailTouched',
+  [EmpresaMap.RUA]: 'ruaTouched',
+  [EmpresaMap.NUMERO]: 'numeroTouched',
+  [EmpresaMap.BAIRRO]: 'bairroTouched',
+  [EmpresaMap.CIDADE]: 'cidadeTouched',
+  [EmpresaMap.ESTADO]: 'estadoTouched',
+  [EmpresaMap.CEP]: 'cepTouched',
+} as const;
+
+export type ErrorEmpresaType = 'emptyCnpj' | 'equalCnpj' | null;
+
+export function getErrorMessage(error: ErrorEmpresaType): string {
+  switch (error) {
+    case 'emptyCnpj':
+      return 'O cnpj é obrigatório.';
+    case 'equalCnpj':
+      return 'O cnpj é igual ao anterior!';
+    default:
+      return '';
+  }
+}

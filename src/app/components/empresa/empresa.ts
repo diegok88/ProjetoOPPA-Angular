@@ -2,7 +2,6 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgxMaskDirective } from 'ngx-mask';
 import { AuditoriaData } from '../../interfaces/auditoria-data.interface';
-import { EmpresaData } from '../../interfaces/empresa-data.interface';
 import { AuditoriaService } from '../../services/auditoria.service';
 import { DialogConfirmarService } from '../../services/dialog-confirmar.service';
 import { DialogFinalizarService } from '../../services/dialog-finalizar.service';

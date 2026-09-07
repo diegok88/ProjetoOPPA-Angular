@@ -8,8 +8,8 @@ import {
   OperationType,
   RecordMap,
   RecordType,
-} from '../../../../const/operation-map.const';
-import { DataProcessPerfil } from '../../../../const/data-process.const';
+} from '../../../../constants/operation-map.const';
+import { DataProcessPerfil } from '../../../../constants/data-process.const';
 import { ConfigProcess } from '../../../../interfaces/config-process.interface';
 import { FormsModule } from '@angular/forms';
 import { INICIALIZAR_PERFIL_ENTITY, PerfilModel } from '../../../../entities/perfil.model';

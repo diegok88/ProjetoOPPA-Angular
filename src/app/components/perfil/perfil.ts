@@ -15,7 +15,7 @@ import {
   OperationType,
   RecordMap,
   RecordType,
-} from '../../const/operation-map.const';
+} from '../../constants/operation-map.const';
 import { ProcessPerfil } from './operation/process-perfil/process-perfil';
 import { AuditPerfil } from './operation/audit-perfil/audit-perfil';
 import { Toogle } from '../toogle/toogle';
@@ -24,7 +24,7 @@ import {
   INICIALIZAR_PERFIL_FORMS,
   PerfilModel,
 } from '../../entities/perfil.model';
-import { INICIALIZAR_AUDITORIA_ENTITY } from '../../const/inicialize-entities.const';
+import { INICIALIZAR_AUDITORIA_ENTITY } from '../../constants/inicialize-auditoria.const';
 
 @Component({
   selector: 'app-perfil',

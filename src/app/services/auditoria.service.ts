@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { catchError, Observable, tap, throwError } from 'rxjs';
-import { RequestHttp } from '../const/requests.const';
+import { RequestHttp } from '../constants/requests.const';
 import { AuditoriaData } from '../interfaces/auditoria-data.interface';
 
 @Injectable({

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { RequestHttp } from '../const/requests.const';
+import { RequestHttp } from '../constants/requests.const';
 import { UsuarioData } from '../interfaces/usuario-data.interface';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 

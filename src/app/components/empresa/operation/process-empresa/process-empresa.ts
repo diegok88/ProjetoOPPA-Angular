@@ -10,7 +10,7 @@ import {
   OperationType,
   RecordMap,
   RecordType,
-} from '../../../../const/operation-map.const';
+} from '../../../../constants/operation-map.const';
 import { EmpresaModel, INICIALIZAR_EMPRESA_ENTITY } from '../../../../entities/empresa.model';
 import {
   CONFIRMAR_ATIVAR,
@@ -22,7 +22,7 @@ import {
   FINALIZAR_ERRO,
   FINALIZAR_SUCESSO,
 } from '../../../../entities/dialogo-finalizar.model';
-import { DataProcessEmpresa } from '../../../../const/data-process.const';
+import { DataProcessEmpresa } from '../../../../constants/data-process.const';
 
 @Component({
   selector: 'app-process-empresa',

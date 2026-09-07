@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Observable, of, tap } from 'rxjs';
-import { RequestHttp } from '../const/requests.const';
-import { ROLES_MAP } from '../const/role-map.const';
+import { RequestHttp } from '../constants/requests.const';
+import { ROLES_MAP } from '../constants/role-map.const';
 import { AuthResponse } from '../interfaces/auth-response.interface';
 import { LoginData } from '../interfaces/login-data.interface';
 import { UserGuard } from '../interfaces/user-guard.interface';

@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { RecordType } from '../../const/operation-map.const';
+import { RecordType } from '../../constants/operation-map.const';
 import { FormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 

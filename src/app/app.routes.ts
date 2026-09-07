@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { roleGuard } from './const/role.guard';
+import { roleGuard } from './constants/role.guard';
 import { AccessDenied } from './modules/access-denied/access-denied';
 import { DashboardUser } from './modules/dashboard-user/dashboard-user';
 import { LoginUser } from './modules/login-user/login-user';
-import { ROLES_MAP } from './const/role-map.const';
+import { ROLES_MAP } from './constants/role-map.const';
 
 export const routes: Routes = [
   {
