@@ -13,6 +13,16 @@ import { DataProcessPerfil } from '../../../../const/data-process.const';
 import { ConfigProcess } from '../../../../interfaces/config-process.interface';
 import { FormsModule } from '@angular/forms';
 import { INICIALIZAR_PERFIL_ENTITY, PerfilModel } from '../../../../entities/perfil.model';
+import {
+  CONFIRMAR_ATIVAR,
+  CONFIRMAR_ELIMINAR,
+  CONFIRMAR_INATIVAR,
+} from '../../../../entities/dialogo-confirmar.model';
+import {
+  FINALIZAR_CANCELAR,
+  FINALIZAR_ERRO,
+  FINALIZAR_SUCESSO,
+} from '../../../../entities/dialogo-finalizar.model';
 
 @Component({
   selector: 'app-process-perfil',
@@ -20,7 +30,7 @@ import { INICIALIZAR_PERFIL_ENTITY, PerfilModel } from '../../../../entities/per
   template: `
     <form (ngSubmit)="executar($event)" class="process-operacao">
       <section class="process-group">
-        <img class="image-eliminar" [src]="listaProcessoSignal()?.imagem" alt="Lixeira" />
+        <img class="image-process" [src]="listaProcessoSignal()?.imagem" alt="Imagem" />
         <span>{{ listaProcessoSignal()?.mensagem }} {{ buscarPerfil().descricao }}?</span>
       </section>
       <button matButton="outlined" type="submit">
@@ -76,12 +86,11 @@ export class ProcessPerfil implements OnInit {
     const id = this.buscarPerfil()!.id;
 
     if (this.tipoProcesso() === RecordMap.ATIVAR) {
-      console.log('ATIVAR');
       this.confirmarService
         .confirmar({
-          icone: '/icons/check_circle_84.png',
-          titulo: 'Ativar Perfil',
-          mensagem: `Deseja confirmar a ativação da perfil ${this.buscarPerfil()?.descricao.toUpperCase()}?`,
+          ...CONFIRMAR_ATIVAR,
+          entidade: 'perfil',
+          dados: this.buscarPerfil()?.descricao.toUpperCase(),
           acao: () => this.perfilService.ativar(id!),
         })
         .subscribe((confirmado) => {
@@ -89,25 +98,22 @@ export class ProcessPerfil implements OnInit {
             this.onMudarOperacao.emit(OperationMap.REGISTRO);
             this.carregar().subscribe();
             this.finalizarService.finalizar({
-              icone: '/icons/check_circle_84.png',
-              operacao: this.buscarPerfil()!.descricao,
-              titulo: 'Sucesso!',
-              mensagem: 'Ativação realizado com exíto.',
+              ...FINALIZAR_SUCESSO,
+              operacao: 'Ativação do perfil',
+              dados: this.buscarPerfil()!.descricao,
             });
           } else if (confirmado === 'erro') {
             this.finalizarService.finalizar({
-              icone: '/icons/error_84.png',
-              operacao: this.buscarPerfil()!.descricao.toLocaleUpperCase(),
-              titulo: 'Erro!',
-              mensagem: 'Falha no ativação.',
+              ...FINALIZAR_ERRO,
+              operacao: 'Ativação do perfil',
+              dados: this.buscarPerfil()!.descricao.toLocaleUpperCase(),
               erros: this.finalizarService.ultimosErros(),
             });
           } else {
             this.finalizarService.finalizar({
-              icone: '/icons/cancel_84.png',
-              operacao: this.buscarPerfil()!.descricao.toLocaleUpperCase(),
-              titulo: 'Cancelado!',
-              mensagem: 'Operação de ativação cancelada.',
+              ...FINALIZAR_CANCELAR,
+              operacao: 'Ativação do perfil',
+              dados: this.buscarPerfil()!.descricao.toLocaleUpperCase(),
             });
           }
         });
@@ -117,9 +123,9 @@ export class ProcessPerfil implements OnInit {
       console.log('INATIVAR');
       this.confirmarService
         .confirmar({
-          icone: '/icons/block_84.png',
-          titulo: 'Inativar Perfil',
-          mensagem: `Deseja confirmar a inativação da perfil ${this.buscarPerfil()?.descricao.toUpperCase()}?`,
+          ...CONFIRMAR_INATIVAR,
+          entidade: 'perfil',
+          dados: this.buscarPerfil()?.descricao.toUpperCase(),
           acao: () => this.perfilService.inativar(id!),
         })
         .subscribe((confirmado) => {
@@ -127,25 +133,22 @@ export class ProcessPerfil implements OnInit {
             this.onMudarOperacao.emit(OperationMap.REGISTRO);
             this.carregar().subscribe();
             this.finalizarService.finalizar({
-              icone: '/icons/check_circle_84.png',
-              operacao: this.buscarPerfil()!.descricao,
-              titulo: 'Sucesso!',
-              mensagem: 'Inativação realizado com exíto.',
+              ...FINALIZAR_SUCESSO,
+              operacao: 'Inativação do perfil',
+              dados: this.buscarPerfil()!.descricao,
             });
           } else if (confirmado === 'erro') {
             this.finalizarService.finalizar({
-              icone: '/icons/error_84.png',
-              operacao: this.buscarPerfil()!.descricao.toLocaleUpperCase(),
-              titulo: 'Erro!',
-              mensagem: 'Falha no inativação.',
+              ...FINALIZAR_ERRO,
+              operacao: 'Inativação do perfil',
+              dados: this.buscarPerfil()!.descricao.toLocaleUpperCase(),
               erros: this.finalizarService.ultimosErros(),
             });
           } else {
             this.finalizarService.finalizar({
-              icone: '/icons/cancel_84.png',
-              operacao: this.buscarPerfil()!.descricao.toLocaleUpperCase(),
-              titulo: 'Cancelado!',
-              mensagem: 'Operação de inativação cancelada.',
+              ...FINALIZAR_CANCELAR,
+              operacao: 'Inativação do perfil',
+              dados: this.buscarPerfil()!.descricao.toLocaleUpperCase(),
             });
           }
         });
@@ -155,9 +158,9 @@ export class ProcessPerfil implements OnInit {
       console.log('ELIMINAR');
       this.confirmarService
         .confirmar({
-          icone: '/icons/delete_84.png',
-          titulo: 'Eliminar Perfil',
-          mensagem: `Deseja confirmar a eliminação da perfil ${this.buscarPerfil()!.descricao.toUpperCase()}?`,
+          ...CONFIRMAR_ELIMINAR,
+          entidade: 'perfil',
+          dados: this.buscarPerfil()!.descricao.toUpperCase(),
           acao: () => this.perfilService.deletar(id!),
         })
         .subscribe((confirmado) => {
@@ -165,25 +168,22 @@ export class ProcessPerfil implements OnInit {
             this.onMudarOperacao.emit(OperationMap.INICIAL);
             this.carregar().subscribe();
             this.finalizarService.finalizar({
-              icone: '/icons/check_circle_84.png',
-              operacao: this.buscarPerfil()!.descricao,
-              titulo: 'Sucesso!',
-              mensagem: 'Eliminação realizado com exíto.',
+              ...FINALIZAR_SUCESSO,
+              operacao: 'Eliminação do perfil',
+              dados: this.buscarPerfil()!.descricao,
             });
           } else if (confirmado === 'erro') {
             this.finalizarService.finalizar({
-              icone: '/icons/error_84.png',
-              operacao: this.buscarPerfil()!.descricao.toLocaleUpperCase(),
-              titulo: 'Erro!',
-              mensagem: 'Falha na eliminação.',
+              ...FINALIZAR_ERRO,
+              operacao: 'Eliminação do perfil',
+              dados: this.buscarPerfil()!.descricao.toLocaleUpperCase(),
               erros: this.finalizarService.ultimosErros(),
             });
           } else {
             this.finalizarService.finalizar({
-              icone: '/icons/cancel_84.png',
-              operacao: this.buscarPerfil()!.descricao.toLocaleUpperCase(),
-              titulo: 'Cancelado!',
-              mensagem: 'Operação de eliminação cancelada.',
+              ...FINALIZAR_CANCELAR,
+              operacao: 'Eliminação do perfil',
+              dados: this.buscarPerfil()!.descricao.toLocaleUpperCase(),
             });
           }
         });

@@ -37,7 +37,7 @@
         }
         @case ('registro') {
           <app-toogle
-            [buscarStatus]="buscar().status"
+            [statusEntity]="buscar().status"
             [onRegistroAtual]="registroEstado()"
             (onMudarRegistro)="mudarRegistro($event)"
           ></app-toogle>

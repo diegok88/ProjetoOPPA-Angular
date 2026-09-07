@@ -2,7 +2,7 @@ import { Dialog } from '@angular/cdk/dialog';
 import { inject, Injectable, signal } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DialogoFinalizar } from '../components/dialogo-finalizar/dialogo-finalizar';
-import { DialogoFinalizarData } from '../interfaces/dialogo-finalizar.interface';
+import { DialogoFinalizarData } from '../entities/dialogo-finalizar.model';
 
 @Injectable({
   providedIn: 'root',

@@ -1,6 +1,6 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Component, inject } from '@angular/core';
-import { DialogoFinalizarData } from '../../interfaces/dialogo-finalizar.interface';
+import { DialogoFinalizarData } from '../../entities/dialogo-finalizar.model';
 
 @Component({
   selector: 'app-dialogo-finalizar',

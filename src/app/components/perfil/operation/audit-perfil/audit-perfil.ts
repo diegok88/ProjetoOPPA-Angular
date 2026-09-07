@@ -118,7 +118,7 @@ import { FormatarDadosRegistradosPipe } from '../../../../pipes/formatar-dados-r
 
     @media (max-height: 750px) {
       .container-dados {
-        height: 94%;
+        height: 93%;
       }
     }
   `,

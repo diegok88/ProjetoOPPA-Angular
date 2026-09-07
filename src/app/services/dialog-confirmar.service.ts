@@ -12,14 +12,18 @@ export class DialogConfirmarService {
   confirmar<T>(config: {
     icone: string;
     titulo: string;
+    entidade?: string;
     mensagem: string;
+    dados?: string;
     acao: () => Observable<T> | Promise<T>;
   }): Observable<string> {
     const dialogRef = this.dialog.open<string>(DialogoConfimar, {
       data: {
         icone: config.icone,
         titulo: config.titulo,
+        entidade: config.entidade,
         mensagem: config.mensagem,
+        dados: config.dados,
         acao: config.acao,
       },
       disableClose: true,

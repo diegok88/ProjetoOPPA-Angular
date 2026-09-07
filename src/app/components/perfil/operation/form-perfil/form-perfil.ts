@@ -21,6 +21,15 @@ import {
   PerfilModel,
   PerfilType,
 } from '../../../../entities/perfil.model';
+import {
+  FINALIZAR_CANCELAR,
+  FINALIZAR_ERRO,
+  FINALIZAR_SUCESSO,
+} from '../../../../entities/dialogo-finalizar.model';
+import {
+  CONFIRMAR_ATUALIZAR,
+  CONFIRMAR_CADASTRAR,
+} from '../../../../entities/dialogo-confirmar.model';
 
 @Component({
   selector: 'app-form-perfil',
@@ -141,6 +150,7 @@ export class FormPerfil implements OnInit {
     return (this.descricaoTouched() || this.formSubmitted()) && this.isDescricaoEmpty();
   });
 
+  /* FUNÇÃO DE VALIDAÇÃO AO APLICAR A SUBMIT */
   protected isFormValid = computed(() => {
     const descricaoOk = this.descricaoEmptyFiedlsError() || this.descricaoEqualsFiedlsError();
     const touchedOk = this.touchedSubmitted();
@@ -148,10 +158,12 @@ export class FormPerfil implements OnInit {
     return dadosOk;
   });
 
+  /* FUNÇÃO DE RECONHECIMENTO DE CAMPO TOCADO */
   protected onBlur(field: PerfilType): void {
     if (field) this.touchedSubmitted.set(false);
     if (field === PerfilMap.DESCRICAO) this.descricaoTouched.set(true);
   }
+
   /* GETTER E SETTER DA ENTIDADE */
   protected getField(field: keyof PerfilModel) {
     return this.perfilModel()[field] ?? '';
@@ -160,6 +172,7 @@ export class FormPerfil implements OnInit {
   protected setField(field: keyof PerfilModel, value: string): void {
     this.perfilModel.update((model) => ({ ...model, [field]: value }));
   }
+
   /* INICIALIZADOR DO COMPONENTE */
   ngOnInit(): void {
     if (
@@ -193,9 +206,9 @@ export class FormPerfil implements OnInit {
     if (!this.isAtualizar()) {
       this.confirmarService
         .confirmar({
-          icone: '/icons/add_circle_84.png',
-          titulo: 'Novo Perfil',
-          mensagem: `Deseja confirmar o cadastro do perfil ${perfil.descricao.toUpperCase()}?`,
+          ...CONFIRMAR_CADASTRAR,
+          entidade: 'perfil',
+          dados: perfil.descricao.toUpperCase(),
           acao: () => this.perfilService.cadastrar(perfil),
         })
         .subscribe((confirmado) => {
@@ -205,25 +218,22 @@ export class FormPerfil implements OnInit {
             this.onMudarOperacao.emit(OperationMap.INICIAL);
             this.carregar().subscribe();
             this.finalizarService.finalizar({
-              icone: '/icons/check_circle_84.png',
-              operacao: perfil.descricao.toLocaleUpperCase(),
-              titulo: 'Sucesso!',
-              mensagem: 'Cadastrado com exíto.',
+              ...FINALIZAR_SUCESSO,
+              operacao: 'Cadastro do perfil',
+              dados: perfil.descricao.toLocaleUpperCase(),
             });
           } else if (confirmado === 'erro') {
             this.finalizarService.finalizar({
-              icone: '/icons/error_84.png',
-              operacao: perfil.descricao.toLocaleUpperCase(),
-              titulo: 'Erro!',
-              mensagem: 'Falha no cadastro.',
+              ...FINALIZAR_ERRO,
+              operacao: 'Cadastro do perfil',
+              dados: perfil.descricao.toLocaleUpperCase(),
               erros: this.finalizarService.ultimosErros(),
             });
           } else {
             this.finalizarService.finalizar({
-              icone: '/icons/cancel_84.png',
-              operacao: perfil.descricao.toLocaleUpperCase(),
-              titulo: 'Cancelado!',
-              mensagem: 'Operação de cadastro cancelada.',
+              ...FINALIZAR_CANCELAR,
+              operacao: 'Cadastro do perfil',
+              dados: perfil.descricao.toLocaleUpperCase(),
             });
           }
         });
@@ -231,9 +241,9 @@ export class FormPerfil implements OnInit {
     if (this.isAtualizar()) {
       this.confirmarService
         .confirmar({
-          icone: '/icons/change_circle_84.png',
-          titulo: 'Atualizar Perfil',
-          mensagem: `Deseja confirmar a atualização da perfil ${perfil.descricao.toUpperCase()}?`,
+          ...CONFIRMAR_ATUALIZAR,
+          entidade: 'perfil',
+          dados: perfil.descricao.toUpperCase(),
           acao: () => this.perfilService.atualizar(id!, perfil),
         })
         .subscribe((confirmado) => {
@@ -242,30 +252,28 @@ export class FormPerfil implements OnInit {
             this.onMudarOperacao.emit(OperationMap.REGISTRO);
             this.carregar().subscribe();
             this.finalizarService.finalizar({
-              icone: '/icons/check_circle_84.png',
-              operacao: perfil.descricao,
-              titulo: 'Sucesso!',
-              mensagem: 'Atualizado com exíto.',
+              ...FINALIZAR_SUCESSO,
+              operacao: 'Atualização do perfil',
+              dados: perfil.descricao.toLocaleUpperCase(),
             });
           } else if (confirmado === 'erro') {
             this.finalizarService.finalizar({
-              icone: '/icons/error_84.png',
-              operacao: perfil.descricao.toLocaleUpperCase(),
-              titulo: 'Erro!',
-              mensagem: 'Falha no atualização.',
+              ...FINALIZAR_ERRO,
+              operacao: 'Atualização do perfil',
+              dados: perfil.descricao.toLocaleUpperCase(),
               erros: this.finalizarService.ultimosErros(),
             });
           } else {
             this.finalizarService.finalizar({
-              icone: '/icons/cancel_84.png',
-              operacao: perfil.descricao.toLocaleUpperCase(),
-              titulo: 'Cancelado!',
-              mensagem: 'Operação de atualização cancelada.',
+              ...FINALIZAR_CANCELAR,
+              operacao: 'Atualização do perfil',
+              dados: perfil.descricao.toLocaleUpperCase(),
             });
           }
         });
     }
   }
+
   /* FUNÇÃO DE LIMPEZA DO CAMPO */
   protected clearField(field: keyof PerfilModel) {
     this.perfilModel.update((current) => {
@@ -273,6 +281,7 @@ export class FormPerfil implements OnInit {
       return { ...current, [field]: emptyValue };
     });
   }
+
   /* FUNÇÃO PARA IDENTIFICAR O TIPO DE DADOS O CAMPO PERTENCE */
   private getEmptyValue(value: any): any {
     if (typeof value === 'string') return '';
@@ -281,6 +290,7 @@ export class FormPerfil implements OnInit {
     if (value instanceof Date) return null; // ou new Date()
     return null;
   }
+
   /* FUNÇÃO PARA RESETAR TODO O COMPONENTE */
   private resetForm(): void {
     this.perfilModel.set({ ...INICIALIZAR_PERFIL_FORMS });

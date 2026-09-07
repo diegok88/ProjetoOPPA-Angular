@@ -9,8 +9,8 @@
     </header>
     <!-- Corpo -->
     <main class="modal-main">
-      <h2>{{ data.titulo }}</h2>
-      <span>{{ data.mensagem }}</span>
+      <h2>{{ data.titulo }} {{ data.entidade | uppercase }}</h2>
+      <span>{{ data.mensagem }} {{ data.entidade }} {{ data.dados }}?</span>
     </main>
   </div>
   <!-- Rodapé com botões -->

@@ -1,28 +1,35 @@
-import { Component, input, OnDestroy, OnInit, output, signal } from '@angular/core';
-import { RecordMap, RecordType } from '../../const/operation-map.const';
+import { Component, input, output } from '@angular/core';
+import { RecordType } from '../../const/operation-map.const';
 import { FormsModule } from '@angular/forms';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+
+export interface ToggleOption {
+  value: string;
+  label: string;
+}
 
 @Component({
   selector: 'app-toogle',
-  imports: [FormsModule],
+  imports: [FormsModule, MatButtonToggleModule],
   templateUrl: './toogle.html',
   styleUrl: './toogle.scss',
 })
-export class Toogle implements OnInit {
-  public buscarStatus = input<boolean | undefined>();
-  public onRegistroAtual = input<RecordType>();
+export class Toogle {
+  protected options: ToggleOption[] = [
+    { value: 'informacao', label: 'Informação' },
+    { value: 'atualizar', label: 'Atualizar' },
+    { value: 'status', label: 'Status' },
+    { value: 'eliminar', label: 'Eliminar' },
+    { value: 'auditoria', label: 'Auditoria' },
+  ];
+  protected label: string = '';
+
+  public onRegistroAtual = input<RecordType | null>(null);
+  public statusEntity = input<boolean>();
+
   public onMudarRegistro = output<RecordType>();
 
-  protected registroAtual = signal<RecordType>(this.onRegistroAtual()!);
-
-  protected recordMap = RecordMap;
-
-  ngOnInit(): void {
-    this.mudarRegistro(RecordMap.INFORMACAO);
-  }
-
-  protected mudarRegistro(registro: RecordType) {
-    this.onMudarRegistro.emit(registro);
-    console.log(this.registroAtual());
+  onSelect(value: RecordType): void {
+    this.onMudarRegistro.emit(value);
   }
 }

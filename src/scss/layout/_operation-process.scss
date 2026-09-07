@@ -10,10 +10,18 @@
   justify-content: space-between;
 }
 
+.image-process {
+  width: 250px;
+}
+
 @media (max-height: 750px) {
   .process-operacao {
     height: 93%;
   }
+}
+
+.image-process {
+  width: 200px;
 }
 
 .process-group {

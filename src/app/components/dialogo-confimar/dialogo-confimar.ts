@@ -1,12 +1,13 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Component, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { DialogoConfirmarData } from '../../interfaces/dialogo-confirmar.interface';
 import { DialogFinalizarService } from '../../services/dialog-finalizar.service';
+import { DialogoConfirmarData } from '../../entities/dialogo-confirmar.model';
+import { UpperCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-dialogo-confimar',
-  imports: [],
+  imports: [UpperCasePipe],
   templateUrl: './dialogo-confimar.html',
   styleUrl: './dialogo-confimar.scss',
 })

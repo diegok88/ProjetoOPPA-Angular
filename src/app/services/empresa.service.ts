@@ -22,6 +22,10 @@ export class EmpresaService {
     return this.http.patch<EmpresaData>(`${this.apiUrl}/${id}`, dados);
   }
 
+  ativar(id: string): Observable<EmpresaData> {
+    return this.http.patch<EmpresaData>(`${this.apiUrl}/active/${id}`, {});
+  }
+
   inativar(id: string): Observable<EmpresaData> {
     return this.http.patch<EmpresaData>(`${this.apiUrl}/deactive/${id}`, {});
   }

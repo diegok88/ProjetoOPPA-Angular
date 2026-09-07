@@ -6,8 +6,8 @@
     </header>
     <main class="modal-main">
       <h2>{{ data.titulo }}</h2>
+      <span>{{ data.operacao }} {{ data.dados }}</span>
       <span>{{ data.mensagem }}</span>
-      <span>{{ data.operacao }}</span>
       @if (data.erros) {
         @for (item of data.erros; track item) {
           <span>{{ item }}</span>

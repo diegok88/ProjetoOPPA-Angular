@@ -53,6 +53,7 @@
             <button
               matIconButton
               matSuffix
+              type="button"
               (click)="clickEvent($event)"
               [attr.aria-label]="'Hide password'"
               [attr.aria-pressed]="hide()"
@@ -97,7 +98,7 @@
           <button matButton="outlined" class="btn-enter" type="submit" [disabled]="formSubmitted()">
             Entrar
           </button>
-          <button matButton="outlined">Pagina Inicial</button>
+          <button matButton="outlined" type="button">Pagina Inicial</button>
         </div>
       </form>
     </section>
