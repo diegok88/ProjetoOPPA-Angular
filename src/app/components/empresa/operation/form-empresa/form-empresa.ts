@@ -1,4 +1,14 @@
-import { Component, computed, inject, input, output, signal, WritableSignal } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  computed,
+  inject,
+  input,
+  OnInit,
+  output,
+  Signal,
+  signal,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,12 +25,16 @@ import {
   RecordType,
 } from '../../../../constants/operation-map.const';
 import {
+  CamposEmpresa,
+  CamposEmpresaLetras,
+  CamposEmpresaNumeros,
+  EmpresaForm,
   EmpresaModel,
   EmpresaType,
   ErrorEmpresaType,
+  getErrorMessage,
   INICIALIZAR_EMPRESA_ENTITY,
   INICIALIZAR_EMPRESA_FORMS,
-  TOUCHED_EMPRESA_MAP,
 } from '../../../../entities/empresa.model';
 import {
   CONFIRMAR_ATUALIZAR,
@@ -31,11 +45,14 @@ import {
   FINALIZAR_ERRO,
   FINALIZAR_SUCESSO,
 } from '../../../../entities/dialogo-finalizar.model';
+import { NgxMaskDirective } from 'ngx-mask';
+import { FormatarCampos } from '../../../../constants/capitalize-first.const';
 
 @Component({
   selector: 'app-form-empresa',
   imports: [
     FormsModule,
+    NgxMaskDirective,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
@@ -43,66 +60,438 @@ import {
     MatListModule,
   ],
   template: `
-    <form class="forms-operacao" (ngSubmit)="executar($event)" [class.resp]="formsResponsive()">
-      <section class="forms-group">
-        @if (isAtualizar()) {
-          <mat-list>
-            <mat-list-item>
-              <span matListItemTitle>
-                <p class="list-label">Id:</p>
-                <p class="list-data">{{ buscar().id }}</p>
-              </span>
-            </mat-list-item>
-          </mat-list>
-        }
-        <mat-form-field appearance="outline">
-          <mat-label>Cnpj</mat-label>
-          <input
-            matInput
-            type="text"
-            id="cnpj"
-            name="cnpj"
-            placeholder="Insira o cnpj da empresa"
-            [ngModel]="getField('cnpj')"
-            (ngModelChange)="setField('cnpj', $event)"
-            (blur)="onBlur('cnpj')"
-            autocomplete="off"
-          />
-          @if (getField('descricao')) {
-            <!-- PARA O BOTÃO NÃO SER SUBMETIDO IGUAL A DO CADASTRAR O MESMO DEVE SER TIPADO - type="button" -->
-            <button
-              matSuffix
-              matIconButton
-              type="button"
-              aria-label="Clear"
-              (click)="clearField('cnpj')"
-            >
-              <mat-icon>close</mat-icon>
+    <form class="container-operation-forms" (ngSubmit)="executar($event)">
+      <div class="container-operation-forms-separated">
+        <section class="container-operation-forms-group">
+          @if (isAtualizar()) {
+            <div class="container-operation-forms-update">
+              <mat-list>
+                <mat-list-item>
+                  <span matListItemTitle>
+                    <p class="list-label">Id:</p>
+                    <p class="list-data">{{ buscar().id }}</p>
+                  </span>
+                </mat-list-item>
+              </mat-list>
+            </div>
+          }
+
+          <mat-form-field appearance="outline">
+            <mat-label>Cnpj</mat-label>
+            <input
+              matInput
+              type="text"
+              id="cnpj"
+              name="cnpj"
+              placeholder="Insira o cnpj da empresa"
+              [ngModel]="getField('cnpj')"
+              (ngModelChange)="setField('cnpj', $event)"
+              mask="00.000.000/0000-00"
+              (keypress)="aoPressionarTecla($event, 'cnpj')"
+              (blur)="onBlur('cnpj')"
+              autocomplete="off"
+            />
+            @if (getField('cnpj')) {
+              <!-- PARA O BOTÃO NÃO SER SUBMETIDO IGUAL A DO CADASTRAR O MESMO DEVE SER TIPADO - type="button" -->
+              <button
+                matSuffix
+                matIconButton
+                type="button"
+                aria-label="Clear"
+                (click)="clearField('cnpj')"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            }
+            <mat-hint>
+              @if (obterErro('cnpj')) {
+                <span class="error-message" [class.show]="!!obterErro('cnpj')">{{
+                  obterErro('cnpj')
+                }}</span>
+              }
+            </mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Razão Social</mat-label>
+            <input
+              matInput
+              type="text"
+              id="razaoSocial"
+              name="razaoSocial"
+              placeholder="Insira a razão social da empresa"
+              [ngModel]="getField('razaoSocial')"
+              (ngModelChange)="setField('razaoSocial', $event)"
+              mask="A******************************************************************"
+              (keypress)="aoPressionarTecla($event, 'razaoSocial')"
+              (blur)="onBlur('razaoSocial')"
+              autocomplete="off"
+            />
+            @if (getField('razaoSocial')) {
+              <!-- PARA O BOTÃO NÃO SER SUBMETIDO IGUAL A DO CADASTRAR O MESMO DEVE SER TIPADO - type="button" -->
+              <button
+                matSuffix
+                matIconButton
+                type="button"
+                aria-label="Clear"
+                (click)="clearField('razaoSocial')"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            }
+            <mat-hint>
+              @if (obterErro('razaoSocial')) {
+                <span class="error-message" [class.show]="!!obterErro('razaoSocial')">{{
+                  obterErro('razaoSocial')
+                }}</span>
+              }
+            </mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Nome Fantasia</mat-label>
+            <input
+              matInput
+              type="text"
+              id="nomeFantasia"
+              name="nomeFantasia"
+              placeholder="Insira o nome fantasia da empresa"
+              [ngModel]="getField('nomeFantasia')"
+              (ngModelChange)="setField('nomeFantasia', $event)"
+              mask="A******************************************************************"
+              (keypress)="aoPressionarTecla($event, 'nomeFantasia')"
+              (blur)="onBlur('nomeFantasia')"
+              autocomplete="off"
+            />
+            @if (getField('nomeFantasia')) {
+              <!-- PARA O BOTÃO NÃO SER SUBMETIDO IGUAL A DO CADASTRAR O MESMO DEVE SER TIPADO - type="button" -->
+              <button
+                matSuffix
+                matIconButton
+                type="button"
+                aria-label="Clear"
+                (click)="clearField('nomeFantasia')"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            }
+            <mat-hint>
+              @if (obterErro('nomeFantasia')) {
+                <span class="error-message" [class.show]="!!obterErro('nomeFantasia')">{{
+                  obterErro('nomeFantasia')
+                }}</span>
+              }
+            </mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Contato</mat-label>
+            <input
+              matInput
+              type="text"
+              id="contato"
+              name="contato"
+              placeholder="Insira o telefone de contato"
+              [ngModel]="getField('contato')"
+              (ngModelChange)="setField('contato', $event)"
+              (keypress)="aoPressionarTecla($event, 'contato')"
+              mask="00 00000-0000"
+              (blur)="onBlur('contato')"
+              autocomplete="off"
+            />
+            @if (getField('contato')) {
+              <button
+                matSuffix
+                matIconButton
+                type="button"
+                aria-label="Clear"
+                (click)="clearField('contato')"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            }
+            <mat-hint>
+              @if (obterErro('contato')) {
+                <span class="error-message" [class.show]="!!obterErro('contato')">{{
+                  obterErro('contato')
+                }}</span>
+              }
+            </mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input
+              matInput
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Insira o e-mail da empresa"
+              [ngModel]="getField('email')"
+              (ngModelChange)="setField('email', $event)"
+              (keypress)="aoPressionarTecla($event, 'email')"
+              (blur)="onBlur('email')"
+              autocomplete="off"
+            />
+            @if (getField('email')) {
+              <button
+                matSuffix
+                matIconButton
+                type="button"
+                aria-label="Clear"
+                (click)="clearField('email')"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            }
+            <mat-hint>
+              @if (obterErro('email')) {
+                <span class="error-message" [class.show]="!!obterErro('email')">{{
+                  obterErro('email')
+                }}</span>
+              }
+            </mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Rua</mat-label>
+            <input
+              matInput
+              type="text"
+              id="rua"
+              name="rua"
+              placeholder="Insira o nome da rua"
+              [ngModel]="getField('rua')"
+              (ngModelChange)="setField('rua', $event)"
+              mask="S******************************************************************"
+              (keypress)="aoPressionarTecla($event, 'rua')"
+              (blur)="onBlur('rua')"
+              autocomplete="off"
+            />
+            @if (getField('rua')) {
+              <button
+                matSuffix
+                matIconButton
+                type="button"
+                aria-label="Clear"
+                (click)="clearField('rua')"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            }
+            <mat-hint>
+              @if (obterErro('rua')) {
+                <span class="error-message" [class.show]="!!obterErro('rua')">{{
+                  obterErro('rua')
+                }}</span>
+              }
+            </mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Número</mat-label>
+            <input
+              matInput
+              type="text"
+              id="numero"
+              name="numero"
+              placeholder="Insira o número do endereço"
+              [ngModel]="getField('numero')"
+              (ngModelChange)="setField('numero', $event)"
+              mask="00000"
+              (keypress)="aoPressionarTecla($event, 'numero')"
+              (blur)="onBlur('numero')"
+              autocomplete="off"
+            />
+            @if (getField('numero')) {
+              <button
+                matSuffix
+                matIconButton
+                type="button"
+                aria-label="Clear"
+                (click)="clearField('numero')"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            }
+            <mat-hint>
+              @if (obterErro('numero')) {
+                <span class="error-message" [class.show]="!!obterErro('numero')">{{
+                  obterErro('numero')
+                }}</span>
+              }
+            </mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Bairro</mat-label>
+            <input
+              matInput
+              type="text"
+              id="bairro"
+              name="bairro"
+              placeholder="Insira o bairro"
+              [ngModel]="getField('bairro')"
+              (ngModelChange)="setField('bairro', $event)"
+              mask="S******************************************************************"
+              (keypress)="aoPressionarTecla($event, 'bairro')"
+              (blur)="onBlur('bairro')"
+              autocomplete="off"
+            />
+            @if (getField('bairro')) {
+              <button
+                matSuffix
+                matIconButton
+                type="button"
+                aria-label="Clear"
+                (click)="clearField('bairro')"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            }
+            <mat-hint>
+              @if (obterErro('bairro')) {
+                <span class="error-message" [class.show]="!!obterErro('bairro')">{{
+                  obterErro('bairro')
+                }}</span>
+              }
+            </mat-hint>
+          </mat-form-field>
+
+          <div class="campos-menor">
+            <mat-form-field appearance="outline">
+              <mat-label>Cidade</mat-label>
+              <input
+                matInput
+                type="text"
+                id="cidade"
+                name="cidade"
+                placeholder="Insira a cidade"
+                [ngModel]="getField('cidade')"
+                (ngModelChange)="setField('cidade', $event)"
+                mask="S******************************************************************"
+                (keypress)="aoPressionarTecla($event, 'cidade')"
+                (blur)="onBlur('cidade')"
+                autocomplete="off"
+              />
+              @if (getField('cidade')) {
+                <button
+                  matSuffix
+                  matIconButton
+                  type="button"
+                  aria-label="Clear"
+                  (click)="clearField('cidade')"
+                >
+                  <mat-icon>close</mat-icon>
+                </button>
+              }
+              <mat-hint>
+                @if (obterErro('cidade')) {
+                  <span class="error-message" [class.show]="!!obterErro('cidade')">{{
+                    obterErro('cidade')
+                  }}</span>
+                }
+              </mat-hint>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Estado</mat-label>
+              <input
+                matInput
+                type="text"
+                id="estado"
+                name="estado"
+                placeholder="Insira o estado (UF)"
+                [ngModel]="getField('estado')"
+                (ngModelChange)="setField('estado', $event)"
+                mask="S******************************************************************"
+                (keypress)="aoPressionarTecla($event, 'estado')"
+                (blur)="onBlur('estado')"
+                maxlength="2"
+                autocomplete="off"
+              />
+              @if (getField('estado')) {
+                <button
+                  matSuffix
+                  matIconButton
+                  type="button"
+                  aria-label="Clear"
+                  (click)="clearField('estado')"
+                >
+                  <mat-icon>close</mat-icon>
+                </button>
+              }
+              <mat-hint>
+                @if (obterErro('estado')) {
+                  <span class="error-message" [class.show]="!!obterErro('estado')">{{
+                    obterErro('estado')
+                  }}</span>
+                }
+              </mat-hint>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>CEP</mat-label>
+              <input
+                matInput
+                type="text"
+                id="cep"
+                name="cep"
+                placeholder="Insira o CEP"
+                [ngModel]="getField('cep')"
+                (ngModelChange)="setField('cep', $event)"
+                mask="00000-000"
+                (keypress)="aoPressionarTecla($event, 'cep')"
+                (blur)="onBlur('cep')"
+                autocomplete="off"
+              />
+              @if (getField('cep')) {
+                <button
+                  matSuffix
+                  matIconButton
+                  type="button"
+                  aria-label="Clear"
+                  (click)="clearField('cep')"
+                >
+                  <mat-icon>close</mat-icon>
+                </button>
+              }
+              <mat-hint>
+                @if (obterErro('cep')) {
+                  <span class="error-message" [class.show]="!!obterErro('cep')">{{
+                    obterErro('cep')
+                  }}</span>
+                }
+              </mat-hint>
+            </mat-form-field>
+          </div>
+        </section>
+        <section class="container-operation-forms-button">
+          @if (isAtualizar()) {
+            <button matButton="outlined" type="submit" [disabled]="!isFormValid()">
+              Atualizar
+            </button>
+          } @else {
+            <button matButton="outlined" type="submit" [disabled]="!isFormValid()">
+              Cadastrar
             </button>
           }
-          <mat-hint>
-            <span class="error-message" [class.show]="!!cnpjError()">
-              {{ getErrorMessage(cnpjError()) }}
-            </span>
-          </mat-hint>
-        </mat-form-field>
-      </section>
-      @if (isAtualizar()) {
-        <button matButton="outlined" type="submit" [disabled]="isFormValid()">Atualizar</button>
-      } @else {
-        <button matButton="outlined" type="submit" [disabled]="isFormValid()">Cadastrar</button>
-      }
+        </section>
+      </div>
     </form>
   `,
   styles: ``,
 })
-export class FormEmpresa {
+export class FormEmpresa implements OnInit {
   /* MODAIS DE CONFIRMAÇÃO E VALIDAÇÃO */
   private confirmarService = inject(DialogConfirmarService);
   private finalizarService = inject(DialogFinalizarService);
 
   /* SERVIÇO DE COMUNICAÇÃO COM O BACKEND */
   private empresaService = inject(EmpresaService);
+
+  /* INJEÇÃO DE DEPENDENCIA PARA BUG NO ATUALIZAR,  NÃO DETECTAVA A FLUTUAÇÃO DA LABEL */
+  private cdr = inject(ChangeDetectorRef);
 
   /* ENTRADA E SAIDA DE DADOS DO COMPONENTE */
   public operacaoAtual = input<OperationType>();
@@ -112,324 +501,153 @@ export class FormEmpresa {
   public onMudarOperacao = output<OperationType>();
 
   /* MODELO DE ENTRADA DE DADOS */
-  protected empresaModel = signal<EmpresaModel>({ ...INICIALIZAR_EMPRESA_FORMS });
-
-  /* RESPONSIVIDADE ENTRE O FORMS DE CADASTRAR E ATUALIZAR */
-  protected formsResponsive = computed(() => {
-    return this.operacaoAtual() === OperationMap.REGISTRO;
-  });
+  protected empresaModel = signal<EmpresaForm>({ ...INICIALIZAR_EMPRESA_FORMS });
 
   /* VALIDAÇÕES DO MODELO */
   protected isAtualizar = signal<boolean>(false);
 
   protected formSubmitted = signal<boolean>(false);
 
-  protected touchedSubmitted = signal<boolean>(true);
+  protected touchedSubmitted = signal<boolean>(false);
 
-  /*-----------------------------------------------------------------------------------------*/
-  protected cnpjTouched = signal<boolean>(false);
+  protected fieldTouched = signal<Record<string, boolean>>({});
 
-  protected cnpjError = computed<ErrorEmpresaType>(() => {
-    const touched = this.cnpjTouched();
-    const submitted = this.formSubmitted();
+  protected invalidCharFields = signal<Record<string, boolean>>({});
 
-    if (!touched && !submitted) return null;
+  /* FUNÇÃO AUXILIAR PARA TRANSFORMAR EM OS CAMPOS A PRIMEIRA LETRA EM MAIUSCULO */
+  private transformarMaiusculo(campo: string): string {
+    return campo.charAt(0).toUpperCase() + campo.slice(1);
+  }
 
-    const value = this.empresaModel().cnpj.toUpperCase();
+  /* FUNÇÃO QUE INTERCEPTA A TENTATIVA DE INSERIR CARACTERES INVALIDOS */
+  protected aoPressionarTecla(event: KeyboardEvent, campo: string): void {
+    const key = event.key;
 
-    if (!value || value.trim().length === 0) return 'emptyCnpj';
+    // Ignora teclas especiais (backspace, setas, tab, etc)
+    //if (key.length > 1) return;
 
-    if (value === this.buscar().cnpj) return 'equalCnpj';
+    // Verifica se a chave possui apenas os caracteres necessarios
+    const isNumbers = /[0-9]/.test(key);
+    const isLetters = /[a-zA-ZÀ-ÿ]/.test(key);
 
-    return null;
-  });
-
-  //----------------------------------------------------------------------------------------//
-  /*
-  protected isCnpjEquals = computed(() => {
-    const atual = this.buscar()?.cnpj;
-    const novo = this.empresaModel().cnpj.toUpperCase();
-    return atual === novo;
-  });
-
-  protected cnpjEqualsFiedlsError = computed(() => {
-    return (this.cnpjTouched() || this.formSubmitted()) && this.isCnpjEquals();
-  });
-
-  protected isCnpjEmpty = computed(() => {
-    return this.empresaModel().cnpj.trim().length === 0;
-  });
-
-  protected cnpjEmptyFiedlsError = computed(() => {
-    return (this.cnpjTouched() || this.formSubmitted()) && this.isCnpjEmpty();
-  });
-  */
-  //----------------------------------------------------------------------------------------//
-  protected razaoSocialTouched = signal<boolean>(false);
-
-  protected isRazaoSocialEquals = computed(() => {
-    const atual = this.buscar()?.razaoSocial;
-    const novo = this.empresaModel().razaoSocial.toUpperCase();
-    return atual === novo;
-  });
-
-  protected razaoSocialEqualsFiedlsError = computed(() => {
-    return (this.razaoSocialTouched() || this.formSubmitted()) && this.isRazaoSocialEquals();
-  });
-
-  protected isRazaoSocialEmpty = computed(() => {
-    return this.empresaModel().razaoSocial.trim().length === 0;
-  });
-
-  protected razaoSocialEmptyFiedlsError = computed(() => {
-    return (this.razaoSocialTouched() || this.formSubmitted()) && this.isRazaoSocialEmpty();
-  });
-  //----------------------------------------------------------------------------------------//
-  protected nomeFantasiaTouched = signal<boolean>(false);
-
-  protected isNomeFantasiaEquals = computed(() => {
-    const atual = this.buscar()?.nomeFantasia;
-    const novo = this.empresaModel().nomeFantasia.toUpperCase();
-    return atual === novo;
-  });
-
-  protected nomeFantasiaEqualsFiedlsError = computed(() => {
-    return (this.nomeFantasiaTouched() || this.formSubmitted()) && this.isNomeFantasiaEquals();
-  });
-
-  protected isNomeFantasiaEmpty = computed(() => {
-    return this.empresaModel().nomeFantasia.trim().length === 0;
-  });
-
-  protected nomeFantasiaEmptyFiedlsError = computed(() => {
-    return (this.nomeFantasiaTouched() || this.formSubmitted()) && this.isNomeFantasiaEmpty();
-  });
-  //----------------------------------------------------------------------------------------//
-  protected contatoTouched = signal<boolean>(false);
-
-  protected isContatoEquals = computed(() => {
-    const atual = this.buscar()?.contato;
-    const novo = this.empresaModel().contato.toUpperCase();
-    return atual === novo;
-  });
-
-  protected contatoEqualsFiedlsError = computed(() => {
-    return (this.contatoTouched() || this.formSubmitted()) && this.isContatoEquals();
-  });
-
-  protected isContatoEmpty = computed(() => {
-    return this.empresaModel().contato.trim().length === 0;
-  });
-
-  protected contatoEmptyFiedlsError = computed(() => {
-    return (this.contatoTouched() || this.formSubmitted()) && this.isContatoEmpty();
-  });
-  //----------------------------------------------------------------------------------------//
-  protected emailTouched = signal<boolean>(false);
-
-  protected isEmailEquals = computed(() => {
-    const atual = this.buscar()?.email;
-    const novo = this.empresaModel().email.toUpperCase();
-    return atual === novo;
-  });
-
-  protected emailEqualsFiedlsError = computed(() => {
-    return (this.emailTouched() || this.formSubmitted()) && this.isEmailEquals();
-  });
-
-  protected isEmailEmpty = computed(() => {
-    return this.empresaModel().email.trim().length === 0;
-  });
-
-  protected emailEmptyFiedlsError = computed(() => {
-    return (this.emailTouched() || this.formSubmitted()) && this.isEmailEmpty();
-  });
-  //----------------------------------------------------------------------------------------//
-  protected ruaTouched = signal<boolean>(false);
-
-  protected isRuaEquals = computed(() => {
-    const atual = this.buscar()?.rua;
-    const novo = this.empresaModel().rua.toUpperCase();
-    return atual === novo;
-  });
-
-  protected ruaEqualsFiedlsError = computed(() => {
-    return (this.ruaTouched() || this.formSubmitted()) && this.isRuaEquals();
-  });
-
-  protected isRuaEmpty = computed(() => {
-    return this.empresaModel().rua.trim().length === 0;
-  });
-
-  protected ruaEmptyFiedlsError = computed(() => {
-    return (this.ruaTouched() || this.formSubmitted()) && this.isRuaEmpty();
-  });
-  //----------------------------------------------------------------------------------------//
-  protected numeroTouched = signal<boolean>(false);
-
-  protected isNumeroEquals = computed(() => {
-    const atual = this.buscar()?.numero;
-    const novo = this.empresaModel().numero.toUpperCase();
-    return atual === novo;
-  });
-
-  protected numeroEqualsFiedlsError = computed(() => {
-    return (this.numeroTouched() || this.formSubmitted()) && this.isNumeroEquals();
-  });
-
-  protected isNumeroEmpty = computed(() => {
-    return this.empresaModel().numero.trim().length === 0;
-  });
-
-  protected numeroEmptyFiedlsError = computed(() => {
-    return (this.numeroTouched() || this.formSubmitted()) && this.isNumeroEmpty();
-  });
-  //----------------------------------------------------------------------------------------//
-  protected bairroTouched = signal<boolean>(false);
-
-  protected isBairroEquals = computed(() => {
-    const atual = this.buscar()?.bairro;
-    const novo = this.empresaModel().bairro.toUpperCase();
-    return atual === novo;
-  });
-
-  protected bairroEqualsFiedlsError = computed(() => {
-    return (this.bairroTouched() || this.formSubmitted()) && this.isBairroEquals();
-  });
-
-  protected isBairroEmpty = computed(() => {
-    return this.empresaModel().bairro.trim().length === 0;
-  });
-
-  protected bairroEmptyFiedlsError = computed(() => {
-    return (this.bairroTouched() || this.formSubmitted()) && this.isBairroEmpty();
-  });
-  //----------------------------------------------------------------------------------------//
-  protected cidadeTouched = signal<boolean>(false);
-
-  protected isCidadeEquals = computed(() => {
-    const atual = this.buscar()?.cidade;
-    const novo = this.empresaModel().cidade.toUpperCase();
-    return atual === novo;
-  });
-
-  protected cidadeEqualsFiedlsError = computed(() => {
-    return (this.cidadeTouched() || this.formSubmitted()) && this.isCidadeEquals();
-  });
-
-  protected isCidadeEmpty = computed(() => {
-    return this.empresaModel().cidade.trim().length === 0;
-  });
-
-  protected cidadeEmptyFiedlsError = computed(() => {
-    return (this.cidadeTouched() || this.formSubmitted()) && this.isCidadeEmpty();
-  });
-  //----------------------------------------------------------------------------------------//
-  protected estadoTouched = signal<boolean>(false);
-
-  protected isEstadoEquals = computed(() => {
-    const atual = this.buscar()?.estado;
-    const novo = this.empresaModel().estado.toUpperCase();
-    return atual === novo;
-  });
-
-  protected estadoEqualsFiedlsError = computed(() => {
-    return (this.estadoTouched() || this.formSubmitted()) && this.isEstadoEquals();
-  });
-
-  protected isEstadoEmpty = computed(() => {
-    return this.empresaModel().estado.trim().length === 0;
-  });
-
-  protected estadoEmptyFiedlsError = computed(() => {
-    return (this.estadoTouched() || this.formSubmitted()) && this.isEstadoEmpty();
-  });
-  //----------------------------------------------------------------------------------------//
-  protected cepTouched = signal<boolean>(false);
-
-  protected isCepEquals = computed(() => {
-    const atual = this.buscar()?.estado;
-    const novo = this.empresaModel().estado.toUpperCase();
-    return atual === novo;
-  });
-
-  protected cepEqualsFiedlsError = computed(() => {
-    return (this.cepTouched() || this.formSubmitted()) && this.isCepEquals();
-  });
-
-  protected isCepEmpty = computed(() => {
-    return this.empresaModel().cep.trim().length === 0;
-  });
-
-  protected cepEmptyFiedlsError = computed(() => {
-    return (this.cepTouched() || this.formSubmitted()) && this.isCepEmpty();
-  });
-  //----------------------------------------------------------------------------------------//
-
-  /* FUNÇÃO DE VALIDAÇÃO AO APLICAR A SUBMIT */
-  protected isFormValid = computed(() => {
-    //const cnpjOk = this.cnpjEmptyFiedlsError() || this.cnpjEqualsFiedlsError();
-    const cnpjOk = this.cnpjError() === null;
-    const razaoSocialOk = this.razaoSocialEmptyFiedlsError() || this.razaoSocialEqualsFiedlsError();
-    const nomeFantasiaOk =
-      this.nomeFantasiaEmptyFiedlsError() || this.nomeFantasiaEqualsFiedlsError();
-    const contatoOk = this.contatoEmptyFiedlsError() || this.contatoEqualsFiedlsError();
-    const emailOk = this.emailEmptyFiedlsError() || this.emailEqualsFiedlsError();
-    const ruaOk = this.ruaEmptyFiedlsError() || this.ruaEqualsFiedlsError();
-    const numeroOk = this.numeroEmptyFiedlsError() || this.numeroEqualsFiedlsError();
-    const bairroOk = this.bairroEmptyFiedlsError() || this.bairroEqualsFiedlsError();
-    const cidadeOk = this.cidadeEmptyFiedlsError() || this.cidadeEqualsFiedlsError();
-    const estadoOk = this.estadoEmptyFiedlsError() || this.estadoEqualsFiedlsError();
-    const cepOk = this.cepEmptyFiedlsError() || this.cepEqualsFiedlsError();
-    const touchedOk = this.touchedSubmitted();
-
-    const dadosOk =
-      cnpjOk ||
-      razaoSocialOk ||
-      nomeFantasiaOk ||
-      contatoOk ||
-      emailOk ||
-      ruaOk ||
-      numeroOk ||
-      bairroOk ||
-      cidadeOk ||
-      estadoOk ||
-      cepOk ||
-      touchedOk;
-    return dadosOk;
-  });
-
-  /* FUNÇÃO DE RECONHECIMENTO DE CAMPO TOCADO */
-  protected onBlur(field: EmpresaType): void {
-    if (!field) return;
-    this.touchedSubmitted.set(false);
-    const nomePropriedade = TOUCHED_EMPRESA_MAP[field];
-    const signalRef = this[nomePropriedade as keyof this] as WritableSignal<boolean>;
-    if (signalRef) {
-      signalRef.set(true);
+    if (CamposEmpresaLetras.includes(campo as keyof EmpresaForm) && isNumbers) {
+      this.invalidCharFields.update((state) => ({ ...state, [campo]: true }));
+    } else if (CamposEmpresaNumeros.includes(campo as keyof EmpresaForm) && isLetters) {
+      this.invalidCharFields.update((state) => ({ ...state, [campo]: true }));
     }
   }
 
-  /* GETTER E SETTER DA ENTIDADE */
-  protected getField(field: keyof EmpresaModel) {
-    return this.empresaModel()[field] ?? '';
+  /* SIGNAL UNICO COM TODOS OS ERROS */
+  protected erros = computed<Record<string, ErrorEmpresaType>>(() => {
+    return CamposEmpresa.reduce(
+      (acc, campo) => {
+        const invalidChar = this.invalidCharFields()[campo as string] ?? false;
+        const touched = this.fieldTouched()[campo as string] ?? false;
+        const submitted = this.formSubmitted();
+
+        let erro: ErrorEmpresaType = null;
+
+        if (touched || submitted) {
+          const value = (this.empresaModel()[campo] ?? '').toString().trim().toUpperCase();
+          const original = (this.buscar()[campo] ?? '').toString().trim().toUpperCase();
+          console.log(`Valor: ${value} - Original: ${original}`);
+
+          if (!value) {
+            erro = `empty${FormatarCampos(campo)}` as ErrorEmpresaType;
+          } else if (value === original) {
+            erro = `equal${FormatarCampos(campo)}` as ErrorEmpresaType;
+          }
+        }
+
+        if (invalidChar && !erro) {
+          erro = `invalidChar${FormatarCampos(campo)}` as ErrorEmpresaType;
+        }
+
+        return { ...acc, [campo]: erro };
+      },
+      {} as Record<string, ErrorEmpresaType>,
+    );
+  });
+
+  /* SIGNALS INDIVIDUAIS PARA CADA CAMPO */
+  protected cnpjError = computed(() => this.erros()['cnpj']);
+  protected razaoSocialError = computed(() => this.erros()['razaoSocial']);
+  protected nomeFantasiaError = computed(() => this.erros()['nomeFantasia']);
+  protected contatoError = computed(() => this.erros()['contato']);
+  protected emailError = computed(() => this.erros()['email']);
+  protected ruaError = computed(() => this.erros()['rua']);
+  protected numeroError = computed(() => this.erros()['numero']);
+  protected bairroError = computed(() => this.erros()['bairro']);
+  protected cidadeError = computed(() => this.erros()['cidade']);
+  protected estadoError = computed(() => this.erros()['estado']);
+  protected cepError = computed(() => this.erros()['cep']);
+
+  /* FUNÇÃO QUE RETORNA O ERRO DE ACORDO COM OS ESPECIFICADOS NO MODEL */
+  protected obterErro(campo: EmpresaType): string {
+    return getErrorMessage(this.erros()[campo] ?? null);
   }
 
+  /* FUNÇÃO DE VALIDAÇÃO DO FORMULARIO */
+  protected isFormValid = computed(() => {
+    const erros = this.erros();
+
+    return CamposEmpresa.every((campo) => erros[campo as string] === null);
+  });
+
+  /* FUNÇÃO DINAMICA QUE IDENTIFICA QUANDO O CAMPO FOI TOCADO */
+  protected onBlur(field: EmpresaType): void {
+    if (!field) return;
+    this.touchedSubmitted.set(true);
+    this.fieldTouched.update((state) => ({
+      ...state,
+      [field]: true,
+    }));
+  }
+
+  /* GETTER DA ENTIDADE */
+  protected getField(field: keyof EmpresaForm) {
+    return this.empresaModel()[field] ?? '';
+  }
+  /* SETTER DA ENTIDADE */
   protected setField(field: keyof EmpresaModel, value: string): void {
     this.empresaModel.update((model) => ({ ...model, [field]: value }));
+
+    this.invalidCharFields.update((state) => {
+      const novo = { ...state };
+      delete novo[field as string];
+      return novo;
+    });
   }
 
   /* INICIALIZADOR DO COMPONENTE */
   ngOnInit(): void {
+    const dados = this.formatarModel();
+
     if (
       this.operacaoAtual() === OperationMap.REGISTRO &&
-      this.registroAtual() === RecordMap.ATUALIZAR
+      this.registroAtual() === RecordMap.ATUALIZAR &&
+      dados
     ) {
-      this.empresaModel.set(this.buscar());
+      this.empresaModel.set(dados);
       this.isAtualizar.set(true);
+
+      setTimeout(() => {
+        this.cdr.detectChanges();
+      }, 0);
     } else {
       this.isAtualizar.set(false);
     }
+  }
+
+  // FUNÇÃO QUE SELECIONA OS ATRIBUTOS
+  private formatarModel(): EmpresaForm {
+    const fieldsFormat = CamposEmpresa.reduce((acc, c) => {
+      if (this.buscar()[c] !== undefined && this.buscar()[c] !== null) {
+        acc[c] = this.buscar()[c];
+      }
+      return acc;
+    }, {} as Partial<EmpresaForm>);
+    return fieldsFormat as EmpresaForm;
   }
 
   /* FUNÇÃO DE CARREGAMENTO A CADA SERVIÇO CONCLUIDO */
@@ -440,13 +658,22 @@ export class FormEmpresa {
   /* FUNÇÃO DE CADASTRO E ATUALIZAR */
   protected executar(event: Event): void {
     event.preventDefault();
-    this.formSubmitted.set(true);
-    if (this.isFormValid()) {
-      alert('Formulário inválido - não enviar');
+    if (this.isFormValid() && !this.isAtualizar()) {
+      this.formSubmitted.set(true);
+    }
+
+    if (!this.isFormValid() && !this.isAtualizar()) {
+      alert('Formulário inválido - não enviar ');
+      return;
+    }
+
+    if (!this.touchedSubmitted()) {
+      alert('Formulário sem alteração - não enviar ');
       return;
     }
 
     const empresa = this.empresaModel();
+    console.log(empresa);
     const id = this.buscar()?.id;
 
     if (!this.isAtualizar()) {
@@ -521,7 +748,7 @@ export class FormEmpresa {
   }
 
   /* FUNÇÃO DE LIMPEZA DO CAMPO */
-  protected clearField(field: keyof EmpresaModel) {
+  protected clearField(field: keyof EmpresaForm) {
     this.empresaModel.update((current) => {
       const emptyValue = this.getEmptyValue(current[field]);
       return { ...current, [field]: emptyValue };
@@ -540,8 +767,9 @@ export class FormEmpresa {
   /* FUNÇÃO PARA RESETAR TODO O COMPONENTE */
   private resetForm(): void {
     this.empresaModel.set({ ...INICIALIZAR_EMPRESA_FORMS });
-    this.cnpjTouched.set(false);
     this.formSubmitted.set(false);
-    this.touchedSubmitted.set(true);
+    this.touchedSubmitted.set(false);
+    this.invalidCharFields.set({});
+    this.fieldTouched.set({});
   }
 }

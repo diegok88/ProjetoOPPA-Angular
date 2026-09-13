@@ -1,45 +1,111 @@
-@media (max-height: 750px) {
-  .operacao-container {
-    height: 90%;
-  }
+@media (max-width: 1390px) {
+  .campos-menor {
+    flex-wrap: wrap;
 
-  .operacao-registro {
-    height: 100%;
-  }
-
-  .operacao-cadastrar {
-    height: 70vh;
-  }
-
-  .operacao-tabela {
-    .operacao-tbody {
-      &.lista {
-        max-height: 484px;
-      }
-      &.auditoria {
-        max-height: 378px;
+    .mat-mdc-form-field.mat-form-field-appearance-outline {
+      .mdc-text-field--outlined {
+        width: 400px;
       }
     }
   }
+}
 
-  .operacao-img {
-    width: 250px;
-    height: 250px;
+// NOVA CONFIGURAÇÃO DE RESPONSIVIDADE
+@media (max-height: 690px) {
+  // PAGINA DE LOGIN
+  .container-login-form {
+    h2 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
   }
 
-  .registro-informacao,
-  .registro-atualizar,
-  .registro-inativar,
-  .registro-eliminar,
-  .registro-auditoria {
-    height: 60vh;
-  }
-
+  // OPERAÇÃO LISTA TABELA
   table.tabela-auditoria tbody.mdc-data-table__content {
     height: 375px !important;
   }
 
   table.tabela-lista tbody.mdc-data-table__content {
     height: 451px !important;
+  }
+
+  // OPERAÇÃO INICIAL
+  .operation-initial-img {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+@media (min-height: 690px) {
+  // PAGINA DE LOGIN
+  .container-login-form {
+    h2 {
+      font-size: 3.5rem;
+      margin-bottom: 40px;
+    }
+  }
+
+  // OPERAÇÃO LISTA TABELA
+  table.tabela-auditoria tbody.mdc-data-table__content {
+    height: 325px !important;
+  }
+
+  table.tabela-lista tbody.mdc-data-table__content {
+    height: 408px !important;
+  }
+  // OPERAÇÃO INICIAL
+  .operation-initial-img {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+@media (min-height: 910px) {
+  // PAGINA DE LOGIN
+  .container-login {
+    height: 70% !important;
+  }
+
+  .container-login-logo {
+    .logo {
+      width: 300px !important;
+    }
+  }
+
+  // OPERAÇÃO INICIAL
+  .operation-initial-img {
+    width: 300px;
+    height: 300px;
+  }
+
+  // OPERAÇÃO LISTA TABELA
+  table.tabela-auditoria tbody.mdc-data-table__content {
+    height: 535px !important;
+  }
+
+  table.tabela-lista tbody.mdc-data-table__content {
+    height: 630px !important;
+  }
+
+  // OPERAÇÃO FORMULARIO
+  .container-operation-forms-separated {
+    overflow-y: hidden;
+  }
+
+  .container-operation-forms-group {
+    width: 80%;
+  }
+
+  .container-operation-info-separated {
+    width: 70%;
+  }
+
+  // OPERAÇÃO AUDITORIA
+  .container-operation-audit-separated {
+    overflow-y: hidden;
+  }
+
+  .container-operation-audit-grid {
+    width: 70%;
   }
 }

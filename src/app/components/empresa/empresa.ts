@@ -1,346 +1,68 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgxMaskDirective } from 'ngx-mask';
 import { AuditoriaData } from '../../interfaces/auditoria-data.interface';
 import { AuditoriaService } from '../../services/auditoria.service';
-import { DialogConfirmarService } from '../../services/dialog-confirmar.service';
-import { DialogFinalizarService } from '../../services/dialog-finalizar.service';
 import { EmpresaService } from '../../services/empresa.service';
-
-type Operacao = 'inicial' | 'cadastrar' | 'registro';
-type Registro = 'informacao' | 'atualizar' | 'inativar' | 'eliminar' | 'auditoria';
-type Field =
-  | 'cnpj'
-  | 'razaoSocial'
-  | 'nomeFantasia'
-  | 'contato'
-  | 'email'
-  | 'rua'
-  | 'numero'
-  | 'bairro'
-  | 'cidade'
-  | 'estado'
-  | 'cep';
+import {
+  EmpresaForm,
+  EmpresaModel,
+  INICIALIZAR_EMPRESA_ENTITY,
+  INICIALIZAR_EMPRESA_FORMS,
+} from '../../entities/empresa.model';
+import { ListEmpresa } from './operation/list-empresa/list-empresa';
+import {
+  OperationMap,
+  OperationType,
+  RecordMap,
+  RecordType,
+} from '../../constants/operation-map.const';
+import { InicialEmpresa } from './operation/inicial-empresa/inicial-empresa';
+import { FormEmpresa } from './operation/form-empresa/form-empresa';
+import { INICIALIZAR_AUDITORIA_ENTITY } from '../../constants/inicialize-auditoria.const';
+import { Toogle } from '../toogle/toogle';
+import { InfoEmpresa } from './operation/info-empresa/info-empresa';
+import { AuditEmpresa } from './operation/audit-empresa/audit-empresa';
+import { ProcessEmpresa } from './operation/process-empresa/process-empresa';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-empresa',
-  imports: [FormsModule, NgxMaskDirective],
+  imports: [
+    FormsModule,
+    InicialEmpresa,
+    ListEmpresa,
+    FormEmpresa,
+    Toogle,
+    InfoEmpresa,
+    ProcessEmpresa,
+    AuditEmpresa,
+    MatIconModule,
+    MatButtonModule,
+  ],
   templateUrl: './empresa.html',
   styleUrl: './empresa.scss',
 })
-export class Empresa {
-  private confirmarService = inject(DialogConfirmarService);
-  private finalizarService = inject(DialogFinalizarService);
+export class Empresa implements OnInit {
+  /* INJEÇÃO DE DEPENDENCIAS DE SERVIÇOS */
   private empresaService = inject(EmpresaService);
   private auditoriaService = inject(AuditoriaService);
 
+  /* DADOS RETORNADOS DO SERVIÇO */
   protected readonly listar = this.empresaService.empresa;
-  protected readonly buscar = signal<EmpresaData | null>(null);
+  protected readonly buscar = signal<EmpresaModel>({ ...INICIALIZAR_EMPRESA_ENTITY });
   protected readonly listarAuditoria = this.auditoriaService.auditoria;
-  protected readonly buscarAuditoria = signal<AuditoriaData | null>(null);
+  protected readonly buscarAuditoria = signal<AuditoriaData>({ ...INICIALIZAR_AUDITORIA_ENTITY });
 
-  protected operacaoEstado = signal<string>('inicial');
-  protected registroEstado = signal<string>('informacao');
+  /* SIGNALS DAS ROTAS DE OPERAÇÃO E REGISTRO */
+  protected operacaoEstado = signal<OperationType>(OperationMap.INICIAL);
+  protected registroEstado = signal<RecordType>(RecordMap.INFORMACAO);
   protected auditoriaEstado = signal<boolean>(true);
 
-  protected empresaModel = signal<EmpresaData>({
-    cnpj: '',
-    razaoSocial: '',
-    nomeFantasia: '',
-    contato: '',
-    email: '',
-    rua: '',
-    numero: '',
-    bairro: '',
-    cidade: '',
-    estado: '',
-    cep: '',
-  });
+  protected empresaModel = signal<EmpresaForm>({ ...INICIALIZAR_EMPRESA_FORMS });
 
-  protected formSubmitted = signal<boolean>(false);
-
-  protected touchedSubmitted = signal<boolean>(true);
-  //----------------------------------------------------------------------------------------//
-  protected cnpjTouched = signal<boolean>(false);
-
-  protected isCnpjEquals = computed(() => {
-    const atual = this.buscar()?.cnpj;
-    const novo = this.empresaModel().cnpj.toUpperCase();
-    return atual === novo;
-  });
-
-  protected cnpjEqualsFiedlsError = computed(() => {
-    return (this.cnpjTouched() || this.formSubmitted()) && this.isCnpjEquals();
-  });
-
-  protected isCnpjEmpty = computed(() => {
-    return this.empresaModel().cnpj.trim().length === 0;
-  });
-
-  protected cnpjEmptyFiedlsError = computed(() => {
-    return (this.cnpjTouched() || this.formSubmitted()) && this.isCnpjEmpty();
-  });
-  //----------------------------------------------------------------------------------------//
-  protected razaoSocialTouched = signal<boolean>(false);
-
-  protected isRazaoSocialEquals = computed(() => {
-    const atual = this.buscar()?.razaoSocial;
-    const novo = this.empresaModel().razaoSocial.toUpperCase();
-    return atual === novo;
-  });
-
-  protected razaoSocialEqualsFiedlsError = computed(() => {
-    return (this.razaoSocialTouched() || this.formSubmitted()) && this.isRazaoSocialEquals();
-  });
-
-  protected isRazaoSocialEmpty = computed(() => {
-    return this.empresaModel().razaoSocial.trim().length === 0;
-  });
-
-  protected razaoSocialEmptyFiedlsError = computed(() => {
-    return (this.razaoSocialTouched() || this.formSubmitted()) && this.isRazaoSocialEmpty();
-  });
-  //----------------------------------------------------------------------------------------//
-  protected nomeFantasiaTouched = signal<boolean>(false);
-
-  protected isNomeFantasiaEquals = computed(() => {
-    const atual = this.buscar()?.nomeFantasia;
-    const novo = this.empresaModel().nomeFantasia.toUpperCase();
-    return atual === novo;
-  });
-
-  protected nomeFantasiaEqualsFiedlsError = computed(() => {
-    return (this.nomeFantasiaTouched() || this.formSubmitted()) && this.isNomeFantasiaEquals();
-  });
-
-  protected isNomeFantasiaEmpty = computed(() => {
-    return this.empresaModel().nomeFantasia.trim().length === 0;
-  });
-
-  protected nomeFantasiaEmptyFiedlsError = computed(() => {
-    return (this.nomeFantasiaTouched() || this.formSubmitted()) && this.isNomeFantasiaEmpty();
-  });
-  //----------------------------------------------------------------------------------------//
-  protected contatoTouched = signal<boolean>(false);
-
-  protected isContatoEquals = computed(() => {
-    const atual = this.buscar()?.contato;
-    const novo = this.empresaModel().contato.toUpperCase();
-    return atual === novo;
-  });
-
-  protected contatoEqualsFiedlsError = computed(() => {
-    return (this.contatoTouched() || this.formSubmitted()) && this.isContatoEquals();
-  });
-
-  protected isContatoEmpty = computed(() => {
-    return this.empresaModel().contato.trim().length === 0;
-  });
-
-  protected contatoEmptyFiedlsError = computed(() => {
-    return (this.contatoTouched() || this.formSubmitted()) && this.isContatoEmpty();
-  });
-  //----------------------------------------------------------------------------------------//
-  protected emailTouched = signal<boolean>(false);
-
-  protected isEmailEquals = computed(() => {
-    const atual = this.buscar()?.email;
-    const novo = this.empresaModel().email.toUpperCase();
-    return atual === novo;
-  });
-
-  protected emailEqualsFiedlsError = computed(() => {
-    return (this.emailTouched() || this.formSubmitted()) && this.isEmailEquals();
-  });
-
-  protected isEmailEmpty = computed(() => {
-    return this.empresaModel().email.trim().length === 0;
-  });
-
-  protected emailEmptyFiedlsError = computed(() => {
-    return (this.emailTouched() || this.formSubmitted()) && this.isEmailEmpty();
-  });
-  //----------------------------------------------------------------------------------------//
-  protected ruaTouched = signal<boolean>(false);
-
-  protected isRuaEquals = computed(() => {
-    const atual = this.buscar()?.rua;
-    const novo = this.empresaModel().rua.toUpperCase();
-    return atual === novo;
-  });
-
-  protected ruaEqualsFiedlsError = computed(() => {
-    return (this.ruaTouched() || this.formSubmitted()) && this.isRuaEquals();
-  });
-
-  protected isRuaEmpty = computed(() => {
-    return this.empresaModel().rua.trim().length === 0;
-  });
-
-  protected ruaEmptyFiedlsError = computed(() => {
-    return (this.ruaTouched() || this.formSubmitted()) && this.isRuaEmpty();
-  });
-  //----------------------------------------------------------------------------------------//
-  protected numeroTouched = signal<boolean>(false);
-
-  protected isNumeroEquals = computed(() => {
-    const atual = this.buscar()?.numero;
-    const novo = this.empresaModel().numero.toUpperCase();
-    return atual === novo;
-  });
-
-  protected numeroEqualsFiedlsError = computed(() => {
-    return (this.numeroTouched() || this.formSubmitted()) && this.isNumeroEquals();
-  });
-
-  protected isNumeroEmpty = computed(() => {
-    return this.empresaModel().numero.trim().length === 0;
-  });
-
-  protected numeroEmptyFiedlsError = computed(() => {
-    return (this.numeroTouched() || this.formSubmitted()) && this.isNumeroEmpty();
-  });
-  //----------------------------------------------------------------------------------------//
-  protected bairroTouched = signal<boolean>(false);
-
-  protected isBairroEquals = computed(() => {
-    const atual = this.buscar()?.bairro;
-    const novo = this.empresaModel().bairro.toUpperCase();
-    return atual === novo;
-  });
-
-  protected bairroEqualsFiedlsError = computed(() => {
-    return (this.bairroTouched() || this.formSubmitted()) && this.isBairroEquals();
-  });
-
-  protected isBairroEmpty = computed(() => {
-    return this.empresaModel().bairro.trim().length === 0;
-  });
-
-  protected bairroEmptyFiedlsError = computed(() => {
-    return (this.bairroTouched() || this.formSubmitted()) && this.isBairroEmpty();
-  });
-  //----------------------------------------------------------------------------------------//
-  protected cidadeTouched = signal<boolean>(false);
-
-  protected isCidadeEquals = computed(() => {
-    const atual = this.buscar()?.cidade;
-    const novo = this.empresaModel().cidade.toUpperCase();
-    return atual === novo;
-  });
-
-  protected cidadeEqualsFiedlsError = computed(() => {
-    return (this.cidadeTouched() || this.formSubmitted()) && this.isCidadeEquals();
-  });
-
-  protected isCidadeEmpty = computed(() => {
-    return this.empresaModel().cidade.trim().length === 0;
-  });
-
-  protected cidadeEmptyFiedlsError = computed(() => {
-    return (this.cidadeTouched() || this.formSubmitted()) && this.isCidadeEmpty();
-  });
-  //----------------------------------------------------------------------------------------//
-  protected estadoTouched = signal<boolean>(false);
-
-  protected isEstadoEquals = computed(() => {
-    const atual = this.buscar()?.estado;
-    const novo = this.empresaModel().estado.toUpperCase();
-    return atual === novo;
-  });
-
-  protected estadoEqualsFiedlsError = computed(() => {
-    return (this.estadoTouched() || this.formSubmitted()) && this.isEstadoEquals();
-  });
-
-  protected isEstadoEmpty = computed(() => {
-    return this.empresaModel().estado.trim().length === 0;
-  });
-
-  protected estadoEmptyFiedlsError = computed(() => {
-    return (this.estadoTouched() || this.formSubmitted()) && this.isEstadoEmpty();
-  });
-  //----------------------------------------------------------------------------------------//
-  protected cepTouched = signal<boolean>(false);
-
-  protected isCepEquals = computed(() => {
-    const atual = this.buscar()?.estado;
-    const novo = this.empresaModel().estado.toUpperCase();
-    return atual === novo;
-  });
-
-  protected cepEqualsFiedlsError = computed(() => {
-    return (this.cepTouched() || this.formSubmitted()) && this.isCepEquals();
-  });
-
-  protected isCepEmpty = computed(() => {
-    return this.empresaModel().cep.trim().length === 0;
-  });
-
-  protected cepEmptyFiedlsError = computed(() => {
-    return (this.cepTouched() || this.formSubmitted()) && this.isCepEmpty();
-  });
-  //----------------------------------------------------------------------------------------//
-  protected isFormValid = computed(() => {
-    const cnpjOk = this.cnpjEmptyFiedlsError() || this.cnpjEqualsFiedlsError();
-    const razaoSocialOk = this.razaoSocialEmptyFiedlsError() || this.razaoSocialEqualsFiedlsError();
-    const nomeFantasiaOk =
-      this.nomeFantasiaEmptyFiedlsError() || this.nomeFantasiaEqualsFiedlsError();
-    const contatoOk = this.contatoEmptyFiedlsError() || this.contatoEqualsFiedlsError();
-    const emailOk = this.emailEmptyFiedlsError() || this.emailEqualsFiedlsError();
-    const ruaOk = this.ruaEmptyFiedlsError() || this.ruaEqualsFiedlsError();
-    const numeroOk = this.numeroEmptyFiedlsError() || this.numeroEqualsFiedlsError();
-    const bairroOk = this.bairroEmptyFiedlsError() || this.bairroEqualsFiedlsError();
-    const cidadeOk = this.cidadeEmptyFiedlsError() || this.cidadeEqualsFiedlsError();
-    const estadoOk = this.estadoEmptyFiedlsError() || this.estadoEqualsFiedlsError();
-    const cepOk = this.cepEmptyFiedlsError() || this.cepEqualsFiedlsError();
-    const touchedOk = this.touchedSubmitted();
-    console.log('touchedOk: ', touchedOk);
-
-    const dadosOk =
-      cnpjOk ||
-      razaoSocialOk ||
-      nomeFantasiaOk ||
-      contatoOk ||
-      emailOk ||
-      ruaOk ||
-      numeroOk ||
-      bairroOk ||
-      cidadeOk ||
-      estadoOk ||
-      cepOk ||
-      touchedOk;
-    console.log('dadosOk: ', dadosOk);
-    return dadosOk;
-  });
-  //----------------------------------------------------------------------------------------//
-  protected onBlur(field: Field): void {
-    if (field) this.touchedSubmitted.set(false);
-    if (field === 'cnpj') this.cnpjTouched.set(true);
-    if (field === 'razaoSocial') this.razaoSocialTouched.set(true);
-    if (field === 'nomeFantasia') this.nomeFantasiaTouched.set(true);
-    if (field === 'contato') this.contatoTouched.set(true);
-    if (field === 'email') this.emailTouched.set(true);
-    if (field === 'rua') this.ruaTouched.set(true);
-    if (field === 'numero') this.numeroTouched.set(true);
-    if (field === 'bairro') this.bairroTouched.set(true);
-    if (field === 'cidade') this.cidadeTouched.set(true);
-    if (field === 'estado') this.estadoTouched.set(true);
-    if (field === 'cep') this.cepTouched.set(true);
-  }
-
-  protected getField(field: keyof EmpresaData) {
-    return this.empresaModel()[field] ?? '';
-  }
-
-  protected setField(field: keyof EmpresaData, value: string): void {
-    this.empresaModel.update((model) => ({ ...model, [field]: value }));
-  }
-
-  protected counterStatus(status: boolean) {
-    const contador = this.listar().filter((item) => item.status === status);
-    return contador.length;
-  }
+  /* ROTAS DE OPERAÇÃO */
+  protected operationMap = OperationMap;
 
   ngOnInit(): void {
     this.carregar().subscribe();
@@ -354,37 +76,25 @@ export class Empresa {
     return this.auditoriaService.listar(field, query);
   }
 
-  protected mudarOperacao(operacao: Operacao, item?: string): void {
-    if (operacao === 'registro') {
-      this.registroEstado.set('informacao');
-      this.resetForm();
+  protected mudarOperacao(operacao: OperationType, item?: string): void {
+    if (!operacao) this.operacaoEstado.set(OperationMap.INICIAL);
+    if (operacao === OperationMap.REGISTRO) {
+      this.mudarRegistro(RecordMap.INFORMACAO);
       if (item) this.carregarRegistro(item);
-    }
-    if (operacao === 'cadastrar') {
+      else this.operacaoEstado.set(OperationMap.INICIAL);
       this.resetForm();
     }
-    if (operacao === 'inicial') {
-      this.buscar.set(null);
+    if (operacao === OperationMap.CADASTRAR) {
+      this.resetForm();
     }
+    this.buscar.set({ ...INICIALIZAR_EMPRESA_ENTITY });
     this.operacaoEstado.set(operacao);
   }
 
-  protected mudarRegistro(registro: Registro): void {
-    if (registro === 'atualizar') {
+  protected mudarRegistro(registro: RecordType): void {
+    if (registro === RecordMap.ATUALIZAR) {
       this.resetForm();
-      this.empresaModel.set({
-        cnpj: this.buscar()!.cnpj,
-        razaoSocial: this.buscar()!.razaoSocial,
-        nomeFantasia: this.buscar()!.nomeFantasia,
-        contato: this.buscar()!.contato,
-        email: this.buscar()!.email,
-        rua: this.buscar()!.rua,
-        numero: this.buscar()!.numero,
-        bairro: this.buscar()!.bairro,
-        cidade: this.buscar()!.cidade,
-        estado: this.buscar()!.estado,
-        cep: this.buscar()!.cep,
-      });
+      this.empresaModel.set(this.buscar());
     }
     this.auditoriaEstado.set(true);
     this.registroEstado.set(registro);
@@ -396,7 +106,7 @@ export class Empresa {
       this.buscarAuditoria.set(dados);
     } else {
       this.auditoriaEstado.update((atual) => (atual = !atual));
-      this.buscarAuditoria.set(null);
+      this.buscarAuditoria.set({ ...INICIALIZAR_AUDITORIA_ENTITY });
     }
   }
 
@@ -408,240 +118,13 @@ export class Empresa {
           const field: string = 'registroId';
           this.carregarAuditoria(field, id).subscribe();
           this.buscar.set(dado);
-          this.empresaModel.set({
-            cnpj: this.buscar()!.cnpj,
-            razaoSocial: this.buscar()!.razaoSocial,
-            nomeFantasia: this.buscar()!.nomeFantasia,
-            contato: this.buscar()!.contato,
-            email: this.buscar()!.email,
-            rua: this.buscar()!.rua,
-            numero: this.buscar()!.numero,
-            bairro: this.buscar()!.bairro,
-            cidade: this.buscar()!.cidade,
-            estado: this.buscar()!.estado,
-            cep: this.buscar()!.cep,
-          });
+          this.empresaModel.set(this.buscar());
         }
       },
     });
   }
 
-  protected cadastrar(event: Event): void {
-    event.preventDefault();
-    this.formSubmitted.set(true);
-    if (this.isFormValid()) {
-      alert('Formulário inválido - não enviar');
-      return;
-    }
-
-    const empresa = this.empresaModel();
-
-    this.confirmarService
-      .confirmar({
-        icone: '/icons/add_circle_84.png',
-        titulo: 'Nova Empresa',
-        mensagem: `Deseja confirmar o cadastro da empresa ${empresa.nomeFantasia.toUpperCase()}?`,
-        acao: () => this.empresaService.cadastrar(empresa),
-      })
-      .subscribe((confirmado) => {
-        console.log(confirmado);
-        if (confirmado === 'finalizado') {
-          this.resetForm();
-          this.mudarOperacao('inicial');
-          this.carregar().subscribe();
-          this.finalizarService.finalizar({
-            icone: '/icons/check_circle_84.png',
-            operacao: empresa.nomeFantasia.toLocaleUpperCase(),
-            titulo: 'Sucesso!',
-            mensagem: 'Cadastrado com exíto.',
-          });
-        } else if (confirmado === 'erro') {
-          this.finalizarService.finalizar({
-            icone: '/icons/error_84.png',
-            operacao: empresa.nomeFantasia.toLocaleUpperCase(),
-            titulo: 'Erro!',
-            mensagem: 'Falha no cadastro.',
-            erros: this.finalizarService.ultimosErros(),
-          });
-        } else {
-          this.finalizarService.finalizar({
-            icone: '/icons/cancel_84.png',
-            operacao: empresa.nomeFantasia.toLocaleUpperCase(),
-            titulo: 'Cancelado!',
-            mensagem: 'Operação de cadastro cancelada.',
-          });
-        }
-      });
-  }
-
-  protected atualizar(event: Event): void {
-    event.preventDefault();
-    this.formSubmitted.set(false);
-    if (this.isFormValid()) {
-      alert('Formulário inválido - não enviar');
-      return;
-    }
-
-    const empresa = this.empresaModel();
-    const id = this.buscar()?.id;
-
-    this.confirmarService
-      .confirmar({
-        icone: '/icons/change_circle_84.png',
-        titulo: 'Atualizar Empresa',
-        mensagem: `Deseja confirmar a atualização da empresa ${empresa.nomeFantasia.toUpperCase()}?`,
-        acao: () => this.empresaService.atualizar(id!, empresa),
-      })
-      .subscribe((confirmado) => {
-        if (confirmado === 'finalizado') {
-          this.resetForm();
-          this.mudarOperacao('registro', id!);
-          this.carregar().subscribe();
-          this.finalizarService.finalizar({
-            icone: '/icons/check_circle_84.png',
-            operacao: empresa.nomeFantasia,
-            titulo: 'Sucesso!',
-            mensagem: 'Atualizado com exíto.',
-          });
-        } else if (confirmado === 'erro') {
-          this.finalizarService.finalizar({
-            icone: '/icons/error_84.png',
-            operacao: empresa.nomeFantasia.toLocaleUpperCase(),
-            titulo: 'Erro!',
-            mensagem: 'Falha no atualização.',
-            erros: this.finalizarService.ultimosErros(),
-          });
-        } else {
-          this.finalizarService.finalizar({
-            icone: '/icons/cancel_84.png',
-            operacao: empresa.nomeFantasia.toLocaleUpperCase(),
-            titulo: 'Cancelado!',
-            mensagem: 'Operação de atualização cancelada.',
-          });
-        }
-      });
-  }
-
-  protected inativar(event: Event): void {
-    event.preventDefault();
-    this.formSubmitted.set(true);
-    if (!this.buscar()?.status) {
-      alert('Perfil já está inativo!');
-      return;
-    }
-
-    const empresa = this.empresaModel();
-    const id = this.buscar()?.id;
-
-    this.confirmarService
-      .confirmar({
-        icone: '/icons/block_84.png',
-        titulo: 'Inativar Empresa',
-        mensagem: `Deseja confirmar a inativação da empresa ${empresa.nomeFantasia.toUpperCase()}?`,
-        acao: () => this.empresaService.inativar(id!),
-      })
-      .subscribe((confirmado) => {
-        if (confirmado === 'finalizado') {
-          this.mudarOperacao('registro', id!);
-          this.carregar().subscribe();
-          this.finalizarService.finalizar({
-            icone: '/icons/check_circle_84.png',
-            operacao: empresa.nomeFantasia,
-            titulo: 'Sucesso!',
-            mensagem: 'Inativação com exíto.',
-          });
-        } else if (confirmado === 'erro') {
-          this.finalizarService.finalizar({
-            icone: '/icons/error_84.png',
-            operacao: empresa.nomeFantasia.toLocaleUpperCase(),
-            titulo: 'Erro!',
-            mensagem: 'Falha no inativação.',
-            erros: this.finalizarService.ultimosErros(),
-          });
-        } else {
-          this.finalizarService.finalizar({
-            icone: '/icons/cancel_84.png',
-            operacao: empresa.nomeFantasia.toLocaleUpperCase(),
-            titulo: 'Cancelado!',
-            mensagem: 'Operação de inativação cancelada.',
-          });
-        }
-      });
-  }
-
-  protected eliminar(event: Event) {
-    event.preventDefault();
-    this.formSubmitted.set(true);
-    if (this.buscar()?.status) {
-      alert('Perfil não está inativo!');
-      return;
-    }
-
-    const empresa = this.empresaModel();
-    const id = this.buscar()?.id;
-
-    this.confirmarService
-      .confirmar({
-        icone: '/icons/delete_84.png',
-        titulo: 'Eliminar Empresa',
-        mensagem: `Deseja confirmar a eliminação da empresa ${empresa.nomeFantasia.toUpperCase()}?`,
-        acao: () => this.empresaService.deletar(id!),
-      })
-      .subscribe((confirmado) => {
-        if (confirmado === 'finalizado') {
-          this.mudarOperacao('inicial');
-          this.carregar().subscribe();
-          this.finalizarService.finalizar({
-            icone: '/icons/check_circle_84.png',
-            operacao: empresa.nomeFantasia,
-            titulo: 'Sucesso!',
-            mensagem: 'Eliminação com exíto.',
-          });
-        } else if (confirmado === 'erro') {
-          this.finalizarService.finalizar({
-            icone: '/icons/error_84.png',
-            operacao: empresa.nomeFantasia.toLocaleUpperCase(),
-            titulo: 'Erro!',
-            mensagem: 'Falha na eliminação.',
-            erros: this.finalizarService.ultimosErros(),
-          });
-        } else {
-          this.finalizarService.finalizar({
-            icone: '/icons/cancel_84.png',
-            operacao: empresa.nomeFantasia.toLocaleUpperCase(),
-            titulo: 'Cancelado!',
-            mensagem: 'Operação de eliminação cancelada.',
-          });
-        }
-      });
-  }
-
   private resetForm(): void {
-    this.empresaModel.set({
-      cnpj: '',
-      razaoSocial: '',
-      nomeFantasia: '',
-      contato: '',
-      email: '',
-      rua: '',
-      numero: '',
-      bairro: '',
-      cidade: '',
-      estado: '',
-      cep: '',
-    });
-    this.cnpjTouched.set(false);
-    this.razaoSocialTouched.set(false);
-    this.nomeFantasiaTouched.set(false);
-    this.contatoTouched.set(false);
-    this.emailTouched.set(false);
-    this.ruaTouched.set(false);
-    this.numeroTouched.set(false);
-    this.bairroTouched.set(false);
-    this.cidadeTouched.set(false);
-    this.estadoTouched.set(false);
-    this.cepTouched.set(false);
-    this.formSubmitted.set(false);
-    this.touchedSubmitted.set(true);
+    this.empresaModel.set({ ...INICIALIZAR_EMPRESA_FORMS });
   }
 }

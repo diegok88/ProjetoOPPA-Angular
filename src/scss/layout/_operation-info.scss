@@ -1,0 +1,22 @@
+.container-operation-info {
+  height: 100%;
+  min-height: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.container-operation-info-separated {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/*
+RESTANTE DO ESTILO NO ARQUIVO _list.scss, ESTILO DETERMINADO 
+PELO TIPO DE TAG.  
+*/

@@ -28,14 +28,16 @@ import { DataProcessEmpresa } from '../../../../constants/data-process.const';
   selector: 'app-process-empresa',
   imports: [FormsModule, MatButtonModule],
   template: `
-    <form (ngSubmit)="executar($event)" class="process-operacao">
-      <section class="process-group">
-        <img class="image-process" [src]="listaProcessoSignal()?.imagem" alt="Imagem" />
-        <span>{{ listaProcessoSignal()?.mensagem }} {{ buscarEmpresa().razaoSocial }}?</span>
+    <form (ngSubmit)="executar($event)" class="container-operation-process">
+      <section class="container-operation-process-group">
+        <img class="operation-process-image" [src]="listaProcessoSignal()?.imagem" alt="Imagem" />
+        <span>{{ listaProcessoSignal()?.mensagem }} {{ buscar().razaoSocial }}?</span>
       </section>
-      <button matButton="outlined" type="submit">
-        {{ listaProcessoSignal()?.botao }}
-      </button>
+      <section class="container-operation-process-group">
+        <button matButton="outlined" type="submit">
+          {{ listaProcessoSignal()?.botao }}
+        </button>
+      </section>
     </form>
   `,
   styles: ``,
@@ -57,15 +59,15 @@ export class ProcessEmpresa implements OnInit {
   /* ENTRADA E SAIDA DE DADOS DO COMPONENTE */
   public operacaoAtual = input<OperationType | undefined>();
   public registroAtual = input<RecordType | undefined>();
-  public buscarEmpresa = input<EmpresaModel>({ ...INICIALIZAR_EMPRESA_ENTITY });
+  public buscar = input<EmpresaModel>({ ...INICIALIZAR_EMPRESA_ENTITY });
   public onMudarOperacao = output<OperationType>();
 
   /* INICIALIZAR O PROCESSO */
   ngOnInit(): void {
-    if (this.buscarEmpresa()?.status && this.registroAtual() === RecordMap.STATUS) {
+    if (this.buscar()?.status && this.registroAtual() === RecordMap.STATUS) {
       this.carregarRegistro(RecordMap.INATIVAR);
       this.tipoProcesso.set(RecordMap.INATIVAR);
-    } else if (!this.buscarEmpresa()?.status && this.registroAtual() === RecordMap.STATUS) {
+    } else if (!this.buscar()?.status && this.registroAtual() === RecordMap.STATUS) {
       this.carregarRegistro(RecordMap.ATIVAR);
       this.tipoProcesso.set(RecordMap.ATIVAR);
     } else {
@@ -83,14 +85,14 @@ export class ProcessEmpresa implements OnInit {
   protected executar(event: Event): void {
     event.preventDefault();
 
-    const id = this.buscarEmpresa()!.id;
+    const id = this.buscar()!.id;
 
     if (this.tipoProcesso() === RecordMap.ATIVAR) {
       this.confirmarService
         .confirmar({
           ...CONFIRMAR_ATIVAR,
           entidade: 'empresa',
-          dados: this.buscarEmpresa()?.razaoSocial.toUpperCase(),
+          dados: this.buscar()?.razaoSocial.toUpperCase(),
           acao: () => this.empresaService.ativar(id!),
         })
         .subscribe((confirmado) => {
@@ -100,20 +102,20 @@ export class ProcessEmpresa implements OnInit {
             this.finalizarService.finalizar({
               ...FINALIZAR_SUCESSO,
               operacao: 'Ativação do empresa',
-              dados: this.buscarEmpresa()!.razaoSocial,
+              dados: this.buscar()!.razaoSocial,
             });
           } else if (confirmado === 'erro') {
             this.finalizarService.finalizar({
               ...FINALIZAR_ERRO,
               operacao: 'Ativação do empresa',
-              dados: this.buscarEmpresa()!.razaoSocial.toLocaleUpperCase(),
+              dados: this.buscar()!.razaoSocial.toLocaleUpperCase(),
               erros: this.finalizarService.ultimosErros(),
             });
           } else {
             this.finalizarService.finalizar({
               ...FINALIZAR_CANCELAR,
               operacao: 'Ativação do empresa',
-              dados: this.buscarEmpresa()!.razaoSocial.toLocaleUpperCase(),
+              dados: this.buscar()!.razaoSocial.toLocaleUpperCase(),
             });
           }
         });
@@ -125,7 +127,7 @@ export class ProcessEmpresa implements OnInit {
         .confirmar({
           ...CONFIRMAR_INATIVAR,
           entidade: 'empresa',
-          dados: this.buscarEmpresa()?.razaoSocial.toUpperCase(),
+          dados: this.buscar()?.razaoSocial.toUpperCase(),
           acao: () => this.empresaService.inativar(id!),
         })
         .subscribe((confirmado) => {
@@ -135,20 +137,20 @@ export class ProcessEmpresa implements OnInit {
             this.finalizarService.finalizar({
               ...FINALIZAR_SUCESSO,
               operacao: 'Inativação do empresa',
-              dados: this.buscarEmpresa()!.razaoSocial,
+              dados: this.buscar()!.razaoSocial,
             });
           } else if (confirmado === 'erro') {
             this.finalizarService.finalizar({
               ...FINALIZAR_ERRO,
               operacao: 'Inativação do empresa',
-              dados: this.buscarEmpresa()!.razaoSocial.toLocaleUpperCase(),
+              dados: this.buscar()!.razaoSocial.toLocaleUpperCase(),
               erros: this.finalizarService.ultimosErros(),
             });
           } else {
             this.finalizarService.finalizar({
               ...FINALIZAR_CANCELAR,
               operacao: 'Inativação do empresa',
-              dados: this.buscarEmpresa()!.razaoSocial.toLocaleUpperCase(),
+              dados: this.buscar()!.razaoSocial.toLocaleUpperCase(),
             });
           }
         });
@@ -160,7 +162,7 @@ export class ProcessEmpresa implements OnInit {
         .confirmar({
           ...CONFIRMAR_ELIMINAR,
           entidade: 'empresa',
-          dados: this.buscarEmpresa()!.razaoSocial.toUpperCase(),
+          dados: this.buscar()!.razaoSocial.toUpperCase(),
           acao: () => this.empresaService.deletar(id!),
         })
         .subscribe((confirmado) => {
@@ -170,20 +172,20 @@ export class ProcessEmpresa implements OnInit {
             this.finalizarService.finalizar({
               ...FINALIZAR_SUCESSO,
               operacao: 'Eliminação do empresa',
-              dados: this.buscarEmpresa()!.razaoSocial,
+              dados: this.buscar()!.razaoSocial,
             });
           } else if (confirmado === 'erro') {
             this.finalizarService.finalizar({
               ...FINALIZAR_ERRO,
               operacao: 'Eliminação do empresa',
-              dados: this.buscarEmpresa()!.razaoSocial.toLocaleUpperCase(),
+              dados: this.buscar()!.razaoSocial.toLocaleUpperCase(),
               erros: this.finalizarService.ultimosErros(),
             });
           } else {
             this.finalizarService.finalizar({
               ...FINALIZAR_CANCELAR,
               operacao: 'Eliminação do empresa',
-              dados: this.buscarEmpresa()!.razaoSocial.toLocaleUpperCase(),
+              dados: this.buscar()!.razaoSocial.toLocaleUpperCase(),
             });
           }
         });

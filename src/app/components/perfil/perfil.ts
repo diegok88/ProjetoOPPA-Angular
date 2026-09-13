@@ -22,6 +22,7 @@ import { Toogle } from '../toogle/toogle';
 import {
   INICIALIZAR_PERFIL_ENTITY,
   INICIALIZAR_PERFIL_FORMS,
+  PerfilForm,
   PerfilModel,
 } from '../../entities/perfil.model';
 import { INICIALIZAR_AUDITORIA_ENTITY } from '../../constants/inicialize-auditoria.const';
@@ -45,20 +46,24 @@ import { INICIALIZAR_AUDITORIA_ENTITY } from '../../constants/inicialize-auditor
   styleUrl: './perfil.scss',
 })
 export class Perfil implements OnInit {
+  /* INJEÇÃO DE DEPENDENCIAS DE SERVIÇOS */
   private perfilService = inject(PerfilService);
   private auditoriaService = inject(AuditoriaService);
 
+  /* DADOS RETORNADOS DO SERVIÇO */
   protected readonly listar = this.perfilService.perfil;
   protected readonly buscar = signal<PerfilModel>({ ...INICIALIZAR_PERFIL_ENTITY });
   protected readonly listarAuditoria = this.auditoriaService.auditoria;
   protected readonly buscarAuditoria = signal<AuditoriaData>({ ...INICIALIZAR_AUDITORIA_ENTITY });
 
+  /* SIGNALS DAS ROTAS DE OPERAÇÃO E REGISTRO */
   protected operacaoEstado = signal<OperationType>(OperationMap.INICIAL);
   protected registroEstado = signal<RecordType>(RecordMap.INFORMACAO);
   protected auditoriaEstado = signal<boolean>(true);
 
-  protected perfilModel = signal<PerfilModel>({ ...INICIALIZAR_PERFIL_FORMS });
+  protected perfilModel = signal<PerfilForm>({ ...INICIALIZAR_PERFIL_FORMS });
 
+  /* ROTAS DE OPERAÇÃO */
   protected operationMap = OperationMap;
 
   ngOnInit(): void {

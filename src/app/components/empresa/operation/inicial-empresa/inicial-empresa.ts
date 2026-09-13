@@ -7,26 +7,26 @@ import { MatCardModule } from '@angular/material/card';
   selector: 'app-inicial-empresa',
   imports: [MatButtonModule, MatCardModule],
   template: `
-    <section class="operacao-inicial">
-      <img class="operacao-img" src="images/factory.png" alt="Empresa" />
-      <span class="operacao-texto">Cadastrar uma nova Empresa?</span>
+    <section class="container-operation-initial">
+      <img class="operation-initial-img" src="images/factory.png" alt="Empresa" />
+      <span class="operation-initial-text">Cadastrar uma nova Empresa?</span>
       <button matButton="outlined" class="operacao-button" (click)="onCadastrarOperacao()">
         Clique aqui
       </button>
-      <div class="inicial-dados">
-        <mat-card class="inicial-totais" appearance="outlined">
+      <div class="operation-initial-data">
+        <mat-card class="initial-totals" appearance="outlined">
           <mat-card-header>
             <mat-card-title>Total de Empresas</mat-card-title>
             <mat-card-subtitle>{{ listar().length }}</mat-card-subtitle>
           </mat-card-header>
         </mat-card>
-        <mat-card class="inicial-ativos" appearance="outlined">
+        <mat-card class="initial-active" appearance="outlined">
           <mat-card-header>
             <mat-card-title>Total de Ativas</mat-card-title>
             <mat-card-subtitle>{{ counterStatus(true) }}</mat-card-subtitle>
           </mat-card-header>
         </mat-card>
-        <mat-card class="inicial-inativos" appearance="outlined">
+        <mat-card class="initial-deactive" appearance="outlined">
           <mat-card-header>
             <mat-card-title>Total de Inativas</mat-card-title>
             <mat-card-subtitle>{{ counterStatus(false) }}</mat-card-subtitle>

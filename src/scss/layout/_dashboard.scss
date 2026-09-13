@@ -12,16 +12,19 @@
     'header header'
     'aside main'
     'footer footer';
-  .container-header {
+
+  header {
     grid-area: header;
+
+    border-bottom: 2px solid var(--color-white);
   }
-  .container-aside {
+  aside {
     grid-area: aside;
   }
-  .container-main {
+  main {
     grid-area: main;
   }
-  .container-footer {
+  footer {
     grid-area: footer;
   }
 }

@@ -28,14 +28,16 @@ import {
   selector: 'app-process-perfil',
   imports: [FormsModule, MatButtonModule],
   template: `
-    <form (ngSubmit)="executar($event)" class="process-operacao">
-      <section class="process-group">
-        <img class="image-process" [src]="listaProcessoSignal()?.imagem" alt="Imagem" />
+    <form (ngSubmit)="executar($event)" class="container-operation-process">
+      <section class="container-operation-process-group">
+        <img class="operation-process-image" [src]="listaProcessoSignal()?.imagem" alt="Imagem" />
         <span>{{ listaProcessoSignal()?.mensagem }} {{ buscarPerfil().descricao }}?</span>
       </section>
-      <button matButton="outlined" type="submit">
-        {{ listaProcessoSignal()?.botao }}
-      </button>
+      <section class="container-operation-process-group">
+        <button matButton="outlined" type="submit">
+          {{ listaProcessoSignal()?.botao }}
+        </button>
+      </section>
     </form>
   `,
   styles: ``,

@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { RequestHttp } from '../constants/requests.const';
-import { EmpresaData } from '../interfaces/empresa-data.interface';
 import { catchError, Observable, tap, throwError } from 'rxjs';
+import { EmpresaModel } from '../entities/empresa.model';
 
 @Injectable({
   providedIn: 'root',
@@ -11,31 +11,31 @@ export class EmpresaService {
   private http = inject(HttpClient);
   private apiUrl = RequestHttp.empresa;
 
-  private empresaSignal = signal<EmpresaData[] | []>([]);
+  private empresaSignal = signal<EmpresaModel[] | []>([]);
   public empresa = this.empresaSignal.asReadonly();
 
-  cadastrar(dados: EmpresaData): Observable<EmpresaData> {
-    return this.http.post<EmpresaData>(this.apiUrl, dados);
+  cadastrar(dados: EmpresaModel): Observable<EmpresaModel> {
+    return this.http.post<EmpresaModel>(this.apiUrl, dados);
   }
 
-  atualizar(id: string, dados: EmpresaData): Observable<EmpresaData> {
-    return this.http.patch<EmpresaData>(`${this.apiUrl}/${id}`, dados);
+  atualizar(id: string, dados: EmpresaModel): Observable<EmpresaModel> {
+    return this.http.patch<EmpresaModel>(`${this.apiUrl}/${id}`, dados);
   }
 
-  ativar(id: string): Observable<EmpresaData> {
-    return this.http.patch<EmpresaData>(`${this.apiUrl}/active/${id}`, {});
+  ativar(id: string): Observable<EmpresaModel> {
+    return this.http.patch<EmpresaModel>(`${this.apiUrl}/active/${id}`, {});
   }
 
-  inativar(id: string): Observable<EmpresaData> {
-    return this.http.patch<EmpresaData>(`${this.apiUrl}/deactive/${id}`, {});
+  inativar(id: string): Observable<EmpresaModel> {
+    return this.http.patch<EmpresaModel>(`${this.apiUrl}/deactive/${id}`, {});
   }
 
-  deletar(id: string): Observable<EmpresaData> {
-    return this.http.delete<EmpresaData>(`${this.apiUrl}/${id}`);
+  deletar(id: string): Observable<EmpresaModel> {
+    return this.http.delete<EmpresaModel>(`${this.apiUrl}/${id}`);
   }
 
-  listar(): Observable<EmpresaData[]> {
-    return this.http.get<EmpresaData[]>(this.apiUrl).pipe(
+  listar(): Observable<EmpresaModel[]> {
+    return this.http.get<EmpresaModel[]>(this.apiUrl).pipe(
       tap((dados) => {
         this.empresaSignal.set(dados);
       }),

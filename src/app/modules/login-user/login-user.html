@@ -1,13 +1,13 @@
-<div class="default">
-  <header class="default-header"></header>
-  <main class="default-main">
+<div class="container-default">
+  <header></header>
+  <main>
     <section class="container-login">
-      <section class="container-logo">
+      <section class="container-login-logo">
         <img class="logo" src="images/logoOPPA-2.png" alt="logo" />
       </section>
-      <form class="container-form" (ngSubmit)="onSubmit($event)">
+      <form class="container-login-form" (ngSubmit)="onSubmit($event)">
         <h2>Login</h2>
-        <div class="group-form">
+        <div class="group-login-form">
           <mat-form-field appearance="outline">
             <mat-label>Crachá</mat-label>
             <mat-icon matPrefix>badge</mat-icon>
@@ -94,7 +94,7 @@
             </mat-hint>
           </mat-form-field>
         </div>
-        <div class="container-button">
+        <div class="container-login-button">
           <button matButton="outlined" class="btn-enter" type="submit" [disabled]="formSubmitted()">
             Entrar
           </button>
@@ -103,7 +103,7 @@
       </form>
     </section>
   </main>
-  <footer class="default-footer">
+  <footer>
     <section class="separate">
       <img class="icon-brand" src="icons/at.png" alt="@" />
       <p class="texto-footer">OPPA System. Todos os direitos reservados.</p>
@@ -115,6 +115,3 @@
     </section>
   </footer>
 </div>
-<!--
-    
--->

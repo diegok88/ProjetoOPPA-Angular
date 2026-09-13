@@ -18,6 +18,28 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withInterceptors([credentialsInterceptor]), withInterceptorsFromDi()),
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptorService, multi: true },
-    provideNgxMask(),
+    /* CONFIGURAÇÃO QUE PERMITE */
+    provideNgxMask({
+      patterns: {
+        '0': {
+          pattern: /\d/,
+        },
+        '9': {
+          pattern: /\d/,
+        },
+        // Letras + acentos + espaços
+        S: {
+          pattern: /[a-zA-ZÀ-ÿ ]/,
+        },
+        // Letras + números
+        A: {
+          pattern: /[a-zA-Z0-9 ]/,
+        },
+        // Padrão para e-mail: letras, números, @, ., -, _
+        E: {
+          pattern: /[a-zA-Z0-9@._\-]/,
+        },
+      },
+    }),
   ],
 };

@@ -6,35 +6,39 @@ import { INICIALIZAR_PERFIL_ENTITY, PerfilModel } from '../../../../entities/per
   selector: 'app-info-perfil',
   imports: [MatListModule],
   template: `
-    <mat-list class="info-operacao">
-      <mat-list-item>
-        <span matListItemTitle>
-          <p class="list-label">Id:</p>
-          <p class="list-data">{{ infoPerfil().id }}</p>
-        </span>
-      </mat-list-item>
-      <mat-list-item>
-        <span matListItemTitle>
-          <p>Código:</p>
-          <p>{{ infoPerfil().codigo }}</p>
-        </span>
-      </mat-list-item>
-      <mat-list-item>
-        <span matListItemTitle>
-          <p>Descrição:</p>
-          <p>{{ infoPerfil().descricao }}</p></span
-        >
-      </mat-list-item>
-      <mat-list-item>
-        <span matListItemTitle>
-          <p>Status:</p>
-          <p>{{ infoPerfil().status }}</p>
-        </span>
-      </mat-list-item>
-    </mat-list>
+    <section class="container-operation-info">
+      <div class="container-operation-info-separated">
+        <mat-list>
+          <mat-list-item>
+            <span matListItemTitle>
+              <p class="list-label">Id:</p>
+              <p class="list-data">{{ info().id }}</p>
+            </span>
+          </mat-list-item>
+          <mat-list-item>
+            <span matListItemTitle>
+              <p>Código:</p>
+              <p>{{ info().codigo }}</p>
+            </span>
+          </mat-list-item>
+          <mat-list-item>
+            <span matListItemTitle>
+              <p>Descrição:</p>
+              <p>{{ info().descricao }}</p></span
+            >
+          </mat-list-item>
+          <mat-list-item>
+            <span matListItemTitle>
+              <p>Status:</p>
+              <p>{{ info().status }}</p>
+            </span>
+          </mat-list-item>
+        </mat-list>
+      </div>
+    </section>
   `,
   styles: ``,
 })
 export class InfoPerfil {
-  public infoPerfil = input<PerfilModel>({...INICIALIZAR_PERFIL_ENTITY});
+  public info = input<PerfilModel>({ ...INICIALIZAR_PERFIL_ENTITY });
 }

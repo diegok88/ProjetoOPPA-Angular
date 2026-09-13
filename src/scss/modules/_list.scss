@@ -12,20 +12,28 @@
 }
 
 .mdc-list {
-  padding: 0 0 10px 0 !important;
+  padding: 0 !important;
 }
 
 .mat-mdc-list-base {
   display: flex !important;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   flex-wrap: wrap;
+  box-sizing: border-box;
   gap: 10px;
 }
 
 .mat-mdc-list-item {
-  width: 450px !important;
+  width: 400px !important;
 }
+
+.container-operation-forms-update {
+  .mat-mdc-list-item {
+    width: 51rem !important;
+  }
+}
+
 .mat-mdc-list-item-title {
   display: flex;
   justify-content: space-between;
@@ -37,11 +45,16 @@
   font-size: 18px;
 }
 
-.list-label {
-  width: 0 !important;
-  font-size: 18px;
-}
-
 .info-operacao {
   padding-top: 10px !important;
+}
+
+.atualizar-operacao {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 60px;
+  padding: 8px 0;
 }

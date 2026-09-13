@@ -1,14 +1,16 @@
-<div class="operacao-dados">
-  <h2 class="operacao-h2">Perfil</h2>
-  <section class="operacao-container">
-    <div class="operacao-lista">
+<div class="container-operation">
+  <section class="container-operation-header">
+    <h2 class="operacao-h2">Perfil</h2>
+  </section>
+  <section class="container-operation-main">
+    <div class="container-operation-list">
       <span>Lista de Perfis</span>
       <app-list-perfil
         [listaPerfil]="listar()"
         (abrirRegistro)="mudarOperacao(operationMap.REGISTRO, $event)"
       ></app-list-perfil>
     </div>
-    <div class="operacao-acao">
+    <div class="container-operation-action">
       @switch (operacaoEstado()) {
         @case ('inicial') {
           <app-inicial-perfil
@@ -16,8 +18,8 @@
           ></app-inicial-perfil>
         }
         @case ('cadastrar') {
-          <section class="operacao-cadastrar">
-            <div class="operacao-titulo">
+          <section class="container-operation-signup">
+            <div class="container-operation-action-header">
               <span>Cadastrar Perfil</span>
               <img
                 class="operacao-voltar"
@@ -29,126 +31,130 @@
             <app-form-perfil
               [operacaoAtual]="operacaoEstado()"
               [registroAtual]="registroEstado()"
-              [listarPerfil]="listar()"
-              [buscarPerfil]="buscar()"
+              [listar]="listar()"
+              [buscar]="buscar()"
               (onMudarOperacao)="mudarOperacao(operationMap.INICIAL)"
             ></app-form-perfil>
           </section>
         }
         @case ('registro') {
-          <app-toogle
-            [statusEntity]="buscar().status"
-            [onRegistroAtual]="registroEstado()"
-            (onMudarRegistro)="mudarRegistro($event)"
-          ></app-toogle>
-          <section class="operacao-registro">
-            @switch (registroEstado()) {
-              @case ('informacao') {
-                <div class="registro-container">
-                  <div class="operacao-titulo">
-                    <span>Dados do Perfil</span>
-                    <img
-                      class="operacao-voltar"
-                      src="icons/arrow_circle_left.png"
-                      alt="Voltar"
-                      (click)="mudarOperacao(operationMap.INICIAL)"
-                    />
+          <section class="container-operation-register">
+            <div class="container-operation-register-toggle">
+              <app-toogle
+                [statusEntity]="buscar().status"
+                [onRegistroAtual]="registroEstado()"
+                (onMudarRegistro)="mudarRegistro($event)"
+              ></app-toogle>
+            </div>
+            <div class="container-operation-separated">
+              @switch (registroEstado()) {
+                @case ('informacao') {
+                  <div class="container-operation-register">
+                    <div class="container-operation-action-header">
+                      <span>Dados do Perfil</span>
+                      <img
+                        class="operacao-voltar"
+                        src="icons/arrow_circle_left.png"
+                        alt="Voltar"
+                        (click)="mudarOperacao(operationMap.INICIAL)"
+                      />
+                    </div>
+                    <app-info-perfil [info]="buscar()"></app-info-perfil>
                   </div>
-                  <app-info-perfil [infoPerfil]="buscar()"></app-info-perfil>
-                </div>
-              }
-              @case ('atualizar') {
-                <div class="registro-container">
-                  <div class="operacao-titulo">
-                    <span>Atualizar o Perfil</span>
-                    <img
-                      class="operacao-voltar"
-                      src="icons/arrow_circle_left.png"
-                      alt="Voltar"
-                      (click)="mudarOperacao(operationMap.INICIAL)"
-                    />
+                }
+                @case ('atualizar') {
+                  <div class="container-operation-register">
+                    <div class="container-operation-action-header">
+                      <span>Atualizar o Perfil</span>
+                      <img
+                        class="operacao-voltar"
+                        src="icons/arrow_circle_left.png"
+                        alt="Voltar"
+                        (click)="mudarOperacao(operationMap.INICIAL)"
+                      />
+                    </div>
+                    <app-form-perfil
+                      [operacaoAtual]="operacaoEstado()"
+                      [registroAtual]="registroEstado()"
+                      [listar]="listar()"
+                      [buscar]="buscar()"
+                      (onMudarOperacao)="mudarOperacao($event, buscar().id)"
+                    ></app-form-perfil>
                   </div>
-                  <app-form-perfil
-                    [operacaoAtual]="operacaoEstado()"
-                    [registroAtual]="registroEstado()"
-                    [listarPerfil]="listar()"
-                    [buscarPerfil]="buscar()"
-                    (onMudarOperacao)="mudarOperacao($event, buscar().id)"
-                  ></app-form-perfil>
-                </div>
-              }
-              @case ('ativar') {
-                <div class="registro-container">
-                  <div class="operacao-titulo">
-                    <span>Inativar o Perfil</span>
-                    <img
-                      class="operacao-voltar"
-                      src="icons/arrow_circle_left.png"
-                      alt="Voltar"
-                      (click)="mudarOperacao(operationMap.INICIAL)"
-                    />
+                }
+                @case ('ativar') {
+                  <div class="container-operation-register">
+                    <div class="container-operation-action-header">
+                      <span>Inativar o Perfil</span>
+                      <img
+                        class="operacao-voltar"
+                        src="icons/arrow_circle_left.png"
+                        alt="Voltar"
+                        (click)="mudarOperacao(operationMap.INICIAL)"
+                      />
+                    </div>
+                    <app-process-perfil
+                      [operacaoAtual]="operacaoEstado()"
+                      [registroAtual]="registroEstado()"
+                      [buscarPerfil]="buscar()"
+                      (onMudarOperacao)="mudarOperacao($event, buscar().id)"
+                    ></app-process-perfil>
                   </div>
-                  <app-process-perfil
-                    [operacaoAtual]="operacaoEstado()"
-                    [registroAtual]="registroEstado()"
-                    [buscarPerfil]="buscar()"
-                    (onMudarOperacao)="mudarOperacao($event, buscar().id)"
-                  ></app-process-perfil>
-                </div>
-              }
-              @case ('status') {
-                <div class="registro-container">
-                  <div class="operacao-titulo">
-                    <span>Inativar o Perfil</span>
-                    <img
-                      class="operacao-voltar"
-                      src="icons/arrow_circle_left.png"
-                      alt="Voltar"
-                      (click)="mudarOperacao(operationMap.INICIAL)"
-                    />
+                }
+                @case ('status') {
+                  <div class="container-operation-register">
+                    <div class="container-operation-action-header">
+                      <span>Inativar o Perfil</span>
+                      <img
+                        class="operacao-voltar"
+                        src="icons/arrow_circle_left.png"
+                        alt="Voltar"
+                        (click)="mudarOperacao(operationMap.INICIAL)"
+                      />
+                    </div>
+                    <app-process-perfil
+                      [operacaoAtual]="operacaoEstado()"
+                      [registroAtual]="registroEstado()"
+                      [buscarPerfil]="buscar()"
+                      (onMudarOperacao)="mudarOperacao($event, buscar().id)"
+                    ></app-process-perfil>
                   </div>
-                  <app-process-perfil
-                    [operacaoAtual]="operacaoEstado()"
-                    [registroAtual]="registroEstado()"
-                    [buscarPerfil]="buscar()"
-                    (onMudarOperacao)="mudarOperacao($event, buscar().id)"
-                  ></app-process-perfil>
-                </div>
-              }
-              @case ('eliminar') {
-                <div class="registro-container">
-                  <div class="operacao-titulo">
-                    <span>Eliminar o Perfil</span>
-                    <img
-                      class="operacao-voltar"
-                      src="icons/arrow_circle_left.png"
-                      alt="Voltar"
-                      (click)="mudarOperacao(operationMap.INICIAL)"
-                    />
+                }
+                @case ('eliminar') {
+                  <div class="container-operation-register">
+                    <div class="container-operation-action-header">
+                      <span>Eliminar o Perfil</span>
+                      <img
+                        class="operacao-voltar"
+                        src="icons/arrow_circle_left.png"
+                        alt="Voltar"
+                        (click)="mudarOperacao(operationMap.INICIAL)"
+                      />
+                    </div>
+                    <app-process-perfil
+                      [operacaoAtual]="operacaoEstado()"
+                      [registroAtual]="registroEstado()"
+                      [buscarPerfil]="buscar()"
+                      (onMudarOperacao)="mudarOperacao($event, buscar().id)"
+                    ></app-process-perfil>
                   </div>
-                  <app-process-perfil
-                    [operacaoAtual]="operacaoEstado()"
-                    [registroAtual]="registroEstado()"
-                    [buscarPerfil]="buscar()"
-                    (onMudarOperacao)="mudarOperacao($event, buscar().id)"
-                  ></app-process-perfil>
-                </div>
-              }
-              @case ('auditoria') {
-                <div class="registro-container">
-                  <div class="operacao-titulo">
-                    <span>Auditoria do Perfil</span>
-                    <img
-                      class="operacao-voltar"
-                      src="icons/arrow_circle_left.png"
-                      alt="Voltar"
-                      (click)="mudarOperacao(operationMap.INICIAL)"
-                    />
+                }
+                @case ('auditoria') {
+                  <div class="container-operation-register">
+                    <div class="container-operation-action-header">
+                      <span>Auditoria do Perfil</span>
+                      <img
+                        class="operacao-voltar"
+                        src="icons/arrow_circle_left.png"
+                        alt="Voltar"
+                        (click)="mudarOperacao(operationMap.INICIAL)"
+                      />
+                    </div>
+                    <app-audit-perfil [listarAuditoria]="listarAuditoria()"></app-audit-perfil>
                   </div>
-                  <app-audit-perfil [listarAuditoria]="listarAuditoria()"></app-audit-perfil>
-                </div>
+                }
               }
-            }
+            </div>
           </section>
         }
       }

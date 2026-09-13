@@ -43,40 +43,46 @@ import { FormatarDadosRegistradosPipe } from '../../../../pipes/formatar-dados-r
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
     } @else {
-      <section class="container-dados">
-        <mat-list class="info-operacao">
-          <mat-list-item>
-            <span matListItemTitle>
-              <p class="list-label">Id:</p>
-              <p class="list-data">{{ buscarAuditoria()?.id }}</p>
-            </span>
-          </mat-list-item>
-          <mat-list-item>
-            <span matListItemTitle>
-              <p class="list-label">Ação:</p>
-              <p class="list-data">{{ buscarAuditoria()?.acao }}</p>
-            </span>
-          </mat-list-item>
-          <mat-list-item>
-            <span matListItemTitle>
-              <p>Data/Hora:</p>
-              <p>{{ buscarAuditoria()?.dataHora }}</p>
-            </span>
-          </mat-list-item>
-          <mat-list-item>
-            <span matListItemTitle>
-              <p>Registrado Por Id:</p>
-              <p>{{ buscarAuditoria()?.registradoPorId }}</p></span
-            >
-          </mat-list-item>
-          <mat-list-item class="dados-registrados">
-            <span matListItemTitle>
-              <p>Dados Registrados:</p>
-              <p>{{ buscarAuditoria()?.dadosRegistrados | formatarDadosRegistrados }}</p>
-            </span>
-          </mat-list-item>
-        </mat-list>
-        <button matButton="outlined" (click)="onAbrirRegistro()">Voltar</button>
+      <section class="container-operation-data-audit">
+        <div class="container-operation-audit-separated">
+          <div class="container-operation-audit-grid">
+            <mat-list>
+              <mat-list-item>
+                <span matListItemTitle>
+                  <p class="list-label">Id:</p>
+                  <p class="list-data">{{ buscarAuditoria()?.id }}</p>
+                </span>
+              </mat-list-item>
+              <mat-list-item>
+                <span matListItemTitle>
+                  <p class="list-label">Ação:</p>
+                  <p class="list-data">{{ buscarAuditoria()?.acao }}</p>
+                </span>
+              </mat-list-item>
+              <mat-list-item>
+                <span matListItemTitle>
+                  <p>Data/Hora:</p>
+                  <p>{{ buscarAuditoria()?.dataHora }}</p>
+                </span>
+              </mat-list-item>
+              <mat-list-item>
+                <span matListItemTitle>
+                  <p>Registrado Por Id:</p>
+                  <p>{{ buscarAuditoria()?.registradoPorId }}</p></span
+                >
+              </mat-list-item>
+              <mat-list-item class="container-operation-dados-registrados">
+                <span matListItemTitle>
+                  <p>Dados Registrados:</p>
+                  <p>{{ buscarAuditoria()?.dadosRegistrados | formatarDadosRegistrados }}</p>
+                </span>
+              </mat-list-item>
+            </mat-list>
+          </div>
+          <div class="container-operation-forms-button">
+            <button matButton="outlined" (click)="onAbrirRegistro()">Voltar</button>
+          </div>
+        </div>
       </section>
     }
   `,
@@ -96,29 +102,16 @@ import { FormatarDadosRegistradosPipe } from '../../../../pipes/formatar-dados-r
       width: 20%;
     }
 
-    .container-dados {
-      width: 100%;
-      height: 95%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-direction: column;
-    }
-
-    .dados-registrados {
-      height: 150px !important;
-      width: 910px !important;
+    .container-operation-dados-registrados {
+      height: auto !important;
+      min-height: 0 !important;
+      width: 810px !important;
+      padding: 16px !important;
 
       p {
         white-space: pre-wrap;
         height: auto;
         width: auto;
-      }
-    }
-
-    @media (max-height: 750px) {
-      .container-dados {
-        height: 93%;
       }
     }
   `,

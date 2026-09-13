@@ -1,27 +1,26 @@
-.operacao-inicial {
+.container-operation-initial {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
 }
 
-.operacao-img {
-  width: 300px;
-  height: 300px;
+.operation-initial-text {
+  font-size: 2rem;
 }
 
-.inicial-dados {
+.operation-initial-data {
   width: 100%;
   display: flex;
   gap: 10px;
 }
 
-mat-card.inicial-totais {
+mat-card.initial-totals {
   border-color: var(--color-alert);
 }
-mat-card.inicial-ativos {
+mat-card.initial-active {
   border-color: var(--color-positive);
 }
-mat-card.inicial-inativos {
+mat-card.initial-deactive {
   border-color: var(--color-negative);
 }

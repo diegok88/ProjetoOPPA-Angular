@@ -24,3 +24,15 @@ export const FINALIZAR_CANCELAR: DialogoFinalizarData = {
   titulo: 'Cancelado!',
   mensagem: 'Cancelada com exíto a operação.',
 };
+
+export const FINALIZAR_ERRO_FORM: DialogoFinalizarData = {
+  icone: '/icons/error_84.png',
+  titulo: 'Erro!',
+  mensagem: 'Formulário inválido, verifique!.',
+};
+
+export const FINALIZAR_ERRO_ALT: DialogoFinalizarData = {
+  icone: '/icons/error_84.png',
+  titulo: 'Erro!',
+  mensagem: 'Formulário sem alteração, verifique!.',
+};

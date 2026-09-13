@@ -1,76 +1,84 @@
 <div class="container-dashboard">
-  <header class="container-header">
-    <div class="container-centralized">
-      <img class="logo" src="images/logoOPPA-1.png" alt="logo" />
-    </div>
-    <div class="container-centralized center">
-      <h1>{{ usuario()?.desEmpresa }}</h1>
-    </div>
-    <div class="container-user-logout">
-      <span class="user">
-        <img class="icons" src="icons/account_circle.png" alt="usuario" />
-        <h3>{{ usuario()?.cracha }}</h3>
-      </span>
-      <span class="logout" (click)="logout()">
-        <img class="icons" src="icons/exit_to_app.png" alt="sair" />
-        <h3>Sair</h3>
-      </span>
-    </div>
+  <header>
+    <section class="container-header">
+      <div class="container-centralized">
+        <img class="logo" src="images/logoOPPA-1.png" alt="logo" />
+      </div>
+      <div class="container-centralized center">
+        <h1>{{ usuario()?.desEmpresa }}</h1>
+      </div>
+      <div class="container-user-logout">
+        <span class="user">
+          <img class="icons" src="icons/account_circle.png" alt="usuario" />
+          <h3>{{ usuario()?.cracha }}</h3>
+        </span>
+        <span class="logout" (click)="logout()">
+          <img class="icons" src="icons/exit_to_app.png" alt="sair" />
+          <h3>Sair</h3>
+        </span>
+      </div>
+    </section>
   </header>
-  <aside class="container-aside" [class.sidebar-collapsed]="isSidebarCollapsed()">
-    <nav>
-      <ul>
-        @for (item of menuItens(); track item.rotulo) {
-          @if (!item.children) {
-            <li>
-              <a [routerLink]="['/dashboard-user', item.caminho]" routerLinkActive="active">
-                <img class="icons" [src]="item.icone" [alt]="item.rotulo" />
-                <span class="nav-text" [class.hidden]="isSidebarCollapsed()">{{
-                  item.rotulo
-                }}</span>
-              </a>
-            </li>
-          } @else {
-            <li class="has-submenu" [class.open]="activeSubmenu() === item.chave">
-              <a (click)="toggleSubmenu(item.chave, $event)">
-                <img class="icons" [src]="item.icone" [alt]="item.rotulo" />
-                <span class="nav-text" [class.hidden]="isSidebarCollapsed()">{{
-                  item.rotulo
-                }}</span>
-                <span
-                  class="arrow"
-                  [class.rotated]="activeSubmenu() === item.chave"
-                  [class.hidden]="isSidebarCollapsed()"
-                >
-                  <img src="icons/arrow_drop_down.png" alt="seta para baixo" />
-                </span>
-              </a>
-              <ul class="submenu" [class.open]="activeSubmenu() === item.chave">
-                @for (sub of item.children; track sub.rotulo) {
-                  <li>
-                    <a [routerLink]="['/dashboard-user', sub.caminho]" routerLinkActive="active">
-                      <img class="icons" [src]="sub.icone" alt="sub.rotulo" />
-                      <span class="nav-text">{{ sub.rotulo }}</span>
-                    </a>
-                  </li>
-                }
-              </ul>
-            </li>
+  <aside>
+    <section class="container-aside" [class.sidebar-collapsed]="isSidebarCollapsed()">
+      <nav>
+        <ul>
+          @for (item of menuItens(); track item.rotulo) {
+            @if (!item.children) {
+              <li>
+                <a [routerLink]="['/dashboard-user', item.caminho]" routerLinkActive="active">
+                  <img class="icons" [src]="item.icone" [alt]="item.rotulo" />
+                  <span class="nav-text" [class.hidden]="isSidebarCollapsed()">{{
+                    item.rotulo
+                  }}</span>
+                </a>
+              </li>
+            } @else {
+              <li class="has-submenu" [class.open]="activeSubmenu() === item.chave">
+                <a (click)="toggleSubmenu(item.chave, $event)">
+                  <img class="icons" [src]="item.icone" [alt]="item.rotulo" />
+                  <span class="nav-text" [class.hidden]="isSidebarCollapsed()">{{
+                    item.rotulo
+                  }}</span>
+                  <span
+                    class="arrow"
+                    [class.rotated]="activeSubmenu() === item.chave"
+                    [class.hidden]="isSidebarCollapsed()"
+                  >
+                    <img src="icons/arrow_drop_down.png" alt="seta para baixo" />
+                  </span>
+                </a>
+                <ul class="submenu" [class.open]="activeSubmenu() === item.chave">
+                  @for (sub of item.children; track sub.rotulo) {
+                    <li>
+                      <a [routerLink]="['/dashboard-user', sub.caminho]" routerLinkActive="active">
+                        <img class="icons" [src]="sub.icone" alt="sub.rotulo" />
+                        <span class="nav-text">{{ sub.rotulo }}</span>
+                      </a>
+                    </li>
+                  }
+                </ul>
+              </li>
+            }
           }
-        }
-      </ul>
-    </nav>
-    <!-- HABILITA A REDUÇÃO DO SIDEBAR -->
-    <div class="reduce-sidebar">
-      <span class="redunce" (click)="toggleSidebar()">
-        <img class="icons" src="icons/dock_to_right.png" alt="Reduzir Sidebar" />
-      </span>
-    </div>
+        </ul>
+      </nav>
+      <!-- HABILITA A REDUÇÃO DO SIDEBAR -->
+      <div class="reduce-sidebar">
+        <span class="redunce" (click)="toggleSidebar()">
+          <img class="icons" src="icons/dock_to_right.png" alt="Reduzir Sidebar" />
+        </span>
+      </div>
+    </section>
   </aside>
-  <main class="container-main">
-    <router-outlet></router-outlet>
+  <main>
+    <section class="container-main">
+      <router-outlet></router-outlet>
+    </section>
   </main>
-  <footer class="container-footer">
-    <p class="text-developed">Desenvolvido por DDK</p>
+  <footer>
+    <section class="container-footer">
+      <p class="text-developed">Desenvolvido por DDK</p>
+    </section>
   </footer>
 </div>

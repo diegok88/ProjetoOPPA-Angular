@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, OnInit, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
@@ -8,8 +8,8 @@ import { EmpresaModel } from '../../../../entities/empresa.model';
   selector: 'app-list-empresa',
   imports: [MatTableModule, MatIconModule, MatButtonModule],
   template: `
-    @if (listaPerfil().length) {
-      <table mat-table [dataSource]="listaEmpresa()" class="tabela-lista">
+    @if (listar().length) {
+      <table mat-table [dataSource]="listar()" class="tabela-lista">
         <ng-container matColumnDef="codigo">
           <th mat-header-cell *matHeaderCellDef>Codigo</th>
           <td mat-cell *matCellDef="let element">{{ element?.codigo }}</td>
@@ -45,14 +45,14 @@ import { EmpresaModel } from '../../../../entities/empresa.model';
     }
   `,
 })
-export class ListEmpresa {
+export class ListEmpresa implements OnInit {
   protected displayedColumns: string[] = ['codigo', 'razaoSocial', 'acao'];
 
-  public listarEmpresa = input<EmpresaModel[] | []>([]);
+  public listar = input<EmpresaModel[] | []>([]);
   public abrirRegistro = output<string>();
 
   ngOnInit(): void {
-    this.listarEmpresa();
+    this.listar();
   }
 
   protected onAbrirRegistro(id: string): void {
