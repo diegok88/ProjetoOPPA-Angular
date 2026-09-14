@@ -64,7 +64,7 @@ export function getErrorPerfilMessage(error: ErrorPerfilType): string {
     case 'equalListDescricao':
       return 'O descrição informado já possui registro!';
     case 'invalidCharDescricao':
-      return 'O descrição não aceita letras.';
+      return 'O descrição não aceita números.';
 
     default:
       return '';

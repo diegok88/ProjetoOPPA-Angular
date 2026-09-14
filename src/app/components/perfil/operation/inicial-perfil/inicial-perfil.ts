@@ -1,8 +1,8 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { PerfilService } from '../../../../services/perfil.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
+import { PerfilModel } from '../../../../entities/perfil.model';
 
 @Component({
   selector: 'app-inicial-perfil',
@@ -48,9 +48,7 @@ import { MatIcon } from '@angular/material/icon';
   styles: ``,
 })
 export class InicialPerfil {
-  private perfilService = inject(PerfilService);
-
-  protected readonly listar = this.perfilService.perfil;
+  public listar = input<PerfilModel[] | []>([]);
 
   public abrirCadastro = output();
 

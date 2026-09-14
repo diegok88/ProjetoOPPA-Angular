@@ -1,429 +1,164 @@
-<div class="operacao-dados">
-  <h2 class="operacao-h2">Usuário</h2>
-  <section class="operacao-container">
-    <div class="operacao-lista">
+<div class="container-operation">
+  <section class="container-operation-header">
+    <h2 class="operacao-h2">Usuário</h2>
+  </section>
+  <section class="container-operation-main">
+    <div class="container-operation-list">
       <span>Lista de Usuários</span>
-      <table class="operacao-tabela">
-        <thead>
-          <tr>
-            <th class="operacao-coluna">Crachá</th>
-            <th class="operacao-coluna">Nome</th>
-            <th class="operacao-coluna">Empresa</th>
-            <th class="operacao-coluna">Ação</th>
-          </tr>
-        </thead>
-        <tbody class="operacao-tbody lista">
-          @for (item of listar(); track item.id) {
-            <tr class="operacao-hover">
-              <td class="operacao-dado">{{ item?.cracha }}</td>
-              <td class="operacao-dado">{{ item?.nome }}</td>
-              <td class="operacao-dado">{{ item?.desEmpresa }}</td>
-              <td class="operacao-dado">
-                <img
-                  class="operacao-icone"
-                  src="icons/more_horiz.png"
-                  alt="Ação"
-                  (click)="mudarOperacao('registro', item.id)"
-                />
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
+      <app-list-usuario
+        [listar]="listar()"
+        (abrirRegistro)="mudarOperacao(operationMap.REGISTRO, $event)"
+      ></app-list-usuario>
     </div>
-    <div class="operacao-acao">
+    <div class="container-operation-action">
       @switch (operacaoEstado()) {
         @case ('inicial') {
-          <section class="operacao-inicial">
-            <img class="operacao-img" src="images/id-card.png" alt="Usuario" />
-            <span class="operacao-texto">Cadastrar um novo usuário?</span>
-            <button class="operacao-botao" (click)="mudarOperacao('cadastrar')">Clique aqui</button>
-            <div class="dados-inicial">
-              <span>Total de Usuários: {{ listar().length }}</span>
-              <span>Total de Ativas: {{ counterStatus(true) }}</span>
-              <span>Total de Inativas: {{ counterStatus(false) }}</span>
-            </div>
-          </section>
+          <app-inicial-usuario
+            [listar]="listar()"
+            (abrirCadastro)="mudarOperacao(operationMap.CADASTRAR)"
+          ></app-inicial-usuario>
         }
         @case ('cadastrar') {
-          <section class="operacao-cadastrar">
-            <div class="operacao-titulo">
+          <section class="container-operation-signup">
+            <div class="container-operation-action-header">
               <span>Cadastrar Usuário</span>
-              <img
-                class="operacao-voltar"
-                src="icons/arrow_circle_left.png"
-                alt="Voltar"
-                (click)="mudarOperacao('inicial')"
-              />
-            </div>
-            <form (ngSubmit)="cadastrar($event)" class="operacao-forms">
-              <div class="container-forms">
-                <div class="form-group">
-                  <label for="nome" class="form-label">Nome:</label>
-                  <div class="form-wrapper">
-                    <input
-                      type="text"
-                      id="nome"
-                      name="nome"
-                      placeholder="Insira o nome do usuário"
-                      [ngModel]="getField('nome')"
-                      (ngModelChange)="setField('nome', $event)"
-                      (blur)="onBlur('nome')"
-                      autocomplete="off"
-                    />
-                  </div>
-                  <div class="error-container">
-                    <span class="error-message" [class.show]="nomeEmptyFiedlsError()">
-                      O nome é obrigatório
-                    </span>
-                    <span class="error-message" [class.show]="nomeEqualsFiedlsError()">
-                      A nome igual a cadastrada.
-                    </span>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="dataNascimento" class="form-label">Data de Nascimento:</label>
-                  <div class="form-wrapper">
-                    <input
-                      type="text"
-                      id="dataNascimento"
-                      name="dataNascimento"
-                      appFlatpickr
-                      [config]="flatpickrConfig"
-                      placeholder="Insira a data de nascimento do usuário"
-                      [ngModel]="getField('dataNascimento')"
-                      (ngModelChange)="setField('dataNascimento', $event)"
-                      (blur)="onBlur('dataNascimento')"
-                      autocomplete="off"
-                    />
-                  </div>
-                  <div class="error-container">
-                    <span class="error-message" [class.show]="dataNascimentoEmptyFiedlsError()">
-                      O data de nascimento é obrigatório
-                    </span>
-                    <span class="error-message" [class.show]="dataNascimentoEqualsFiedlsError()">
-                      A data de nascimento igual a cadastrada.
-                    </span>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="dataAdmissao" class="form-label">Data de Admissão:</label>
-                  <div class="form-wrapper">
-                    <input
-                      type="text"
-                      id="dataAdmissao"
-                      name="dataAdmissao"
-                      appFlatpickr
-                      [config]="flatpickrConfig"
-                      placeholder="Insira a data de admissão do usuário"
-                      [ngModel]="getField('dataAdmissao')"
-                      (ngModelChange)="setField('dataAdmissao', $event)"
-                      (blur)="onBlur('dataAdmissao')"
-                      autocomplete="off"
-                    />
-                  </div>
-                  <div class="error-container">
-                    <span class="error-message" [class.show]="dataAdmissaoEmptyFiedlsError()">
-                      O data de admissão é obrigatório
-                    </span>
-                    <span class="error-message" [class.show]="dataAdmissaoEqualsFiedlsError()">
-                      A data de admissão igual a cadastrada.
-                    </span>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="escala" class="form-label">Escala:</label>
-                  <div class="form-wrapper">
-                    <select
-                      name="escala"
-                      id="escala"
-                      [ngModel]="getField('escala')"
-                      (ngModelChange)="setField('escala', $event)"
-                    >
-                      <option value="" disabled>Selecione a escala</option>
-                      @for (item of escalas; track item) {
-                        <option [value]="item">{{ item }}</option>
-                      }
-                    </select>
-                  </div>
-                  <div class="error-container">
-                    <span class="error-message" [class.show]="dataAdmissaoEmptyFiedlsError()">
-                      O data de admissão é obrigatório
-                    </span>
-                    <span class="error-message" [class.show]="dataAdmissaoEqualsFiedlsError()">
-                      A data de admissão igual a cadastrada.
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <button type="submit" class="operacao-botao" [disabled]="isFormValid()">
-                Cadastrar
+              <button mat-icon-button color="accent" (click)="mudarOperacao(operationMap.INICIAL)">
+                <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
               </button>
-            </form>
+            </div>
+            <app-form-usuario
+              [operacaoAtual]="operacaoEstado()"
+              [registroAtual]="registroEstado()"
+              [listar]="listar()"
+              [buscar]="buscar()"
+              (onMudarOperacao)="mudarOperacao(operationMap.INICIAL)"
+            ></app-form-usuario>
           </section>
         }
         @case ('registro') {
-          <section class="operacao-registro">
-            <div class="registro-selecao">
-              <label (click)="mudarRegistro('informacao')">
-                <input
-                  type="radio"
-                  id="valor-1"
-                  name="valor-radio"
-                  value="informacao"
-                  [(ngModel)]="registroEstado"
-                />
-                <span>Informação</span>
-              </label>
-              <label (click)="mudarRegistro('atualizar')">
-                <input
-                  type="radio"
-                  id="valor-2"
-                  name="valor-radio"
-                  value="atualizar"
-                  [(ngModel)]="registroEstado"
-                />
-                <span>Atualizar</span>
-              </label>
-              <label (click)="mudarRegistro('inativar')">
-                <input
-                  type="radio"
-                  id="valor-3"
-                  name="valor-radio"
-                  value="inativar"
-                  [(ngModel)]="registroEstado"
-                />
-                <span>Inativar</span>
-              </label>
-              <label (click)="mudarRegistro('eliminar')">
-                <input
-                  type="radio"
-                  id="valor-4"
-                  name="valor-radio"
-                  value="eliminar"
-                  [(ngModel)]="registroEstado"
-                />
-                <span>Eliminar</span>
-              </label>
-              <label (click)="mudarRegistro('auditoria')">
-                <input
-                  type="radio"
-                  id="valor-5"
-                  name="valor-radio"
-                  value="auditoria"
-                  [(ngModel)]="registroEstado"
-                />
-                <span>Auditoria</span>
-              </label>
-              <span class="selecao"></span>
+          <section class="container-operation-register">
+            <div class="container-operation-register-toggle">
+              <app-toogle
+                [statusEntity]="buscar().status"
+                [onRegistroAtual]="registroEstado()"
+                (onMudarRegistro)="mudarRegistro($event)"
+              ></app-toogle>
             </div>
-            @switch (registroEstado()) {
-              @case ('informacao') {
-                <div class="registro-container">
-                  <div class="operacao-titulo">
-                    <span>Dados do Usuário</span>
-                    <img
-                      class="operacao-voltar"
-                      src="icons/arrow_circle_left.png"
-                      alt="Voltar"
-                      (click)="mudarOperacao('inicial')"
-                    />
-                  </div>
-                  <div class="registro-informacao">
-                    <form class="operacao-forms">
-                      <div class="container-info">
-                        <div class="form-info">
-                          <span class="info-label">Id:</span>
-                          <span class="info-value">{{ buscar()?.id }}</span>
-                        </div>
-                        <div class="form-info">
-                          <span class="info-label">Crachá:</span>
-                          <span class="info-value">{{ buscar()?.cracha }}</span>
-                        </div>
-                        <div class="form-info">
-                          <span class="info-label">Nome:</span>
-                          <span class="info-value">{{ buscar()?.nome }}</span>
-                        </div>
-                        <div class="form-info">
-                          <span class="info-label">Status:</span>
-                          <span class="info-value">{{ buscar()?.status }}</span>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              }
-              @case ('atualizar') {
-                <div class="registro-container">
-                  <div class="operacao-titulo">
-                    <span>Atualizar o Perfil</span>
-                    <img
-                      class="operacao-voltar"
-                      src="icons/arrow_circle_left.png"
-                      alt="Voltar"
-                      (click)="mudarOperacao('inicial')"
-                    />
-                  </div>
-                  <div class="registro-atualizar">
-                    <form (ngSubmit)="atualizar($event)" class="operacao-forms">
-                      <div class="container-info">
-                        <div class="form-info">
-                          <span class="info-label">Id:</span>
-                          <span class="info-value">{{ buscar()?.id }}</span>
-                        </div>
-                        <div class="form-info">
-                          <span class="info-label">Crachá:</span>
-                          <span class="info-value">{{ buscar()?.cracha }}</span>
-                        </div>
-                        <div class="form-info">
-                          <span class="info-label">Nome:</span>
-                          <div class="form-group">
-                            <div class="form-wrapper">
-                              <input
-                                type="text"
-                                id="nome"
-                                name="nome"
-                                placeholder="Insira o nome do usuário?"
-                                [ngModel]="getField('nome')"
-                                (ngModelChange)="setField('nome', $event)"
-                                (blur)="onBlur('nome')"
-                                autocomplete="off"
-                              />
-                            </div>
-                            <div class="error-container">
-                              <span class="error-message" [class.show]="nomeEmptyFiedlsError()">
-                                A nome é obrigatório.
-                              </span>
-                              <span class="error-message" [class.show]="nomeEqualsFiedlsError()">
-                                A nome é igual a cadastrada.
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="form-info">
-                          <span class="info-label">Status:</span>
-                          <span class="info-value">{{ buscar()?.status }}</span>
-                        </div>
-                      </div>
-                      <button type="submit" class="operacao-botao" [disabled]="isFormValid()">
-                        Atualizar
+            <div class="container-operation-separated">
+              @switch (registroEstado()) {
+                @case ('informacao') {
+                  <div class="container-operation-register">
+                    <div class="container-operation-action-header">
+                      <span>Dados do Usuário</span>
+                      <button
+                        mat-icon-button
+                        color="accent"
+                        (click)="mudarOperacao(operationMap.INICIAL)"
+                      >
+                        <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
                       </button>
-                    </form>
+                    </div>
+                    <app-info-usuario [info]="buscar()"></app-info-usuario>
                   </div>
-                </div>
+                }
+                @case ('atualizar') {
+                  <div class="container-operation-register">
+                    <div class="container-operation-action-header">
+                      <span>Atualizar o Usuário</span>
+                      <button
+                        mat-icon-button
+                        color="accent"
+                        (click)="mudarOperacao(operationMap.INICIAL)"
+                      >
+                        <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
+                      </button>
+                    </div>
+                    <app-form-usuario
+                      [operacaoAtual]="operacaoEstado()"
+                      [registroAtual]="registroEstado()"
+                      [listar]="listar()"
+                      [buscar]="buscar()"
+                      (onMudarOperacao)="mudarOperacao($event, buscar().id)"
+                    ></app-form-usuario>
+                  </div>
+                }
+                @case ('ativar') {
+                  <div class="container-operation-register">
+                    <div class="container-operation-action-header">
+                      <span>Inativar o Usuário</span>
+                      <button
+                        mat-icon-button
+                        color="accent"
+                        (click)="mudarOperacao(operationMap.INICIAL)"
+                      >
+                        <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
+                      </button>
+                    </div>
+                    <app-process-usuario
+                      [operacaoAtual]="operacaoEstado()"
+                      [registroAtual]="registroEstado()"
+                      [buscar]="buscar()"
+                      (onMudarOperacao)="mudarOperacao($event, buscar().id)"
+                    ></app-process-usuario>
+                  </div>
+                }
+                @case ('status') {
+                  <div class="container-operation-register">
+                    <div class="container-operation-action-header">
+                      <span>Inativar o Usuário</span>
+                      <button
+                        mat-icon-button
+                        color="accent"
+                        (click)="mudarOperacao(operationMap.INICIAL)"
+                      >
+                        <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
+                      </button>
+                    </div>
+                    <app-process-usuario
+                      [operacaoAtual]="operacaoEstado()"
+                      [registroAtual]="registroEstado()"
+                      [buscar]="buscar()"
+                      (onMudarOperacao)="mudarOperacao($event, buscar().id)"
+                    ></app-process-usuario>
+                  </div>
+                }
+                @case ('eliminar') {
+                  <div class="container-operation-register">
+                    <div class="container-operation-action-header">
+                      <span>Eliminar o Usuário</span>
+                      <button
+                        mat-icon-button
+                        color="accent"
+                        (click)="mudarOperacao(operationMap.INICIAL)"
+                      >
+                        <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
+                      </button>
+                    </div>
+                    <app-process-usuario
+                      [operacaoAtual]="operacaoEstado()"
+                      [registroAtual]="registroEstado()"
+                      [buscar]="buscar()"
+                      (onMudarOperacao)="mudarOperacao($event, buscar().id)"
+                    ></app-process-usuario>
+                  </div>
+                }
+                @case ('auditoria') {
+                  <div class="container-operation-register">
+                    <div class="container-operation-action-header">
+                      <span>Auditoria do Usuário</span>
+                      <button
+                        mat-icon-button
+                        color="accent"
+                        (click)="mudarOperacao(operationMap.INICIAL)"
+                      >
+                        <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
+                      </button>
+                    </div>
+                    <app-audit-usuario [listarAuditoria]="listarAuditoria()"></app-audit-usuario>
+                  </div>
+                }
               }
-              @case ('inativar') {
-                <div class="registro-container">
-                  <div class="operacao-titulo">
-                    <span>Inativar o Usuário</span>
-                    <img
-                      class="operacao-voltar"
-                      src="icons/arrow_circle_left.png"
-                      alt="Voltar"
-                      (click)="mudarOperacao('inicial')"
-                    />
-                  </div>
-                  <div class="registro-inativar">
-                    <form (ngSubmit)="inativar($event)" class="operacao-forms">
-                      <div class="container-imagem">
-                        <img class="image-eliminar" src="images/prohibited.png" alt="Lixeira" />
-                        <span>Deseja inativar a usuário? {{ buscar()?.nome }}?</span>
-                      </div>
-                      <button type="submit" class="operacao-botao">Inativar</button>
-                    </form>
-                  </div>
-                </div>
-              }
-              @case ('eliminar') {
-                <div class="registro-container">
-                  <div class="operacao-titulo">
-                    <span>Eliminar o Usuário</span>
-                    <img
-                      class="operacao-voltar"
-                      src="icons/arrow_circle_left.png"
-                      alt="Voltar"
-                      (click)="mudarOperacao('inicial')"
-                    />
-                  </div>
-                  <div class="registro-eliminar">
-                    <form (ngSubmit)="eliminar($event)" class="operacao-forms">
-                      <div class="container-imagem">
-                        <img class="image-eliminar" src="images/trash.png" alt="Lixeira" />
-                        <span>Deseja eliminar a usuário? {{ buscar()?.nome }}?</span>
-                      </div>
-                      <button type="submit" class="operacao-botao">Eliminar</button>
-                    </form>
-                  </div>
-                </div>
-              }
-              @case ('auditoria') {
-                <div class="registro-container">
-                  <div class="operacao-titulo">
-                    <span>Auditoria do Usuário</span>
-                    <img
-                      class="operacao-voltar"
-                      src="icons/arrow_circle_left.png"
-                      alt="Voltar"
-                      (click)="mudarOperacao('inicial')"
-                    />
-                  </div>
-                  <div class="registro-auditoria">
-                    @if (auditoriaEstado()) {
-                      <table class="operacao-tabela">
-                        <thead>
-                          <tr>
-                            <th class="operacao-coluna">Ação</th>
-                            <th class="operacao-coluna">Dados Registrados</th>
-                            <th class="operacao-coluna">Data/Hora</th>
-                            <th class="operacao-coluna">Registrado Por Id</th>
-                          </tr>
-                        </thead>
-                        <tbody class="operacao-tbody auditoria">
-                          @for (item of listarAuditoria(); track item.id) {
-                            <tr class="operacao-hover">
-                              <td class="operacao-dado">{{ item.acao }}</td>
-                              <td class="operacao-dado">
-                                <span (click)="mudarAuditoria(item)" class="operacao-visualizar"
-                                  >VISUALIZAR</span
-                                >
-                              </td>
-                              <td class="operacao-dado">{{ item.dataHora }}</td>
-                              <td class="operacao-dado">{{ item.registradoPorId }}</td>
-                            </tr>
-                          }
-                        </tbody>
-                      </table>
-                    } @else {
-                      <form class="operacao-forms">
-                        <div class="container-info">
-                          <div class="form-info">
-                            <span class="info-label">Ação:</span>
-                            <span class="info-value">{{ buscarAuditoria()?.acao }}</span>
-                          </div>
-                          <div class="form-info">
-                            <span class="info-label">Dados Registrados:</span>
-                            <span class="info-value-1">{{
-                              buscarAuditoria()?.dadosRegistrados
-                            }}</span>
-                          </div>
-                          <div class="form-info">
-                            <span class="info-label">Data/Hora:</span>
-                            <span class="info-value">{{ buscarAuditoria()?.dataHora }}</span>
-                          </div>
-                          <div class="form-info">
-                            <span class="info-label">Registrado Por Id:</span>
-                            <span class="info-value">{{ buscarAuditoria()?.registradoPorId }}</span>
-                          </div>
-                        </div>
-                        <button type="button" (click)="mudarAuditoria()" class="operacao-botao">
-                          Voltar
-                        </button>
-                      </form>
-                    }
-                  </div>
-                </div>
-              }
-            }
+            </div>
           </section>
         }
       }

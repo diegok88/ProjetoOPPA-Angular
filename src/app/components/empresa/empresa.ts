@@ -64,18 +64,20 @@ export class Empresa implements OnInit {
   /* ROTAS DE OPERAÇÃO */
   protected operationMap = OperationMap;
 
+  /* CICLO DE VIDA PARA INICIALIZAR A LISTA */
   ngOnInit(): void {
     this.carregar().subscribe();
   }
-
+  /* FUNÇÃO DE CARREGAMENTO DE LISTA */
   protected carregar() {
     return this.empresaService.listar();
   }
 
+  /* FUNÇÃO DE CARREGAMENTO DE LISTA DE AUDITORIA */
   protected carregarAuditoria(field: string, query: string) {
     return this.auditoriaService.listar(field, query);
   }
-
+  /* FUNÇÃO DE MUDANÇA DE OPERAÇÃO */
   protected mudarOperacao(operacao: OperationType, item?: string): void {
     if (!operacao) this.operacaoEstado.set(OperationMap.INICIAL);
     if (operacao === OperationMap.REGISTRO) {
@@ -91,6 +93,7 @@ export class Empresa implements OnInit {
     this.operacaoEstado.set(operacao);
   }
 
+  /* FUNÇÃO DE MUDANÇA DE REGISTRO */
   protected mudarRegistro(registro: RecordType): void {
     if (registro === RecordMap.ATUALIZAR) {
       this.resetForm();
@@ -100,6 +103,7 @@ export class Empresa implements OnInit {
     this.registroEstado.set(registro);
   }
 
+  /* FUNÇÃO DE MUDANÇA DE AUDITORIA */
   protected mudarAuditoria(dados?: AuditoriaData): void {
     if (this.auditoriaEstado() && dados) {
       this.auditoriaEstado.update((atual) => (atual = !atual));
@@ -110,6 +114,7 @@ export class Empresa implements OnInit {
     }
   }
 
+  /* FUNÇÃO DE CARREGAMENTO DE INFORMAÇÕES PARA AUDITORIA E REGISTRO */
   private carregarRegistro(id: string): void {
     this.carregar().subscribe({
       next: () => {
@@ -124,6 +129,7 @@ export class Empresa implements OnInit {
     });
   }
 
+  /* FUNÇÃO DE INICIALIZAÇÃO DO FORMULARIO */
   private resetForm(): void {
     this.empresaModel.set({ ...INICIALIZAR_EMPRESA_FORMS });
   }

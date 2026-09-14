@@ -1,8 +1,8 @@
-import { Component, inject, output } from '@angular/core';
-import { EmpresaService } from '../../../../services/empresa.service';
+import { Component, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
+import { EmpresaModel } from '../../../../entities/empresa.model';
 
 @Component({
   selector: 'app-inicial-empresa',
@@ -48,9 +48,7 @@ import { MatIcon } from '@angular/material/icon';
   styles: ``,
 })
 export class InicialEmpresa {
-  private empresaService = inject(EmpresaService);
-
-  protected readonly listar = this.empresaService.empresa;
+  public listar = input<EmpresaModel[] | []>([]);
 
   public abrirCadastro = output();
 

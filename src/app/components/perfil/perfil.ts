@@ -66,18 +66,22 @@ export class Perfil implements OnInit {
   /* ROTAS DE OPERAÇÃO */
   protected operationMap = OperationMap;
 
+  /* CICLO DE VIDA PARA INICIALIZAR A LISTA */
   ngOnInit(): void {
     this.carregar().subscribe();
   }
 
+  /* FUNÇÃO DE CARREGAMENTO DE LISTA */
   protected carregar() {
     return this.perfilService.listar();
   }
 
+  /* FUNÇÃO DE CARREGAMENTO DE LISTA DE AUDITORIA */
   protected carregarAuditoria(field: string, query: string) {
     return this.auditoriaService.listar(field, query);
   }
 
+  /* FUNÇÃO DE MUDANÇA DE OPERAÇÃO */
   protected mudarOperacao(operacao: OperationType, item?: string): void {
     if (!operacao) this.operacaoEstado.set(OperationMap.INICIAL);
     if (operacao === OperationMap.REGISTRO) {
@@ -93,6 +97,7 @@ export class Perfil implements OnInit {
     this.operacaoEstado.set(operacao);
   }
 
+  /* FUNÇÃO DE MUDANÇA DE REGISTRO */
   protected mudarRegistro(registro: RecordType): void {
     if (registro === RecordMap.ATUALIZAR) {
       this.resetForm();
@@ -103,6 +108,7 @@ export class Perfil implements OnInit {
     this.registroEstado.set(registro);
   }
 
+  /* FUNÇÃO DE MUDANÇA DE AUDITORIA */
   protected mudarAuditoria(dados?: AuditoriaData): void {
     if (this.auditoriaEstado() && dados) {
       this.auditoriaEstado.update((atual) => (atual = !atual));
@@ -113,6 +119,7 @@ export class Perfil implements OnInit {
     }
   }
 
+  /* FUNÇÃO DE CARREGAMENTO DE INFORMAÇÕES PARA AUDITORIA E REGISTRO */
   private carregarRegistro(id: string): void {
     this.carregar().subscribe({
       next: () => {
@@ -122,12 +129,13 @@ export class Perfil implements OnInit {
           this.carregarAuditoria(field, id).subscribe();
           console.log(this.listarAuditoria());
           this.buscar.set(dado);
-          this.perfilModel.set({ descricao: dado.descricao });
+          this.perfilModel.set(this.buscar());
         }
       },
     });
   }
 
+  /* FUNÇÃO DE INICIALIZAÇÃO DO FORMULARIO */
   private resetForm(): void {
     this.perfilModel.set({ ...INICIALIZAR_PERFIL_FORMS });
   }

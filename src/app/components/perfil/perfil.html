@@ -21,12 +21,9 @@
           <section class="container-operation-signup">
             <div class="container-operation-action-header">
               <span>Cadastrar Perfil</span>
-              <img
-                class="operacao-voltar"
-                src="icons/arrow_circle_left.png"
-                alt="Voltar"
-                (click)="mudarOperacao(operationMap.INICIAL)"
-              />
+              <button mat-icon-button color="accent" (click)="mudarOperacao(operationMap.INICIAL)">
+                <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
+              </button>
             </div>
             <app-form-perfil
               [operacaoAtual]="operacaoEstado()"
@@ -52,12 +49,13 @@
                   <div class="container-operation-register">
                     <div class="container-operation-action-header">
                       <span>Dados do Perfil</span>
-                      <img
-                        class="operacao-voltar"
-                        src="icons/arrow_circle_left.png"
-                        alt="Voltar"
+                      <button
+                        mat-icon-button
+                        color="accent"
                         (click)="mudarOperacao(operationMap.INICIAL)"
-                      />
+                      >
+                        <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
+                      </button>
                     </div>
                     <app-info-perfil [info]="buscar()"></app-info-perfil>
                   </div>
@@ -66,12 +64,13 @@
                   <div class="container-operation-register">
                     <div class="container-operation-action-header">
                       <span>Atualizar o Perfil</span>
-                      <img
-                        class="operacao-voltar"
-                        src="icons/arrow_circle_left.png"
-                        alt="Voltar"
+                      <button
+                        mat-icon-button
+                        color="accent"
                         (click)="mudarOperacao(operationMap.INICIAL)"
-                      />
+                      >
+                        <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
+                      </button>
                     </div>
                     <app-form-perfil
                       [operacaoAtual]="operacaoEstado()"
@@ -86,12 +85,13 @@
                   <div class="container-operation-register">
                     <div class="container-operation-action-header">
                       <span>Inativar o Perfil</span>
-                      <img
-                        class="operacao-voltar"
-                        src="icons/arrow_circle_left.png"
-                        alt="Voltar"
+                      <button
+                        mat-icon-button
+                        color="accent"
                         (click)="mudarOperacao(operationMap.INICIAL)"
-                      />
+                      >
+                        <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
+                      </button>
                     </div>
                     <app-process-perfil
                       [operacaoAtual]="operacaoEstado()"
@@ -105,12 +105,13 @@
                   <div class="container-operation-register">
                     <div class="container-operation-action-header">
                       <span>Inativar o Perfil</span>
-                      <img
-                        class="operacao-voltar"
-                        src="icons/arrow_circle_left.png"
-                        alt="Voltar"
+                      <button
+                        mat-icon-button
+                        color="accent"
                         (click)="mudarOperacao(operationMap.INICIAL)"
-                      />
+                      >
+                        <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
+                      </button>
                     </div>
                     <app-process-perfil
                       [operacaoAtual]="operacaoEstado()"
@@ -124,12 +125,13 @@
                   <div class="container-operation-register">
                     <div class="container-operation-action-header">
                       <span>Eliminar o Perfil</span>
-                      <img
-                        class="operacao-voltar"
-                        src="icons/arrow_circle_left.png"
-                        alt="Voltar"
+                      <button
+                        mat-icon-button
+                        color="accent"
                         (click)="mudarOperacao(operationMap.INICIAL)"
-                      />
+                      >
+                        <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
+                      </button>
                     </div>
                     <app-process-perfil
                       [operacaoAtual]="operacaoEstado()"
@@ -143,12 +145,13 @@
                   <div class="container-operation-register">
                     <div class="container-operation-action-header">
                       <span>Auditoria do Perfil</span>
-                      <img
-                        class="operacao-voltar"
-                        src="icons/arrow_circle_left.png"
-                        alt="Voltar"
+                      <button
+                        mat-icon-button
+                        color="accent"
                         (click)="mudarOperacao(operationMap.INICIAL)"
-                      />
+                      >
+                        <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
+                      </button>
                     </div>
                     <app-audit-perfil [listarAuditoria]="listarAuditoria()"></app-audit-perfil>
                   </div>
