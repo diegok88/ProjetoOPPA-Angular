@@ -24,3 +24,28 @@ mat-card.initial-active {
 mat-card.initial-deactive {
   border-color: var(--color-negative);
 }
+
+div.container-card-icon {
+  width: 51px;
+  height: 51px;
+  order: -1;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+  border-radius: 50%;
+  padding: 10px;
+
+  &.totals {
+    background-color: var(--color-alert);
+  }
+
+  &.active {
+    background-color: var(--color-positive);
+  }
+
+  &.deactive {
+    background-color: var(--color-negative);
+  }
+}

@@ -43,6 +43,8 @@ import {
 import {
   FINALIZAR_CANCELAR,
   FINALIZAR_ERRO,
+  FINALIZAR_ERRO_ALT,
+  FINALIZAR_ERRO_FORM,
   FINALIZAR_SUCESSO,
 } from '../../../../entities/dialogo-finalizar.model';
 import { NgxMaskDirective } from 'ngx-mask';
@@ -663,12 +665,20 @@ export class FormEmpresa implements OnInit {
     }
 
     if (!this.isFormValid() && !this.isAtualizar()) {
-      alert('Formulário inválido - não enviar ');
+      this.finalizarService.finalizar({
+        ...FINALIZAR_ERRO_FORM,
+        operacao: 'Cadastro do empresa',
+        dados: this.empresaModel().razaoSocial.toLocaleUpperCase(),
+      });
       return;
     }
 
     if (!this.touchedSubmitted()) {
-      alert('Formulário sem alteração - não enviar ');
+      this.finalizarService.finalizar({
+        ...FINALIZAR_ERRO_ALT,
+        operacao: 'Atualização do empresa',
+        dados: this.empresaModel().razaoSocial.toLocaleUpperCase(),
+      });
       return;
     }
 

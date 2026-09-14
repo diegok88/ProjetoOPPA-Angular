@@ -20,6 +20,7 @@ import {
 import {
   FINALIZAR_CANCELAR,
   FINALIZAR_ERRO,
+  FINALIZAR_ERRO_ACT,
   FINALIZAR_SUCESSO,
 } from '../../../../entities/dialogo-finalizar.model';
 import { DataProcessEmpresa } from '../../../../constants/data-process.const';
@@ -85,6 +86,18 @@ export class ProcessEmpresa implements OnInit {
   protected executar(event: Event): void {
     event.preventDefault();
 
+    const processo = this.tipoProcesso() === RecordMap.ELIMINAR;
+    const ativado = this.buscar().status === true;
+
+    if (processo && ativado) {
+      this.finalizarService.finalizar({
+        ...FINALIZAR_ERRO_ACT,
+        operacao: 'Eliminação do empresa',
+        dados: this.buscar().razaoSocial.toLocaleUpperCase(),
+      });
+      return;
+    }
+
     const id = this.buscar()!.id;
 
     if (this.tipoProcesso() === RecordMap.ATIVAR) {
@@ -122,7 +135,6 @@ export class ProcessEmpresa implements OnInit {
     }
 
     if (this.tipoProcesso() === RecordMap.INATIVAR) {
-      console.log('INATIVAR');
       this.confirmarService
         .confirmar({
           ...CONFIRMAR_INATIVAR,
@@ -157,7 +169,6 @@ export class ProcessEmpresa implements OnInit {
     }
 
     if (this.tipoProcesso() === RecordMap.ELIMINAR) {
-      console.log('ELIMINAR');
       this.confirmarService
         .confirmar({
           ...CONFIRMAR_ELIMINAR,

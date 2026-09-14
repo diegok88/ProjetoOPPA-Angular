@@ -7,7 +7,7 @@
       outlined-outline-width: 2px,
       title-text-font: var(--font-primary),
       title-text-tracking: 1px,
-      title-text-size: 22px,
+      title-text-size: 16px,
       title-text-weight: 600,
       subtitle-text-font: var(--font-primary),
       subtitle-text-size: 18px,
@@ -19,7 +19,11 @@
 
 .mat-mdc-card-outlined {
   width: 250px;
-  padding: 15px !important;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px !important;
 }
 
 .mat-mdc-card-header {
@@ -33,5 +37,5 @@
 }
 
 .mat-mdc-card-title {
-  margin-bottom: 10px !important;
+  margin-bottom: 15px !important;
 }

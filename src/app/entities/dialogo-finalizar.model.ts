@@ -36,3 +36,9 @@ export const FINALIZAR_ERRO_ALT: DialogoFinalizarData = {
   titulo: 'Erro!',
   mensagem: 'Formulário sem alteração, verifique!.',
 };
+
+export const FINALIZAR_ERRO_ACT: DialogoFinalizarData = {
+  icone: '/icons/error_84.png',
+  titulo: 'Erro!',
+  mensagem: 'Registro está ativo, verifique!.',
+};

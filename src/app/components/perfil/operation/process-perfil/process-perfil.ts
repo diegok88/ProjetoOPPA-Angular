@@ -21,6 +21,7 @@ import {
 import {
   FINALIZAR_CANCELAR,
   FINALIZAR_ERRO,
+  FINALIZAR_ERRO_ACT,
   FINALIZAR_SUCESSO,
 } from '../../../../entities/dialogo-finalizar.model';
 
@@ -31,7 +32,7 @@ import {
     <form (ngSubmit)="executar($event)" class="container-operation-process">
       <section class="container-operation-process-group">
         <img class="operation-process-image" [src]="listaProcessoSignal()?.imagem" alt="Imagem" />
-        <span>{{ listaProcessoSignal()?.mensagem }} {{ buscarPerfil().descricao }}?</span>
+        <span>{{ listaProcessoSignal()?.mensagem }} {{ buscar().descricao }}?</span>
       </section>
       <section class="container-operation-process-group">
         <button matButton="outlined" type="submit">
@@ -59,15 +60,15 @@ export class ProcessPerfil implements OnInit {
   /* ENTRADA E SAIDA DE DADOS DO COMPONENTE */
   public operacaoAtual = input<OperationType | undefined>();
   public registroAtual = input<RecordType | undefined>();
-  public buscarPerfil = input<PerfilModel>({ ...INICIALIZAR_PERFIL_ENTITY });
+  public buscar = input<PerfilModel>({ ...INICIALIZAR_PERFIL_ENTITY });
   public onMudarOperacao = output<OperationType>();
 
   /* INICIALIZAR O PROCESSO */
   ngOnInit(): void {
-    if (this.buscarPerfil()?.status && this.registroAtual() === RecordMap.STATUS) {
+    if (this.buscar()?.status && this.registroAtual() === RecordMap.STATUS) {
       this.carregarRegistro(RecordMap.INATIVAR);
       this.tipoProcesso.set(RecordMap.INATIVAR);
-    } else if (!this.buscarPerfil()?.status && this.registroAtual() === RecordMap.STATUS) {
+    } else if (!this.buscar()?.status && this.registroAtual() === RecordMap.STATUS) {
       this.carregarRegistro(RecordMap.ATIVAR);
       this.tipoProcesso.set(RecordMap.ATIVAR);
     } else {
@@ -85,14 +86,26 @@ export class ProcessPerfil implements OnInit {
   protected executar(event: Event): void {
     event.preventDefault();
 
-    const id = this.buscarPerfil()!.id;
+    const processo = this.tipoProcesso() === RecordMap.ELIMINAR;
+    const ativado = this.buscar().status === true;
+
+    if (processo && ativado) {
+      this.finalizarService.finalizar({
+        ...FINALIZAR_ERRO_ACT,
+        operacao: 'Eliminação do empresa',
+        dados: this.buscar().descricao.toLocaleUpperCase(),
+      });
+      return;
+    }
+
+    const id = this.buscar()!.id;
 
     if (this.tipoProcesso() === RecordMap.ATIVAR) {
       this.confirmarService
         .confirmar({
           ...CONFIRMAR_ATIVAR,
           entidade: 'perfil',
-          dados: this.buscarPerfil()?.descricao.toUpperCase(),
+          dados: this.buscar()?.descricao.toUpperCase(),
           acao: () => this.perfilService.ativar(id!),
         })
         .subscribe((confirmado) => {
@@ -102,20 +115,20 @@ export class ProcessPerfil implements OnInit {
             this.finalizarService.finalizar({
               ...FINALIZAR_SUCESSO,
               operacao: 'Ativação do perfil',
-              dados: this.buscarPerfil()!.descricao,
+              dados: this.buscar()!.descricao,
             });
           } else if (confirmado === 'erro') {
             this.finalizarService.finalizar({
               ...FINALIZAR_ERRO,
               operacao: 'Ativação do perfil',
-              dados: this.buscarPerfil()!.descricao.toLocaleUpperCase(),
+              dados: this.buscar()!.descricao.toLocaleUpperCase(),
               erros: this.finalizarService.ultimosErros(),
             });
           } else {
             this.finalizarService.finalizar({
               ...FINALIZAR_CANCELAR,
               operacao: 'Ativação do perfil',
-              dados: this.buscarPerfil()!.descricao.toLocaleUpperCase(),
+              dados: this.buscar()!.descricao.toLocaleUpperCase(),
             });
           }
         });
@@ -127,7 +140,7 @@ export class ProcessPerfil implements OnInit {
         .confirmar({
           ...CONFIRMAR_INATIVAR,
           entidade: 'perfil',
-          dados: this.buscarPerfil()?.descricao.toUpperCase(),
+          dados: this.buscar()?.descricao.toUpperCase(),
           acao: () => this.perfilService.inativar(id!),
         })
         .subscribe((confirmado) => {
@@ -137,20 +150,20 @@ export class ProcessPerfil implements OnInit {
             this.finalizarService.finalizar({
               ...FINALIZAR_SUCESSO,
               operacao: 'Inativação do perfil',
-              dados: this.buscarPerfil()!.descricao,
+              dados: this.buscar()!.descricao,
             });
           } else if (confirmado === 'erro') {
             this.finalizarService.finalizar({
               ...FINALIZAR_ERRO,
               operacao: 'Inativação do perfil',
-              dados: this.buscarPerfil()!.descricao.toLocaleUpperCase(),
+              dados: this.buscar()!.descricao.toLocaleUpperCase(),
               erros: this.finalizarService.ultimosErros(),
             });
           } else {
             this.finalizarService.finalizar({
               ...FINALIZAR_CANCELAR,
               operacao: 'Inativação do perfil',
-              dados: this.buscarPerfil()!.descricao.toLocaleUpperCase(),
+              dados: this.buscar()!.descricao.toLocaleUpperCase(),
             });
           }
         });
@@ -162,7 +175,7 @@ export class ProcessPerfil implements OnInit {
         .confirmar({
           ...CONFIRMAR_ELIMINAR,
           entidade: 'perfil',
-          dados: this.buscarPerfil()!.descricao.toUpperCase(),
+          dados: this.buscar()!.descricao.toUpperCase(),
           acao: () => this.perfilService.deletar(id!),
         })
         .subscribe((confirmado) => {
@@ -172,20 +185,20 @@ export class ProcessPerfil implements OnInit {
             this.finalizarService.finalizar({
               ...FINALIZAR_SUCESSO,
               operacao: 'Eliminação do perfil',
-              dados: this.buscarPerfil()!.descricao,
+              dados: this.buscar()!.descricao,
             });
           } else if (confirmado === 'erro') {
             this.finalizarService.finalizar({
               ...FINALIZAR_ERRO,
               operacao: 'Eliminação do perfil',
-              dados: this.buscarPerfil()!.descricao.toLocaleUpperCase(),
+              dados: this.buscar()!.descricao.toLocaleUpperCase(),
               erros: this.finalizarService.ultimosErros(),
             });
           } else {
             this.finalizarService.finalizar({
               ...FINALIZAR_CANCELAR,
               operacao: 'Eliminação do perfil',
-              dados: this.buscarPerfil()!.descricao.toLocaleUpperCase(),
+              dados: this.buscar()!.descricao.toLocaleUpperCase(),
             });
           }
         });
