@@ -1,0 +1,226 @@
+<form class="container-operation-forms" (ngSubmit)="executar($event)">
+  <div class="container-operation-forms-separated">
+    <section class="container-operation-forms-group">
+      @if (isAtualizar()) {
+        <div class="container-operation-forms-update">
+          <mat-list>
+            <mat-list-item>
+              <span matListItemTitle>
+                <p class="list-label">Id:</p>
+                <p class="list-data">{{ buscar().id }}</p>
+              </span>
+            </mat-list-item>
+          </mat-list>
+        </div>
+      }
+
+      <!-- INPUT DE PADRÃO -->
+      <mat-form-field appearance="outline">
+        <mat-label>Nome</mat-label>
+        <input
+          matInput
+          type="text"
+          id="nome"
+          name="nome"
+          placeholder="Insira o nome do usuário"
+          [ngModel]="getField('nome')"
+          (ngModelChange)="setField('nome', $event)"
+          mask="S******************************************************************"
+          (keypress)="aoPressionarTecla($event, 'nome')"
+          (blur)="onBlur('nome')"
+          autocomplete="off"
+        />
+        @if (getField('nome')) {
+          <!-- PARA O BOTÃO NÃO SER SUBMETIDO IGUAL A DO CADASTRAR O MESMO DEVE SER TIPADO - type="button" -->
+          <button
+            matSuffix
+            matIconButton
+            type="button"
+            aria-label="Clear"
+            (click)="clearField('nome')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+        <mat-hint>
+          @if (obterErro('nome')) {
+            <span class="error-message" [class.show]="!!obterErro('nome')">{{
+              obterErro('nome')
+            }}</span>
+          }
+        </mat-hint>
+      </mat-form-field>
+
+      <!-- INPUT DE CALENDARIO -->
+      <mat-form-field appearance="outline">
+        <mat-label>Data de nascimento</mat-label>
+        <input
+          matInput
+          id="dataNascimento"
+          name="dataNascimento"
+          [matDatepicker]="pickerNascimento"
+          placeholder="Digite ou selecione a data da nascimento"
+          [ngModel]="getField('dataNascimento')"
+          (ngModelChange)="setField('dataNascimento', $event)"
+          (input)="filtrarDataInput($event, 'dataNascimento')"
+          (blur)="onBlur('dataNascimento')"
+          autocomplete="off"
+        />
+        <mat-hint>
+          @if (obterErro('dataNascimento')) {
+            <span class="error-message" [class.show]="!!obterErro('dataNascimento')">{{
+              obterErro('dataNascimento')
+            }}</span>
+          }
+        </mat-hint>
+        <!-- BOTÃO LIMPAR (só aparece com valor) -->
+        @if (getField('dataNascimento')) {
+          <button
+            matSuffix
+            matIconButton
+            type="button"
+            aria-label="Clear"
+            (click)="clearField('dataNascimento')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+        <mat-datepicker-toggle matIconSuffix [for]="pickerNascimento"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #pickerNascimento></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Data de admissão</mat-label>
+        <input
+          matInput
+          id="dataAdmissao"
+          name="dataAdmissao"
+          [matDatepicker]="pickerAdmissao"
+          placeholder="Digite ou selecione a data da admissão"
+          [ngModel]="getField('dataAdmissao')"
+          (ngModelChange)="setField('dataAdmissao', $event)"
+          (input)="filtrarDataInput($event, 'dataAdmissao')"
+          (blur)="onBlur('dataAdmissao')"
+          autocomplete="off"
+        />
+        <mat-hint>
+          @if (obterErro('dataAdmissao')) {
+            <span class="error-message" [class.show]="!!obterErro('dataAdmissao')">{{
+              obterErro('dataAdmissao')
+            }}</span>
+          }
+        </mat-hint>
+        <!-- BOTÃO LIMPAR (só aparece com valor) -->
+        @if (getField('dataAdmissao')) {
+          <button
+            matSuffix
+            matIconButton
+            type="button"
+            aria-label="Clear"
+            (click)="clearField('dataAdmissao')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+        <mat-datepicker-toggle matIconSuffix [for]="pickerAdmissao"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #pickerAdmissao></mat-datepicker>
+      </mat-form-field>
+
+      <!-- SELECT DO PERFIL, EMPRESA, ESCALA E TURNO -->
+      <mat-form-field appearance="outline">
+        <mat-label>Escala</mat-label>
+        <mat-select
+          name="escala"
+          placeholder="Selecione a escala"
+          [ngModel]="getField('escala')"
+          (ngModelChange)="setField('escala', $event)"
+          (openedChange)="!$event && onBlur('escala')"
+        >
+          @for (opcao of escalasOptions; track opcao.value) {
+            <mat-option [value]="opcao.value">{{ opcao.viewValue }}</mat-option>
+          }
+        </mat-select>
+        <mat-hint>
+          @if (obterErro('escala')) {
+            <span class="error-message" [class.show]="!!obterErro('escala')">{{
+              obterErro('escala')
+            }}</span>
+          }
+        </mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Turno</mat-label>
+        <mat-select
+          name="turno"
+          placeholder="Selecione o turno"
+          [ngModel]="getField('turno')"
+          (ngModelChange)="setField('turno', $event)"
+          (openedChange)="!$event && onBlur('turno')"
+        >
+          @for (opcao of turnosOptions; track opcao.value) {
+            <mat-option [value]="opcao.value">{{ opcao.viewValue }}</mat-option>
+          }
+        </mat-select>
+        <mat-hint>
+          @if (obterErro('turno')) {
+            <span class="error-message" [class.show]="!!obterErro('turno')">{{
+              obterErro('turno')
+            }}</span>
+          }
+        </mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Empresa</mat-label>
+        <mat-select
+          name="empresaId"
+          placeholder="Selecione a empresa"
+          [ngModel]="getField('empresaId')"
+          (ngModelChange)="setField('empresaId', $event)"
+          (openedChange)="!$event && onBlur('empresaId')"
+        >
+          @for (opcao of empresaOptions(); track opcao.value) {
+            <mat-option [value]="opcao.value">{{ opcao.viewValue }}</mat-option>
+          }
+        </mat-select>
+        <mat-hint>
+          @if (obterErro('empresaId')) {
+            <span class="error-message" [class.show]="!!obterErro('empresaId')">{{
+              obterErro('empresaId')
+            }}</span>
+          }
+        </mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Perfil</mat-label>
+        <mat-select
+          name="perfilId"
+          placeholder="Selecione o perfil"
+          [ngModel]="getField('perfilId')"
+          (ngModelChange)="setField('perfilId', $event)"
+          (openedChange)="!$event && onBlur('perfilId')"
+        >
+          @for (opcao of perfilOptions(); track opcao.value) {
+            <mat-option [value]="opcao.value">{{ opcao.viewValue }}</mat-option>
+          }
+        </mat-select>
+        <mat-hint>
+          @if (obterErro('perfilId')) {
+            <span class="error-message" [class.show]="!!obterErro('perfilId')">{{
+              obterErro('perfilId')
+            }}</span>
+          }
+        </mat-hint>
+      </mat-form-field>
+    </section>
+    <section class="container-operation-forms-button">
+      @if (isAtualizar()) {
+        <button matButton="outlined" type="submit" [disabled]="!isFormValid()">Atualizar</button>
+      } @else {
+        <button matButton="outlined" type="submit" [disabled]="!isFormValid()">Cadastrar</button>
+      }
+    </section>
+  </div>
+</form>

@@ -31,6 +31,8 @@ import {
   getErrorPerfilMessage,
   INICIALIZAR_PERFIL_ENTITY,
   INICIALIZAR_PERFIL_FORMS,
+  Niveis,
+  NivelType,
   PerfilForm,
   PerfilModel,
   PerfilType,
@@ -47,6 +49,8 @@ import {
   CONFIRMAR_CADASTRAR,
 } from '../../../../entities/dialogo-confirmar.model';
 import { FormatarCampos } from '../../../../constants/capitalize-first.const';
+import { MatSelectModule } from '@angular/material/select';
+import { CamposSetores } from '../../../../entities/setores.model';
 
 @Component({
   selector: 'app-form-perfil',
@@ -57,73 +61,9 @@ import { FormatarCampos } from '../../../../constants/capitalize-first.const';
     MatButtonModule,
     MatIconModule,
     MatListModule,
+    MatSelectModule,
   ],
-  template: `
-    <form class="container-operation-forms" (ngSubmit)="executar($event)">
-      <div class="container-operation-forms-separated">
-        <section class="container-operation-forms-group">
-          @if (isAtualizar()) {
-            <div class="container-operation-forms-update">
-              <mat-list>
-                <mat-list-item>
-                  <span matListItemTitle>
-                    <p class="list-label">Id:</p>
-                    <p class="list-data">{{ buscar().id }}</p>
-                  </span>
-                </mat-list-item>
-              </mat-list>
-            </div>
-          }
-          <mat-form-field appearance="outline">
-            <mat-label>Descrição</mat-label>
-            <input
-              matInput
-              type="text"
-              id="descricao"
-              name="descricao"
-              placeholder="Insira a descrição do perfil"
-              [ngModel]="getField('descricao')"
-              (ngModelChange)="setField('descricao', $event)"
-              mask="A******************************************************************"
-              (keypress)="aoPressionarTecla($event, 'descricao')"
-              (blur)="onBlur('descricao')"
-              autocomplete="off"
-            />
-            @if (getField('descricao')) {
-              <!-- PARA O BOTÃO NÃO SER SUBMETIDO IGUAL A DO CADASTRAR O MESMO DEVE SER TIPADO - type="button" -->
-              <button
-                matSuffix
-                matIconButton
-                type="button"
-                aria-label="Clear"
-                (click)="clearField('descricao')"
-              >
-                <mat-icon>close</mat-icon>
-              </button>
-            }
-            <mat-hint>
-              @if (obterErro('descricao')) {
-                <span class="error-message" [class.show]="!!obterErro('descricao')">{{
-                  obterErro('descricao')
-                }}</span>
-              }
-            </mat-hint>
-          </mat-form-field>
-        </section>
-        <section class="container-operation-forms-button">
-          @if (isAtualizar()) {
-            <button matButton="outlined" type="submit" [disabled]="!isFormValid()">
-              Atualizar
-            </button>
-          } @else {
-            <button matButton="outlined" type="submit" [disabled]="!isFormValid()">
-              Cadastrar
-            </button>
-          }
-        </section>
-      </div>
-    </form>
-  `,
+  templateUrl: '/form-perfil.html',
   styles: ``,
 })
 export class FormPerfil implements OnInit {
@@ -141,11 +81,17 @@ export class FormPerfil implements OnInit {
   public operacaoAtual = input<OperationType>();
   public registroAtual = input<RecordType>();
   public listar = input<PerfilModel[] | []>([]);
-  public buscar = input<PerfilModel>({ ...INICIALIZAR_PERFIL_ENTITY });
+  public buscar = input<PerfilModel>(INICIALIZAR_PERFIL_ENTITY());
   public onMudarOperacao = output<OperationType>();
 
   /* MODELO DE ENTRADA DE DADOS */
-  protected perfilModel = signal<PerfilForm>({ ...INICIALIZAR_PERFIL_FORMS });
+  protected perfilModel = signal<PerfilForm>(INICIALIZAR_PERFIL_FORMS());
+
+  /* LISTA DE OPÇÕES DO SELECT - DERIVADA DAS CONSTANTES NO ARQUIVO model.ts */
+  protected niveisOptions = Object.entries(Niveis).map(([chave, valor]) => ({
+    value: valor as NivelType,
+    viewValue: chave === '' ? '' : `${valor}`,
+  }));
 
   /* VALIDAÇÕES DO MODELO */
   protected isAtualizar = signal<boolean>(false);
@@ -174,12 +120,19 @@ export class FormPerfil implements OnInit {
 
   /* SIGNAL UNICO COM TODOS OS ERROS */
   protected erros = computed<Record<string, ErrorPerfilType>>(() => {
+    const normalize = (v: unknown) => (v ?? '').toString().trim().toUpperCase();
+
     return CamposPerfil.reduce(
       (acc, campo) => {
         const invalidChar = this.invalidCharFields()[campo as string] ?? false;
         const touched = this.fieldTouched()[campo as string] ?? false;
         const submitted = this.formSubmitted();
-        const recordEqual = this.listar().some((item) => item[campo] === this.perfilModel()[campo]);
+        const recordEqual = this.listar().some(
+          (item) =>
+            item !== this.buscar() &&
+            normalize(item['descricao']) === normalize(this.perfilModel()['descricao']) &&
+            normalize(item['nivel']) === normalize(this.perfilModel()['nivel']),
+        );
 
         let erro: ErrorPerfilType = null;
 
@@ -207,6 +160,7 @@ export class FormPerfil implements OnInit {
 
   /* SIGNALS INDIVIDUAIS PARA CADA CAMPO */
   protected descricaoError = computed(() => this.erros()['descricao']);
+  protected nivelError = computed(() => this.erros()['nivel']);
 
   /* FUNÇÃO QUE RETORNA O ERRO DE ACORDO COM OS ESPECIFICADOS NO MODEL */
   protected obterErro(campo: PerfilType): string {
@@ -272,7 +226,7 @@ export class FormPerfil implements OnInit {
 
   /* FUNÇÃO DE CARREGAMENTO A CADA SERVIÇO CONCLUIDO */
   protected carregar() {
-    return this.perfilService.listar();
+    return this.perfilService.listarTabela();
   }
 
   /* FUNÇÃO DE CADASTRO E ATUALIZAR */
@@ -393,7 +347,7 @@ export class FormPerfil implements OnInit {
 
   /* FUNÇÃO PARA RESETAR TODO O COMPONENTE */
   private resetForm(): void {
-    this.perfilModel.set({ ...INICIALIZAR_PERFIL_FORMS });
+    this.perfilModel.set(INICIALIZAR_PERFIL_FORMS());
     this.formSubmitted.set(false);
     this.touchedSubmitted.set(true);
   }

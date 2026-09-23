@@ -3,7 +3,6 @@ import { FormsModule } from '@angular/forms';
 import { AuditoriaData } from '../../interfaces/auditoria-data.interface';
 import { UsuarioData } from '../../interfaces/usuario-data.interface';
 import { AuditoriaService } from '../../services/auditoria.service';
-import { PerfilService } from '../../services/perfil.service';
 import { UsuarioService } from '../../services/usuario.service';
 import {
   Escalas,
@@ -11,7 +10,6 @@ import {
   INICIALIZAR_USUARIO_FORMS,
   UsuarioModel,
 } from '../../entities/usuario.model';
-import { EmpresaService } from '../../services/empresa.service';
 import {
   OperationMap,
   OperationType,
@@ -19,10 +17,32 @@ import {
   RecordType,
 } from '../../constants/operation-map.const';
 import { INICIALIZAR_AUDITORIA_ENTITY } from '../../constants/inicialize-auditoria.const';
+import { AuditUsuario } from './operation/audit-usuario/audit-usuario';
+import { FormUsuario } from './operation/form-usuario/form-usuario';
+import { InfoUsuario } from './operation/info-usuario/info-usuario';
+import { InicialUsuario } from './operation/inicial-usuario/inicial-usuario';
+import { ListUsuario } from './operation/list-usuario/list-usuario';
+import { ProcessUsuario } from './operation/process-usuario/process-usuario';
+import { MatIconModule } from '@angular/material/icon';
+import { Toogle } from '../toogle/toogle';
+import { MatButtonModule } from '@angular/material/button';
+import { MatListModule } from '@angular/material/list';
 
 @Component({
   selector: 'app-usuario',
-  imports: [FormsModule],
+  imports: [
+    FormsModule,
+    MatIconModule,
+    MatButtonModule,
+    MatListModule,
+    AuditUsuario,
+    FormUsuario,
+    InfoUsuario,
+    InicialUsuario,
+    ListUsuario,
+    ProcessUsuario,
+    Toogle,
+  ],
   templateUrl: './usuario.html',
   styleUrl: './usuario.scss',
   encapsulation: ViewEncapsulation.None,
@@ -30,24 +50,22 @@ import { INICIALIZAR_AUDITORIA_ENTITY } from '../../constants/inicialize-auditor
 export class Usuario implements OnInit {
   /* INJEÇÃO DE DEPENDENCIAS DE SERVIÇOS */
   private usuarioService = inject(UsuarioService);
-  private perfilService = inject(PerfilService);
-  private empresaService = inject(EmpresaService);
   private auditoriaService = inject(AuditoriaService);
 
   /* DADOS RETORNADOS DO SERVIÇO */
   protected readonly listar = this.usuarioService.usuario;
-  protected readonly buscar = signal<UsuarioModel>({ ...INICIALIZAR_USUARIO_ENTITY });
+  protected readonly buscar = signal<UsuarioModel>(INICIALIZAR_USUARIO_ENTITY());
   protected readonly listarAuditoria = this.auditoriaService.auditoria;
   protected readonly buscarAuditoria = signal<AuditoriaData>({ ...INICIALIZAR_AUDITORIA_ENTITY });
 
   protected escalas = Escalas;
 
   /* SIGNALS DAS ROTAS DE OPERAÇÃO E REGISTRO */
-  protected operacaoEstado = signal<string>(OperationMap.INICIAL);
-  protected registroEstado = signal<string>(RecordMap.INFORMACAO);
+  protected operacaoEstado = signal<OperationType>(OperationMap.INICIAL);
+  protected registroEstado = signal<RecordType>(RecordMap.INFORMACAO);
   protected auditoriaEstado = signal<boolean>(true);
 
-  protected usuarioModel = signal<UsuarioData>({ ...INICIALIZAR_USUARIO_FORMS });
+  protected usuarioModel = signal<UsuarioData>(INICIALIZAR_USUARIO_FORMS());
 
   /* ROTAS DE OPERAÇÃO */
   protected operationMap = OperationMap;
@@ -58,7 +76,7 @@ export class Usuario implements OnInit {
   }
   /* FUNÇÃO DE CARREGAMENTO DE LISTA */
   protected carregar() {
-    return this.usuarioService.listarAssist();
+    return this.usuarioService.listar();
   }
   /* FUNÇÃO DE CARREGAMENTO DE LISTA DE AUDITORIA */
   protected carregarAuditoria(field: string, query: string) {
@@ -77,14 +95,14 @@ export class Usuario implements OnInit {
     if (operacao === OperationMap.CADASTRAR) {
       this.resetForm();
     }
-    this.buscar.set({ ...INICIALIZAR_USUARIO_ENTITY });
+    this.buscar.set(INICIALIZAR_USUARIO_ENTITY());
     this.operacaoEstado.set(operacao);
   }
   /* FUNÇÃO DE MUDANÇA DE REGISTRO */
   protected mudarRegistro(registro: RecordType): void {
     if (registro === RecordMap.ATUALIZAR) {
       this.resetForm();
-      this.usuarioModel.set({ ...INICIALIZAR_USUARIO_FORMS });
+      this.usuarioModel.set(INICIALIZAR_USUARIO_FORMS());
       this.registroEstado.set(registro);
     }
     this.auditoriaEstado.set(true);
@@ -120,8 +138,6 @@ export class Usuario implements OnInit {
 
   /* FUNÇÃO DE INICIALIZAÇÃO DO FORMULARIO */
   private resetForm(): void {
-    this.usuarioModel.set({
-      ...INICIALIZAR_USUARIO_FORMS,
-    });
+    this.usuarioModel.set(INICIALIZAR_USUARIO_FORMS());
   }
 }

@@ -51,6 +51,20 @@ tbody.mdc-data-table__content {
   overflow-y: scroll;
 }
 
-.image-list {
-  width: 200px;
+.operation-list-empty {
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+
+  .text-list-empty {
+    font-size: 2em;
+  }
+
+  .image-list {
+    width: 150px;
+  }
 }

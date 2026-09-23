@@ -7,6 +7,7 @@ export const roleGuard: CanActivateFn = (route) => {
   const router = inject(Router);
 
   const perfil = authService.getPerfil();
+
   if (!perfil) {
     router.navigate(['/login-user']);
     return false;

@@ -11,8 +11,11 @@ export class PerfilService {
   private http = inject(HttpClient);
   private apiUrl = RequestHttp.perfil;
 
-  private perfilSignal = signal<PerfilModel[] | []>([]);
-  public perfil = this.perfilSignal.asReadonly();
+  private listarPerfilSignal = signal<PerfilModel[] | []>([]);
+  public listarPerfil = this.listarPerfilSignal.asReadonly();
+
+  private buscarPerfilSignal = signal<PerfilModel | null>(null);
+  public buscarPerfil = this.buscarPerfilSignal.asReadonly();
 
   cadastrar(dados: PerfilModel): Observable<PerfilModel> {
     return this.http.post<PerfilModel>(this.apiUrl, dados);
@@ -34,12 +37,37 @@ export class PerfilService {
     return this.http.delete<PerfilModel>(`${this.apiUrl}/${id}`);
   }
 
+  /* LISTA TODOS OS DADOS CADASTRADOS */
   listar(): Observable<PerfilModel[]> {
     return this.http.get<PerfilModel[]>(this.apiUrl).pipe(
       tap((dados) => {
-        this.perfilSignal.set(dados);
+        this.listarPerfilSignal.set(dados);
       }),
       catchError((error) => throwError(() => error)),
     );
+  }
+
+  /* LISTA OS DADOS APENAS PARA A TABELA */
+  listarTabela(): Observable<PerfilModel[]> {
+    return this.http.get<PerfilModel[]>(`${this.apiUrl}/list`).pipe(
+      tap((dados) => {
+        this.listarPerfilSignal.set(dados);
+      }),
+      catchError((error) => throwError(() => error)),
+    );
+  }
+
+  /* BUSCA O DADOS UNICO SOLICITADO */
+  buscar(id: string): Observable<PerfilModel> {
+    return this.http.get<PerfilModel>(`${this.apiUrl}/${id}`).pipe(
+      tap((dado) => {
+        this.buscarPerfilSignal.set(dado);
+      }),
+      catchError((error) => throwError(() => error)),
+    );
+  }
+
+  public limparBascar() {
+    this.buscarPerfilSignal.set(null);
   }
 }

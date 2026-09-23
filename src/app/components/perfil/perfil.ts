@@ -19,13 +19,8 @@ import {
 import { ProcessPerfil } from './operation/process-perfil/process-perfil';
 import { AuditPerfil } from './operation/audit-perfil/audit-perfil';
 import { Toogle } from '../toogle/toogle';
-import {
-  INICIALIZAR_PERFIL_ENTITY,
-  INICIALIZAR_PERFIL_FORMS,
-  PerfilForm,
-  PerfilModel,
-} from '../../entities/perfil.model';
 import { INICIALIZAR_AUDITORIA_ENTITY } from '../../constants/inicialize-auditoria.const';
+import { AuditoriaModel } from '../../entities/auditoria.model';
 
 @Component({
   selector: 'app-perfil',
@@ -51,29 +46,32 @@ export class Perfil implements OnInit {
   private auditoriaService = inject(AuditoriaService);
 
   /* DADOS RETORNADOS DO SERVIÇO */
-  protected readonly listar = this.perfilService.perfil;
-  protected readonly buscar = signal<PerfilModel>({ ...INICIALIZAR_PERFIL_ENTITY });
+  protected readonly listar = this.perfilService.listarPerfil;
+  protected readonly buscar = this.perfilService.buscarPerfil;
   protected readonly listarAuditoria = this.auditoriaService.auditoria;
-  protected readonly buscarAuditoria = signal<AuditoriaData>({ ...INICIALIZAR_AUDITORIA_ENTITY });
+  protected readonly buscarAuditoria = signal<AuditoriaModel>({ ...INICIALIZAR_AUDITORIA_ENTITY });
 
   /* SIGNALS DAS ROTAS DE OPERAÇÃO E REGISTRO */
   protected operacaoEstado = signal<OperationType>(OperationMap.INICIAL);
   protected registroEstado = signal<RecordType>(RecordMap.INFORMACAO);
   protected auditoriaEstado = signal<boolean>(true);
 
-  protected perfilModel = signal<PerfilForm>({ ...INICIALIZAR_PERFIL_FORMS });
-
   /* ROTAS DE OPERAÇÃO */
   protected operationMap = OperationMap;
 
   /* CICLO DE VIDA PARA INICIALIZAR A LISTA */
   ngOnInit(): void {
-    this.carregar().subscribe();
+    this.carregarTodos().subscribe();
   }
 
   /* FUNÇÃO DE CARREGAMENTO DE LISTA */
-  protected carregar() {
-    return this.perfilService.listar();
+  protected carregarTodos() {
+    return this.perfilService.listarTabela();
+  }
+
+  /* FUNÇÃO DE CARREGAMENTO O DADO SELECIONADO */
+  protected carregarDado(id: string) {
+    return this.perfilService.buscar(id);
   }
 
   /* FUNÇÃO DE CARREGAMENTO DE LISTA DE AUDITORIA */
@@ -88,20 +86,13 @@ export class Perfil implements OnInit {
       this.mudarRegistro(RecordMap.INFORMACAO);
       if (item) this.carregarRegistro(item);
       else this.operacaoEstado.set(OperationMap.INICIAL);
-      this.resetForm();
     }
-    if (operacao === OperationMap.CADASTRAR) {
-      this.resetForm();
-    }
-    this.buscar.set({ ...INICIALIZAR_PERFIL_ENTITY });
     this.operacaoEstado.set(operacao);
   }
 
   /* FUNÇÃO DE MUDANÇA DE REGISTRO */
   protected mudarRegistro(registro: RecordType): void {
     if (registro === RecordMap.ATUALIZAR) {
-      this.resetForm();
-      this.perfilModel.set({ descricao: this.buscar()!.descricao });
       this.registroEstado.set(registro);
     }
     this.auditoriaEstado.set(true);
@@ -121,22 +112,13 @@ export class Perfil implements OnInit {
 
   /* FUNÇÃO DE CARREGAMENTO DE INFORMAÇÕES PARA AUDITORIA E REGISTRO */
   private carregarRegistro(id: string): void {
-    this.carregar().subscribe({
-      next: () => {
-        const dado = this.listar().find((item) => item.id === id);
+    this.carregarDado(id).subscribe({
+      next: (dado) => {
         if (dado) {
           const field: string = 'registroId';
           this.carregarAuditoria(field, id).subscribe();
-          console.log(this.listarAuditoria());
-          this.buscar.set(dado);
-          this.perfilModel.set(this.buscar());
         }
       },
     });
-  }
-
-  /* FUNÇÃO DE INICIALIZAÇÃO DO FORMULARIO */
-  private resetForm(): void {
-    this.perfilModel.set({ ...INICIALIZAR_PERFIL_FORMS });
   }
 }

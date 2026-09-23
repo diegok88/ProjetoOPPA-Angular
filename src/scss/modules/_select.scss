@@ -1,0 +1,37 @@
+@use '@angular/material' as mat;
+
+:root {
+  @include mat.select-overrides(
+    (
+      // Cor de fundo da caixa de opções, usar caso tenha dica em baixo
+      panel-background-color: var(--color-secondary),
+      // Cor do item selecionado
+      enabled-trigger-text-color: var(--color-white),
+      disabled-trigger-text-color: var(--color-secondary),
+      // Cor do placehoder
+      placeholder-text-color: var(--color-white),
+      enabled-arrow-color: var(--color-white),
+      disabled-arrow-color: var(--color-white),
+      focused-arrow-color: var(--color-white)
+    )
+  );
+}
+
+div.cdk-overlay-pane {
+  border: 2px solid var(--color-white);
+  border-radius: 10px;
+  color: var(--color-white);
+}
+
+div.mat-mdc-select-panel {
+  border-radius: 10px !important;
+}
+
+.mdc-text-field__input {
+  line-height: 24px !important;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin: 0;
+}
+
+

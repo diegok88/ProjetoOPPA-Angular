@@ -1,0 +1,11 @@
+<form (ngSubmit)="executar($event)" class="container-operation-process">
+  <section class="container-operation-process-group">
+    <img class="operation-process-image" [src]="listaProcessoSignal()?.imagem" alt="Imagem" />
+    <span>{{ listaProcessoSignal()?.mensagem }} {{ buscar().descricao }}?</span>
+  </section>
+  <section class="container-operation-process-group">
+    <button matButton="outlined" type="submit">
+      {{ listaProcessoSignal()?.botao }}
+    </button>
+  </section>
+</form>

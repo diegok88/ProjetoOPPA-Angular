@@ -30,7 +30,10 @@ import { EmpresaModel } from '../../../../entities/empresa.model';
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
     } @else {
-      <img class="image-list" src="images/mystery.png" alt="Vazia" />
+      <div class="operation-list-empty">
+        <img class="image-list" src="images/mystery.png" alt="Vazia" />
+        <span class="text-list-empty">Lista Vazia!</span>
+      </div>
     }
   `,
   styles: `

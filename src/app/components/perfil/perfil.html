@@ -14,6 +14,7 @@
       @switch (operacaoEstado()) {
         @case ('inicial') {
           <app-inicial-perfil
+            [listar]="listar()"
             (abrirCadastro)="mudarOperacao(operationMap.CADASTRAR)"
           ></app-inicial-perfil>
         }
@@ -25,23 +26,27 @@
                 <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
               </button>
             </div>
-            <app-form-perfil
-              [operacaoAtual]="operacaoEstado()"
-              [registroAtual]="registroEstado()"
-              [listar]="listar()"
-              [buscar]="buscar()"
-              (onMudarOperacao)="mudarOperacao(operationMap.INICIAL)"
-            ></app-form-perfil>
+            @if (buscar(); as dado) {
+              <app-form-perfil
+                [operacaoAtual]="operacaoEstado()"
+                [registroAtual]="registroEstado()"
+                [listar]="listar()"
+                [buscar]="dado"
+                (onMudarOperacao)="mudarOperacao(operationMap.INICIAL)"
+              ></app-form-perfil>
+            }
           </section>
         }
         @case ('registro') {
           <section class="container-operation-register">
             <div class="container-operation-register-toggle">
-              <app-toogle
-                [statusEntity]="buscar().status"
-                [onRegistroAtual]="registroEstado()"
-                (onMudarRegistro)="mudarRegistro($event)"
-              ></app-toogle>
+              @if (buscar(); as dado) {
+                <app-toogle
+                  [statusEntity]="dado.status"
+                  [onRegistroAtual]="registroEstado()"
+                  (onMudarRegistro)="mudarRegistro($event)"
+                ></app-toogle>
+              }
             </div>
             <div class="container-operation-separated">
               @switch (registroEstado()) {
@@ -57,7 +62,9 @@
                         <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
                       </button>
                     </div>
-                    <app-info-perfil [info]="buscar()"></app-info-perfil>
+                    @if (buscar(); as dado) {
+                      <app-info-perfil [info]="dado"></app-info-perfil>
+                    }
                   </div>
                 }
                 @case ('atualizar') {
@@ -72,13 +79,15 @@
                         <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
                       </button>
                     </div>
-                    <app-form-perfil
-                      [operacaoAtual]="operacaoEstado()"
-                      [registroAtual]="registroEstado()"
-                      [listar]="listar()"
-                      [buscar]="buscar()"
-                      (onMudarOperacao)="mudarOperacao($event, buscar().id)"
-                    ></app-form-perfil>
+                    @if (buscar(); as dado) {
+                      <app-form-perfil
+                        [operacaoAtual]="operacaoEstado()"
+                        [registroAtual]="registroEstado()"
+                        [listar]="listar()"
+                        [buscar]="dado"
+                        (onMudarOperacao)="mudarOperacao($event, dado.id)"
+                      ></app-form-perfil>
+                    }
                   </div>
                 }
                 @case ('ativar') {
@@ -93,12 +102,14 @@
                         <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
                       </button>
                     </div>
-                    <app-process-perfil
-                      [operacaoAtual]="operacaoEstado()"
-                      [registroAtual]="registroEstado()"
-                      [buscar]="buscar()"
-                      (onMudarOperacao)="mudarOperacao($event, buscar().id)"
-                    ></app-process-perfil>
+                    @if (buscar(); as dado) {
+                      <app-process-perfil
+                        [operacaoAtual]="operacaoEstado()"
+                        [registroAtual]="registroEstado()"
+                        [buscar]="dado"
+                        (onMudarOperacao)="mudarOperacao($event, dado.id)"
+                      ></app-process-perfil>
+                    }
                   </div>
                 }
                 @case ('status') {
@@ -113,12 +124,14 @@
                         <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
                       </button>
                     </div>
-                    <app-process-perfil
-                      [operacaoAtual]="operacaoEstado()"
-                      [registroAtual]="registroEstado()"
-                      [buscar]="buscar()"
-                      (onMudarOperacao)="mudarOperacao($event, buscar().id)"
-                    ></app-process-perfil>
+                    @if (buscar(); as dado) {
+                      <app-process-perfil
+                        [operacaoAtual]="operacaoEstado()"
+                        [registroAtual]="registroEstado()"
+                        [buscar]="dado"
+                        (onMudarOperacao)="mudarOperacao($event, dado.id)"
+                      ></app-process-perfil>
+                    }
                   </div>
                 }
                 @case ('eliminar') {
@@ -133,12 +146,14 @@
                         <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
                       </button>
                     </div>
-                    <app-process-perfil
-                      [operacaoAtual]="operacaoEstado()"
-                      [registroAtual]="registroEstado()"
-                      [buscar]="buscar()"
-                      (onMudarOperacao)="mudarOperacao($event, buscar().id)"
-                    ></app-process-perfil>
+                    @if (buscar(); as dado) {
+                      <app-process-perfil
+                        [operacaoAtual]="operacaoEstado()"
+                        [registroAtual]="registroEstado()"
+                        [buscar]="dado"
+                        (onMudarOperacao)="mudarOperacao($event, dado.id)"
+                      ></app-process-perfil>
+                    }
                   </div>
                 }
                 @case ('auditoria') {

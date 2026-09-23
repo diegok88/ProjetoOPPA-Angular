@@ -17,7 +17,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'principal',
-        loadComponent: () => import('./components/principal/principal').then((m) => m.Principal),
+        loadComponent: () => import('./components/principal/principal').then((p) => p.Principal),
         canActivate: [roleGuard],
         data: { roles: [ROLES_MAP.ASN1, ROLES_MAP.ADN1] },
       },
@@ -29,13 +29,19 @@ export const routes: Routes = [
       },
       {
         path: 'perfil',
-        loadComponent: () => import('./components/perfil/perfil').then((m) => m.Perfil),
+        loadComponent: () => import('./components/perfil/perfil').then((p) => p.Perfil),
         canActivate: [roleGuard],
         data: { roles: [ROLES_MAP.ASN1] },
       },
       {
         path: 'empresa',
-        loadComponent: () => import('./components/empresa/empresa').then((m) => m.Empresa),
+        loadComponent: () => import('./components/empresa/empresa').then((e) => e.Empresa),
+        canActivate: [roleGuard],
+        data: { roles: [ROLES_MAP.ASN1] },
+      },
+      {
+        path: 'setores',
+        loadComponent: () => import('./components/setores/setores').then((s) => s.Setores),
         canActivate: [roleGuard],
         data: { roles: [ROLES_MAP.ASN1] },
       },

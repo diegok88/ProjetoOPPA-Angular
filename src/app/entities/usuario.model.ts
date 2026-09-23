@@ -13,16 +13,18 @@ export interface UsuarioModel {
   empresaId?: string | null;
   desEmpresa?: string | null;
   status?: boolean;
+  nomeGestor?: string | null;
+  crachaGestor?: number | null;
 }
 
 export interface UsuarioForm {
   nome: string;
   dataNascimento: Date | null;
   dataAdmissao?: Date | null;
-  perfilId?: string | null;
+  perfilId?: string;
   turno: string;
   escala: string;
-  empresaId?: string | null;
+  empresaId?: string;
 }
 
 /* CONSTANTES ADCIONAIS */
@@ -51,18 +53,16 @@ export const CamposUsuario: (keyof UsuarioForm)[] = [
 ] as const;
 
 /* CONSTANTE DOS CAMPOS DA ENTIDADE ACEITA APENAS NUMEROS */
-export const CamposUsuarioNumeros: (keyof UsuarioForm)[] = [] as const;
+export const CamposUsuarioNumeros: (keyof UsuarioForm)[] = [];
 
 /* CONSTANTE DOS CAMPOS DA ENTIDADE ACEITA APENAS LETRAS */
-export const CamposUsuarioLetras: (keyof UsuarioForm)[] = ['nome', 'turno', 'escala'] as const;
+export const CamposUsuarioLetras: (keyof UsuarioForm)[] = ['nome', 'turno', 'escala'];
+
+/* CONSTANTE DOS CAMPOS DA ENTIDADE ACEITA APENAS DATAS */
+export const CamposUsuarioData: (keyof UsuarioForm)[] = ['dataNascimento', 'dataAdmissao'];
 
 /* CONSTANTE DOS CAMPOS DA ENTIDADE LIVRES */
-export const CamposUsuarioLivres: (keyof UsuarioForm)[] = [
-  'dataNascimento',
-  'dataAdmissao',
-  'perfilId',
-  'empresaId',
-] as const;
+export const CamposUsuarioLivres: (keyof UsuarioForm)[] = ['perfilId', 'empresaId'];
 
 /* MAPEAMENTO DA ENTIDADE */
 export const UsuarioMap = {
@@ -79,7 +79,7 @@ export const UsuarioMap = {
 export type UsuarioType = (typeof UsuarioMap)[keyof typeof UsuarioMap];
 
 /* INICIALIZADOR DO OBJETO SIGNALS DE BUSCA */
-export const INICIALIZAR_USUARIO_ENTITY: UsuarioModel = {
+export const INICIALIZAR_USUARIO_ENTITY = (): UsuarioModel => ({
   id: '',
   cracha: undefined,
   nome: '',
@@ -93,10 +93,10 @@ export const INICIALIZAR_USUARIO_ENTITY: UsuarioModel = {
   empresaId: '',
   desEmpresa: '',
   status: undefined,
-} as const;
+});
 
-/* INICIALIZADOR DO OBJETO SIGNALS DO FORMULARIO */
-export const INICIALIZAR_USUARIO_FORMS: UsuarioForm = {
+/* INICIALIZADOR DO OBJETO SIGNALS DO FORMULARIO - FACTORY */
+export const INICIALIZAR_USUARIO_FORMS = (): UsuarioForm => ({
   nome: '',
   dataNascimento: null,
   dataAdmissao: null,
@@ -104,7 +104,7 @@ export const INICIALIZAR_USUARIO_FORMS: UsuarioForm = {
   turno: '' as TurnoType,
   escala: '' as EscalaType,
   empresaId: '',
-} as const;
+});
 
 /* TIPOS DE FALHAS */
 export type ErrorUsuarioType =
@@ -115,11 +115,11 @@ export type ErrorUsuarioType =
   // DATA DE NASCIMENTO
   | 'emptyDataNascimento'
   | 'equalDataNascimento'
-  | 'invalidCharDataNascimento'
+  | 'invalidDateDataNascimento'
   // DATA DE ADMISSÃO
   | 'emptyDataAdmissao'
   | 'equalDataAdmissao'
-  | 'invalidCharDataAdmissao'
+  | 'invalidDateDataAdmissao'
   // PERFIL ID
   | 'emptyPerfilId'
   | 'equalPerfilId'
@@ -153,16 +153,16 @@ export function getErrorUsuarioMessage(error: ErrorUsuarioType): string {
       return 'A data de nascimento é obrigatória.';
     case 'equalDataNascimento':
       return 'A data de nascimento informada é igual à anterior!';
-    case 'invalidCharDataNascimento':
-      return 'A data de nascimento não aceita letras.';
+    case 'invalidDateDataNascimento':
+      return 'A data de nascimento é inválida — verifique dia, mês e ano.';
 
     // ─── DATA DE ADMISSÃO ───
     case 'emptyDataAdmissao':
       return 'A data de admissão é obrigatória.';
     case 'equalDataAdmissao':
       return 'A data de admissão informada é igual à anterior!';
-    case 'invalidCharDataAdmissao':
-      return 'A data de admissão não aceita letras.';
+    case 'invalidDateDataAdmissao':
+      return 'A data de admissão é inválida — verifique dia, mês e ano.';
 
     // ─── PERFIL ID ───
     case 'emptyPerfilId':

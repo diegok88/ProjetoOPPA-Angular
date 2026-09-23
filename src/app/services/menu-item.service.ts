@@ -103,7 +103,7 @@ export class MenuItemService {
       papeis: [ROLES_MAP.ASN1, ROLES_MAP.ADN1],
       children: [
         { rotulo: 'Empresa', icone: 'icons/add_business.png', caminho: 'empresa' },
-        { rotulo: 'Setores', icone: 'icons/add_column_right.png', caminho: 'empresa/setores' },
+        { rotulo: 'Setores', icone: 'icons/add_column_right.png', caminho: 'setores' },
         {
           rotulo: 'Competência Setorial',
           icone: 'icons/demography.png',

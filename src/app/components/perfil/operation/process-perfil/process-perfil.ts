@@ -28,19 +28,7 @@ import {
 @Component({
   selector: 'app-process-perfil',
   imports: [FormsModule, MatButtonModule],
-  template: `
-    <form (ngSubmit)="executar($event)" class="container-operation-process">
-      <section class="container-operation-process-group">
-        <img class="operation-process-image" [src]="listaProcessoSignal()?.imagem" alt="Imagem" />
-        <span>{{ listaProcessoSignal()?.mensagem }} {{ buscar().descricao }}?</span>
-      </section>
-      <section class="container-operation-process-group">
-        <button matButton="outlined" type="submit">
-          {{ listaProcessoSignal()?.botao }}
-        </button>
-      </section>
-    </form>
-  `,
+  templateUrl: '/process-perfil.html',
   styles: ``,
 })
 export class ProcessPerfil implements OnInit {
@@ -60,7 +48,7 @@ export class ProcessPerfil implements OnInit {
   /* ENTRADA E SAIDA DE DADOS DO COMPONENTE */
   public operacaoAtual = input<OperationType | undefined>();
   public registroAtual = input<RecordType | undefined>();
-  public buscar = input<PerfilModel>({ ...INICIALIZAR_PERFIL_ENTITY });
+  public buscar = input<PerfilModel>(INICIALIZAR_PERFIL_ENTITY());
   public onMudarOperacao = output<OperationType>();
 
   /* INICIALIZAR O PROCESSO */

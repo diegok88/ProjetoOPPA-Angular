@@ -5,6 +5,7 @@ import { MatTableModule } from '@angular/material/table';
 import { AuditoriaData } from '../../../../interfaces/auditoria-data.interface';
 import { MatListModule } from '@angular/material/list';
 import { FormatarDadosRegistradosPipe } from '../../../../pipes/formatar-dados-registrados-pipe';
+import { AuditoriaModel } from '../../../../entities/auditoria.model';
 
 @Component({
   selector: 'app-audit-perfil',
@@ -117,8 +118,8 @@ import { FormatarDadosRegistradosPipe } from '../../../../pipes/formatar-dados-r
   `,
 })
 export class AuditPerfil {
-  public listarAuditoria = input<AuditoriaData[] | []>([]);
-  protected buscarAuditoria = signal<AuditoriaData | null>(null);
+  public listarAuditoria = input<AuditoriaModel[] | []>([]);
+  protected buscarAuditoria = signal<AuditoriaModel | null>(null);
   protected auditoriaEstado = signal<boolean>(true);
 
   protected displayedColumns: string[] = [
@@ -128,7 +129,7 @@ export class AuditPerfil {
     'dadosRegistrados',
   ];
 
-  protected onAbrirRegistro(dados?: AuditoriaData): void {
+  protected onAbrirRegistro(dados?: AuditoriaModel): void {
     if (this.auditoriaEstado() && dados) {
       this.auditoriaEstado.update((atual) => (atual = !atual));
       this.buscarAuditoria.set(dados);

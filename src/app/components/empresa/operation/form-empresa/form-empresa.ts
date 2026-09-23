@@ -516,11 +516,6 @@ export class FormEmpresa implements OnInit {
 
   protected invalidCharFields = signal<Record<string, boolean>>({});
 
-  /* FUNÇÃO AUXILIAR PARA TRANSFORMAR EM OS CAMPOS A PRIMEIRA LETRA EM MAIUSCULO */
-  private transformarMaiusculo(campo: string): string {
-    return campo.charAt(0).toUpperCase() + campo.slice(1);
-  }
-
   /* FUNÇÃO QUE INTERCEPTA A TENTATIVA DE INSERIR CARACTERES INVALIDOS */
   protected aoPressionarTecla(event: KeyboardEvent, campo: string): void {
     const key = event.key;
@@ -552,7 +547,6 @@ export class FormEmpresa implements OnInit {
         if (touched || submitted) {
           const value = (this.empresaModel()[campo] ?? '').toString().trim().toUpperCase();
           const original = (this.buscar()[campo] ?? '').toString().trim().toUpperCase();
-          console.log(`Valor: ${value} - Original: ${original}`);
 
           if (!value) {
             erro = `empty${FormatarCampos(campo)}` as ErrorEmpresaType;

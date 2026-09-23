@@ -1,0 +1,83 @@
+<form class="container-operation-forms" (ngSubmit)="executar($event)">
+  <div class="container-operation-forms-separated">
+    <section class="container-operation-forms-group">
+      @if (isAtualizar()) {
+        <div class="container-operation-forms-update">
+          <mat-list>
+            <mat-list-item>
+              <span matListItemTitle>
+                <p class="list-label">Id:</p>
+                <p class="list-data">{{ buscar().id }}</p>
+              </span>
+            </mat-list-item>
+          </mat-list>
+        </div>
+      }
+
+      <mat-form-field appearance="outline">
+        <mat-label>Descrição</mat-label>
+        <input
+          matInput
+          type="text"
+          id="descricao"
+          name="descricao"
+          placeholder="Insira a descrição do perfil"
+          [ngModel]="getField('descricao')"
+          (ngModelChange)="setField('descricao', $event)"
+          mask="A******************************************************************"
+          (keypress)="aoPressionarTecla($event, 'descricao')"
+          (blur)="onBlur('descricao')"
+          autocomplete="off"
+        />
+        @if (getField('descricao')) {
+          <!-- PARA O BOTÃO NÃO SER SUBMETIDO IGUAL A DO CADASTRAR O MESMO DEVE SER TIPADO - type="button" -->
+          <button
+            matSuffix
+            matIconButton
+            type="button"
+            aria-label="Clear"
+            (click)="clearField('descricao')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+        <mat-hint>
+          @if (obterErro('descricao')) {
+            <span class="error-message" [class.show]="!!obterErro('descricao')">{{
+              obterErro('descricao')
+            }}</span>
+          }
+        </mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Nivel</mat-label>
+        <mat-select
+          name="nivel"
+          placeholder="Selecione a nivel"
+          [ngModel]="getField('nivel')"
+          (ngModelChange)="setField('nivel', $event)"
+          (openedChange)="!$event && onBlur('nivel')"
+        >
+          @for (opcao of niveisOptions; track opcao.value) {
+            <mat-option [value]="opcao.value">{{ opcao.viewValue }}</mat-option>
+          }
+        </mat-select>
+        <mat-hint>
+          @if (obterErro('nivel')) {
+            <span class="error-message" [class.show]="!!obterErro('nivel')">{{
+              obterErro('nivel')
+            }}</span>
+          }
+        </mat-hint>
+      </mat-form-field>
+    </section>
+    <section class="container-operation-forms-button">
+      @if (isAtualizar()) {
+        <button matButton="outlined" type="submit" [disabled]="!isFormValid()">Atualizar</button>
+      } @else {
+        <button matButton="outlined" type="submit" [disabled]="!isFormValid()">Cadastrar</button>
+      }
+    </section>
+  </div>
+</form>

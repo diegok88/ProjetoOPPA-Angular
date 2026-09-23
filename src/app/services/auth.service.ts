@@ -55,6 +55,6 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return this.perfilSignal() !== null;
+    return this.perfilSignal() !== null; 
   }
 }
