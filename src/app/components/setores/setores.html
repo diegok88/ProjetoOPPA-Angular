@@ -13,10 +13,12 @@
     <div class="container-operation-action">
       @switch (operacaoEstado()) {
         @case ('inicial') {
-          <app-inicial-setores
-            [listar]="listar()"
-            (abrirCadastro)="mudarOperacao(operationMap.CADASTRAR)"
-          ></app-inicial-setores>
+          @if (contador(); as contagem) {
+            <app-inicial-setores
+              [contador]="contagem"
+              (abrirCadastro)="mudarOperacao(operationMap.CADASTRAR)"
+            ></app-inicial-setores>
+          }
         }
         @case ('cadastrar') {
           <section class="container-operation-signup">

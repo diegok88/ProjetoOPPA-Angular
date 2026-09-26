@@ -28,19 +28,7 @@ import { DataProcessEmpresa } from '../../../../constants/data-process.const';
 @Component({
   selector: 'app-process-empresa',
   imports: [FormsModule, MatButtonModule],
-  template: `
-    <form (ngSubmit)="executar($event)" class="container-operation-process">
-      <section class="container-operation-process-group">
-        <img class="operation-process-image" [src]="listaProcessoSignal()?.imagem" alt="Imagem" />
-        <span>{{ listaProcessoSignal()?.mensagem }} {{ buscar().razaoSocial }}?</span>
-      </section>
-      <section class="container-operation-process-group">
-        <button matButton="outlined" type="submit">
-          {{ listaProcessoSignal()?.botao }}
-        </button>
-      </section>
-    </form>
-  `,
+  templateUrl: './process-empresa.html',
   styles: ``,
 })
 export class ProcessEmpresa implements OnInit {
@@ -60,7 +48,7 @@ export class ProcessEmpresa implements OnInit {
   /* ENTRADA E SAIDA DE DADOS DO COMPONENTE */
   public operacaoAtual = input<OperationType | undefined>();
   public registroAtual = input<RecordType | undefined>();
-  public buscar = input<EmpresaModel>({ ...INICIALIZAR_EMPRESA_ENTITY });
+  public buscar = input<EmpresaModel>(INICIALIZAR_EMPRESA_ENTITY());
   public onMudarOperacao = output<OperationType>();
 
   /* INICIALIZAR O PROCESSO */
@@ -80,6 +68,11 @@ export class ProcessEmpresa implements OnInit {
   /* FUNÇÃO DE CARREGAMENTO A CADA SERVIÇO CONCLUIDO */
   protected carregar() {
     return this.empresaService.listar();
+  }
+
+  /* FUNÇÃO DE CARREGAMENTO DO CONATDOR A CADA SERVIÇO CONCLUIDO */
+  protected carregarContador() {
+    return this.empresaService.counter();
   }
 
   /* FUNÇÃO DE INATIVAR, ATIVAR E ELIMINAR */
@@ -112,6 +105,7 @@ export class ProcessEmpresa implements OnInit {
           if (confirmado === 'finalizado') {
             this.onMudarOperacao.emit(OperationMap.REGISTRO);
             this.carregar().subscribe();
+            this.carregarContador().subscribe();
             this.finalizarService.finalizar({
               ...FINALIZAR_SUCESSO,
               operacao: 'Ativação do empresa',
@@ -146,6 +140,7 @@ export class ProcessEmpresa implements OnInit {
           if (confirmado === 'finalizado') {
             this.onMudarOperacao.emit(OperationMap.REGISTRO);
             this.carregar().subscribe();
+            this.carregarContador().subscribe();
             this.finalizarService.finalizar({
               ...FINALIZAR_SUCESSO,
               operacao: 'Inativação do empresa',
@@ -180,6 +175,7 @@ export class ProcessEmpresa implements OnInit {
           if (confirmado === 'finalizado') {
             this.onMudarOperacao.emit(OperationMap.INICIAL);
             this.carregar().subscribe();
+            this.carregarContador().subscribe();
             this.finalizarService.finalizar({
               ...FINALIZAR_SUCESSO,
               operacao: 'Eliminação do empresa',

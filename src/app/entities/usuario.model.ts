@@ -50,7 +50,7 @@ export const CamposUsuario: (keyof UsuarioForm)[] = [
   'turno',
   'escala',
   'empresaId',
-] as const;
+];
 
 /* CONSTANTE DOS CAMPOS DA ENTIDADE ACEITA APENAS NUMEROS */
 export const CamposUsuarioNumeros: (keyof UsuarioForm)[] = [];

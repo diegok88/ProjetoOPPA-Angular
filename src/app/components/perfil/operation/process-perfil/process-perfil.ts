@@ -70,6 +70,11 @@ export class ProcessPerfil implements OnInit {
     return this.perfilService.listar();
   }
 
+  /* FUNÇÃO DE CARREGAMENTO DO CONATDOR A CADA SERVIÇO CONCLUIDO */
+  protected carregarContador() {
+    return this.perfilService.counter();
+  }
+
   /* FUNÇÃO DE INATIVAR, ATIVAR E ELIMINAR */
   protected executar(event: Event): void {
     event.preventDefault();
@@ -100,6 +105,7 @@ export class ProcessPerfil implements OnInit {
           if (confirmado === 'finalizado') {
             this.onMudarOperacao.emit(OperationMap.REGISTRO);
             this.carregar().subscribe();
+            this.carregarContador().subscribe();
             this.finalizarService.finalizar({
               ...FINALIZAR_SUCESSO,
               operacao: 'Ativação do perfil',
@@ -135,6 +141,7 @@ export class ProcessPerfil implements OnInit {
           if (confirmado === 'finalizado') {
             this.onMudarOperacao.emit(OperationMap.REGISTRO);
             this.carregar().subscribe();
+            this.carregarContador().subscribe();
             this.finalizarService.finalizar({
               ...FINALIZAR_SUCESSO,
               operacao: 'Inativação do perfil',
@@ -170,6 +177,7 @@ export class ProcessPerfil implements OnInit {
           if (confirmado === 'finalizado') {
             this.onMudarOperacao.emit(OperationMap.INICIAL);
             this.carregar().subscribe();
+            this.carregarContador().subscribe();
             this.finalizarService.finalizar({
               ...FINALIZAR_SUCESSO,
               operacao: 'Eliminação do perfil',

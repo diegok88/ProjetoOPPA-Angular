@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -40,7 +40,7 @@ import { AuditoriaModel } from '../../entities/auditoria.model';
   templateUrl: './perfil.html',
   styleUrl: './perfil.scss',
 })
-export class Perfil implements OnInit {
+export class Perfil implements OnInit, OnDestroy {
   /* INJEÇÃO DE DEPENDENCIAS DE SERVIÇOS */
   private perfilService = inject(PerfilService);
   private auditoriaService = inject(AuditoriaService);
@@ -48,6 +48,7 @@ export class Perfil implements OnInit {
   /* DADOS RETORNADOS DO SERVIÇO */
   protected readonly listar = this.perfilService.listarPerfil;
   protected readonly buscar = this.perfilService.buscarPerfil;
+  protected readonly contador = this.perfilService.contadorPerfil;
   protected readonly listarAuditoria = this.auditoriaService.auditoria;
   protected readonly buscarAuditoria = signal<AuditoriaModel>({ ...INICIALIZAR_AUDITORIA_ENTITY });
 
@@ -62,11 +63,22 @@ export class Perfil implements OnInit {
   /* CICLO DE VIDA PARA INICIALIZAR A LISTA */
   ngOnInit(): void {
     this.carregarTodos().subscribe();
+    this.carregarContador().subscribe();
+  }
+
+  /* CICLO DE VIDA PARA LIMPAR O DADO DA BUSCA */
+  ngOnDestroy(): void {
+    this.perfilService.limparBuscar();
   }
 
   /* FUNÇÃO DE CARREGAMENTO DE LISTA */
   protected carregarTodos() {
     return this.perfilService.listarTabela();
+  }
+
+  /* FUNÇÃO DE CARREGAMENTO DE CONTADOR */
+  protected carregarContador() {
+    return this.perfilService.counter();
   }
 
   /* FUNÇÃO DE CARREGAMENTO O DADO SELECIONADO */

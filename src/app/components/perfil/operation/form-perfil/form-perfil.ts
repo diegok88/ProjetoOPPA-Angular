@@ -50,7 +50,7 @@ import {
 } from '../../../../entities/dialogo-confirmar.model';
 import { FormatarCampos } from '../../../../constants/capitalize-first.const';
 import { MatSelectModule } from '@angular/material/select';
-import { CamposSetores } from '../../../../entities/setores.model';
+import { NgxMaskDirective } from 'ngx-mask';
 
 @Component({
   selector: 'app-form-perfil',
@@ -62,6 +62,7 @@ import { CamposSetores } from '../../../../entities/setores.model';
     MatIconModule,
     MatListModule,
     MatSelectModule,
+    NgxMaskDirective,
   ],
   templateUrl: '/form-perfil.html',
   styles: ``,
@@ -111,10 +112,18 @@ export class FormPerfil implements OnInit {
     const isNumbers = /[0-9]/.test(key);
     const isLetters = /[a-zA-ZÀ-ÿ]/.test(key);
 
-    if (CamposPerfilLetras.includes(campo as keyof PerfilForm) && isNumbers) {
-      this.invalidCharFields.update((state) => ({ ...state, [campo]: true }));
+    if (CamposPerfilLetras.includes(campo as keyof PerfilForm)) {
+      if (isNumbers) {
+        this.invalidCharFields.update((state) => ({ ...state, [campo]: true }));
+      } else {
+        this.invalidCharFields.update((state) => ({ ...state, [campo]: false }));
+      }
     } else if (CamposPerfilNumeros.includes(campo as keyof PerfilForm) && isLetters) {
-      this.invalidCharFields.update((state) => ({ ...state, [campo]: true }));
+      if (isLetters) {
+        this.invalidCharFields.update((state) => ({ ...state, [campo]: true }));
+      } else {
+        this.invalidCharFields.update((state) => ({ ...state, [campo]: false }));
+      }
     }
   }
 
@@ -229,6 +238,11 @@ export class FormPerfil implements OnInit {
     return this.perfilService.listarTabela();
   }
 
+  /* FUNÇÃO DE CARREGAMENTO DO CONATDOR A CADA SERVIÇO CONCLUIDO */
+  protected carregarContador() {
+    return this.perfilService.counter();
+  }
+
   /* FUNÇÃO DE CADASTRO E ATUALIZAR */
   protected executar(event: Event): void {
     event.preventDefault();
@@ -271,6 +285,7 @@ export class FormPerfil implements OnInit {
             this.resetForm();
             this.onMudarOperacao.emit(OperationMap.INICIAL);
             this.carregar().subscribe();
+            this.carregarContador().subscribe();
             this.finalizarService.finalizar({
               ...FINALIZAR_SUCESSO,
               operacao: 'Cadastro do perfil',
@@ -349,6 +364,7 @@ export class FormPerfil implements OnInit {
   private resetForm(): void {
     this.perfilModel.set(INICIALIZAR_PERFIL_FORMS());
     this.formSubmitted.set(false);
-    this.touchedSubmitted.set(true);
+    this.touchedSubmitted.set(false);
+    this.invalidCharFields.set({});
   }
 }

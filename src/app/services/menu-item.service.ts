@@ -22,7 +22,7 @@ export class MenuItemService {
       chave: 'gestao',
       papeis: [ROLES_MAP.ASN1, ROLES_MAP.ADN1],
       children: [
-        { rotulo: 'Cadastros', icone: 'icons/badge.png', caminho: 'usuario' },
+        { rotulo: 'Usuários', icone: 'icons/badge.png', caminho: 'usuario' },
         {
           rotulo: 'Alocações',
           icone: 'icons/swap_horizontal_circle.png',

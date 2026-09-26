@@ -28,19 +28,7 @@ import { INICIALIZAR_USUARIO_ENTITY, UsuarioModel } from '../../../../entities/u
 @Component({
   selector: 'app-process-usuario',
   imports: [FormsModule, MatButtonModule],
-  template: `
-    <form (ngSubmit)="executar($event)" class="container-operation-process">
-      <section class="container-operation-process-group">
-        <img class="operation-process-image" [src]="listaProcessoSignal()?.imagem" alt="Imagem" />
-        <span>{{ listaProcessoSignal()?.mensagem }} {{ buscar().nome }}?</span>
-      </section>
-      <section class="container-operation-process-group">
-        <button matButton="outlined" type="submit">
-          {{ listaProcessoSignal()?.botao }}
-        </button>
-      </section>
-    </form>
-  `,
+  templateUrl: './process-usuario.html',
   styles: ``,
 })
 export class ProcessUsuario implements OnInit {
@@ -79,7 +67,12 @@ export class ProcessUsuario implements OnInit {
 
   /* FUNÇÃO DE CARREGAMENTO A CADA SERVIÇO CONCLUIDO */
   protected carregar() {
-    return this.usuarioService.listar();
+    return this.usuarioService.listarTabela();
+  }
+
+  /* FUNÇÃO DE CARREGAMENTO DO CONATDOR A CADA SERVIÇO CONCLUIDO */
+  protected carregarContador() {
+    return this.usuarioService.counter();
   }
 
   /* FUNÇÃO DE INATIVAR, ATIVAR E ELIMINAR */
@@ -112,6 +105,7 @@ export class ProcessUsuario implements OnInit {
           if (confirmado === 'finalizado') {
             this.onMudarOperacao.emit(OperationMap.REGISTRO);
             this.carregar().subscribe();
+            this.carregarContador().subscribe();
             this.finalizarService.finalizar({
               ...FINALIZAR_SUCESSO,
               operacao: 'Ativação do usuário',
@@ -146,6 +140,7 @@ export class ProcessUsuario implements OnInit {
           if (confirmado === 'finalizado') {
             this.onMudarOperacao.emit(OperationMap.REGISTRO);
             this.carregar().subscribe();
+            this.carregarContador().subscribe();
             this.finalizarService.finalizar({
               ...FINALIZAR_SUCESSO,
               operacao: 'Inativação do usuário',
@@ -180,6 +175,7 @@ export class ProcessUsuario implements OnInit {
           if (confirmado === 'finalizado') {
             this.onMudarOperacao.emit(OperationMap.INICIAL);
             this.carregar().subscribe();
+            this.carregarContador().subscribe();
             this.finalizarService.finalizar({
               ...FINALIZAR_SUCESSO,
               operacao: 'Eliminação do usuário',

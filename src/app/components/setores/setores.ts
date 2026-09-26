@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { AuditoriaService } from '../../services/auditoria.service';
 import { SetoresService } from '../../services/setores.service';
 import { INICIALIZAR_SETORES_FORMS, SetoresForm } from '../../entities/setores.model';
@@ -41,7 +41,7 @@ import { AuditoriaModel } from '../../entities/auditoria.model';
   templateUrl: './setores.html',
   styleUrl: './setores.scss',
 })
-export class Setores {
+export class Setores implements OnInit, OnDestroy {
   /* INJEÇÃO DE DEPENDENCIAS DE SERVIÇOS */
   private setoresService = inject(SetoresService);
   private auditoriaService = inject(AuditoriaService);
@@ -49,6 +49,7 @@ export class Setores {
   /* DADOS RETORNADOS DO SERVIÇO */
   protected readonly listar = this.setoresService.listarSetores;
   protected readonly buscar = this.setoresService.buscarSetores;
+  protected readonly contador = this.setoresService.contadorSetores;
   protected readonly listarAuditoria = this.auditoriaService.auditoria;
   protected readonly buscarAuditoria = signal<AuditoriaModel>({ ...INICIALIZAR_AUDITORIA_ENTITY });
 
@@ -65,11 +66,22 @@ export class Setores {
   /* CICLO DE VIDA PARA INICIALIZAR A LISTA */
   ngOnInit(): void {
     this.carregarTodos().subscribe();
+    this.carregarContador().subscribe();
+  }
+
+  /* CICLO DE VIDA PARA LIMPAR O DADO DA BUSCA */
+  ngOnDestroy(): void {
+    this.setoresService.limparBuscar();
   }
 
   /* FUNÇÃO DE CARREGAMENTO DE LISTA */
   protected carregarTodos() {
     return this.setoresService.listarTabela();
+  }
+
+  /* FUNÇÃO DE CARREGAMENTO DE CONTADOR */
+  protected carregarContador() {
+    return this.setoresService.counter();
   }
 
   /* FUNÇÃO DE CARREGAMENTO O DADO SELECIONADO */

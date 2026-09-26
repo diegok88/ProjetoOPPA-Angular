@@ -1,110 +1,16 @@
 import { Component, input } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import { EmpresaModel, INICIALIZAR_EMPRESA_ENTITY } from '../../../../entities/empresa.model';
+import { TelefonePipe } from '../../../../pipes/formatar-telefone.pipe';
+import { CepPipe } from '../../../../pipes/formatar-cep.pipe';
+import { CnpjPipe } from '../../../../pipes/formatar-cnpj.pipe';
 
 @Component({
   selector: 'app-info-empresa',
-  imports: [MatListModule],
-  template: `
-    <section class="container-operation-info">
-      <div class="container-operation-info-separated">
-        <mat-list>
-          <mat-list-item>
-            <span matListItemTitle>
-              <p class="list-label">Id:</p>
-              <p class="list-data">{{ info().id }}</p>
-            </span>
-          </mat-list-item>
-          <mat-list-item>
-            <span matListItemTitle>
-              <p>Código:</p>
-              <p>{{ info().codigo }}</p>
-            </span>
-          </mat-list-item>
-          <mat-list-item>
-            <span matListItemTitle>
-              <p>Cnpj:</p>
-              <p>{{ info().cnpj }}</p>
-            </span>
-          </mat-list-item>
-          <mat-list-item>
-            <span matListItemTitle>
-              <p>Razão Social:</p>
-              <p>{{ info().razaoSocial }}</p></span
-            >
-          </mat-list-item>
-          <mat-list-item>
-            <span matListItemTitle>
-              <p>Nome Fantasia:</p>
-              <p>{{ info().nomeFantasia }}</p></span
-            >
-          </mat-list-item>
-          <mat-list-item>
-            <span matListItemTitle>
-              <p>Contato:</p>
-              <p>{{ info().contato }}</p></span
-            >
-          </mat-list-item>
-          <mat-list-item>
-            <span matListItemTitle>
-              <p>Email:</p>
-              <p>{{ info().email }}</p></span
-            >
-          </mat-list-item>
-          <mat-list-item>
-            <span matListItemTitle>
-              <p>Rua:</p>
-              <p>{{ info().rua }}</p></span
-            >
-          </mat-list-item>
-          <mat-list-item>
-            <span matListItemTitle>
-              <p>Número:</p>
-              <p>{{ info().numero }}</p>
-            </span>
-          </mat-list-item>
-          <mat-list-item>
-            <span matListItemTitle>
-              <p>Bairro:</p>
-              <p>{{ info().bairro }}</p></span
-            >
-          </mat-list-item>
-          <mat-list-item>
-            <span matListItemTitle>
-              <p>Cidade:</p>
-              <p>{{ info().cidade }}</p></span
-            >
-          </mat-list-item>
-          <mat-list-item>
-            <span matListItemTitle>
-              <p>Estado:</p>
-              <p>{{ info().estado }}</p></span
-            >
-          </mat-list-item>
-          <mat-list-item>
-            <span matListItemTitle>
-              <p>Cep:</p>
-              <p>{{ info().cep }}</p></span
-            >
-          </mat-list-item>
-          <mat-list-item>
-            <span matListItemTitle>
-              <p>Status:</p>
-              <p>{{ info().status }}</p>
-            </span>
-          </mat-list-item>
-          <mat-list-item>
-            <span matListItemTitle>
-              <p>Contador Cracha Atual:</p>
-              <p>{{ info().qtdCracha }}</p>
-            </span>
-          </mat-list-item>
-        </mat-list>
-      </div>
-    </section>
-  `,
+  imports: [MatListModule, TelefonePipe, CepPipe, CnpjPipe],
+  templateUrl: './info-empresa.html',
   styles: ``,
 })
 export class InfoEmpresa {
-  public info = input<EmpresaModel>({ ...INICIALIZAR_EMPRESA_ENTITY });
+  public info = input<EmpresaModel>(INICIALIZAR_EMPRESA_ENTITY());
 }

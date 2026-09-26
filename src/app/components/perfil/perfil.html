@@ -6,17 +6,19 @@
     <div class="container-operation-list">
       <span>Lista de Perfis</span>
       <app-list-perfil
-        [listaPerfil]="listar()"
+        [listar]="listar()"
         (abrirRegistro)="mudarOperacao(operationMap.REGISTRO, $event)"
       ></app-list-perfil>
     </div>
     <div class="container-operation-action">
       @switch (operacaoEstado()) {
         @case ('inicial') {
-          <app-inicial-perfil
-            [listar]="listar()"
-            (abrirCadastro)="mudarOperacao(operationMap.CADASTRAR)"
-          ></app-inicial-perfil>
+          @if (contador(); as contagem) {
+            <app-inicial-perfil
+              [contador]="contagem"
+              (abrirCadastro)="mudarOperacao(operationMap.CADASTRAR)"
+            ></app-inicial-perfil>
+          }
         }
         @case ('cadastrar') {
           <section class="container-operation-signup">
@@ -26,15 +28,12 @@
                 <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
               </button>
             </div>
-            @if (buscar(); as dado) {
-              <app-form-perfil
-                [operacaoAtual]="operacaoEstado()"
-                [registroAtual]="registroEstado()"
-                [listar]="listar()"
-                [buscar]="dado"
-                (onMudarOperacao)="mudarOperacao(operationMap.INICIAL)"
-              ></app-form-perfil>
-            }
+            <app-form-perfil
+              [operacaoAtual]="operacaoEstado()"
+              [registroAtual]="registroEstado()"
+              [listar]="listar()"
+              (onMudarOperacao)="mudarOperacao(operationMap.INICIAL)"
+            ></app-form-perfil>
           </section>
         }
         @case ('registro') {

@@ -85,7 +85,11 @@
             <mat-icon>close</mat-icon>
           </button>
         }
-        <mat-datepicker-toggle matIconSuffix [for]="pickerNascimento"></mat-datepicker-toggle>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="pickerNascimento"
+          (click)="onBlur('dataNascimento')"
+        ></mat-datepicker-toggle>
         <mat-datepicker touchUi #pickerNascimento></mat-datepicker>
       </mat-form-field>
 
@@ -122,7 +126,11 @@
             <mat-icon>close</mat-icon>
           </button>
         }
-        <mat-datepicker-toggle matIconSuffix [for]="pickerAdmissao"></mat-datepicker-toggle>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="pickerAdmissao"
+          (click)="onBlur('dataAdmissao')"
+        ></mat-datepicker-toggle>
         <mat-datepicker touchUi #pickerAdmissao></mat-datepicker>
       </mat-form-field>
 

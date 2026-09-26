@@ -101,7 +101,7 @@ export class FormUsuario {
   private cdr = inject(ChangeDetectorRef);
 
   /* DADOS DE ENTIDADES EXTERNAS*/
-  protected empresa = this.empresaService.empresa;
+  protected empresa = this.empresaService.listarEmpresa;
   protected perfil = this.perfilService.listarPerfil;
 
   /* ENTRADA E SAIDA DE DADOS DO COMPONENTE */
@@ -136,7 +136,7 @@ export class FormUsuario {
   protected perfilOptions = computed(() =>
     (this.perfil() ?? []).map((p: PerfilModel) => ({
       value: p.id,
-      viewValue: p.descricao,
+      viewValue: p.descricao + ' - ' + p.nivel,
     })),
   );
 
@@ -160,10 +160,18 @@ export class FormUsuario {
     const isNumbers = /[0-9]/.test(key);
     const isLetters = /[a-zA-ZÀ-ÿ]/.test(key);
 
-    if (CamposUsuarioLetras.includes(campo as keyof UsuarioForm) && isNumbers) {
-      this.invalidCharFields.update((state) => ({ ...state, [campo]: true }));
-    } else if (CamposUsuarioNumeros.includes(campo as keyof UsuarioForm) && isLetters) {
-      this.invalidCharFields.update((state) => ({ ...state, [campo]: true }));
+    if (CamposUsuarioLetras.includes(campo as keyof UsuarioForm)) {
+      if (isNumbers) {
+        this.invalidCharFields.update((state) => ({ ...state, [campo]: true }));
+      } else {
+        this.invalidCharFields.update((state) => ({ ...state, [campo]: false }));
+      }
+    } else if (CamposUsuarioNumeros.includes(campo as keyof UsuarioForm)) {
+      if (isLetters) {
+        this.invalidCharFields.update((state) => ({ ...state, [campo]: true }));
+      } else {
+        this.invalidCharFields.update((state) => ({ ...state, [campo]: false }));
+      }
     }
   }
 
@@ -395,8 +403,13 @@ export class FormUsuario {
   }
 
   /* FUNÇÃO DE CARREGAMENTO A CADA SERVIÇO CONCLUIDO */
-  protected carregar() {
-    return this.usuarioService.listar();
+  protected carregarTodos() {
+    return this.usuarioService.listarTabela();
+  }
+
+  /* FUNÇÃO DE CARREGAMENTO DO CONATDOR A CADA SERVIÇO CONCLUIDO */
+  protected carregarContador() {
+    return this.usuarioService.counter();
   }
 
   /* FUNÇÃO DE CADASTRO E ATUALIZAR */
@@ -440,7 +453,8 @@ export class FormUsuario {
           if (confirmado === 'finalizado') {
             this.resetForm();
             this.onMudarOperacao.emit(OperationMap.INICIAL);
-            this.carregar().subscribe();
+            this.carregarTodos().subscribe();
+            this.carregarContador().subscribe();
             this.finalizarService.finalizar({
               ...FINALIZAR_SUCESSO,
               operacao: 'Cadastro do empresa',
@@ -474,7 +488,8 @@ export class FormUsuario {
           if (confirmado === 'finalizado') {
             this.resetForm();
             this.onMudarOperacao.emit(OperationMap.REGISTRO);
-            this.carregar().subscribe();
+            this.carregarTodos().subscribe();
+
             this.finalizarService.finalizar({
               ...FINALIZAR_SUCESSO,
               operacao: 'Atualização do empresa',

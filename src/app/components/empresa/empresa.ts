@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuditoriaData } from '../../interfaces/auditoria-data.interface';
 import { AuditoriaService } from '../../services/auditoria.service';
@@ -43,14 +43,15 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './empresa.html',
   styleUrl: './empresa.scss',
 })
-export class Empresa implements OnInit {
+export class Empresa implements OnInit, OnDestroy {
   /* INJEÇÃO DE DEPENDENCIAS DE SERVIÇOS */
   private empresaService = inject(EmpresaService);
   private auditoriaService = inject(AuditoriaService);
 
   /* DADOS RETORNADOS DO SERVIÇO */
-  protected readonly listar = this.empresaService.empresa;
-  protected readonly buscar = signal<EmpresaModel>({ ...INICIALIZAR_EMPRESA_ENTITY });
+  protected readonly listar = this.empresaService.listarEmpresa;
+  protected readonly buscar = this.empresaService.buscarEmpresas;
+  protected readonly contador = this.empresaService.contadorPerfil;
   protected readonly listarAuditoria = this.auditoriaService.auditoria;
   protected readonly buscarAuditoria = signal<AuditoriaData>({ ...INICIALIZAR_AUDITORIA_ENTITY });
 
@@ -59,18 +60,35 @@ export class Empresa implements OnInit {
   protected registroEstado = signal<RecordType>(RecordMap.INFORMACAO);
   protected auditoriaEstado = signal<boolean>(true);
 
-  protected empresaModel = signal<EmpresaForm>({ ...INICIALIZAR_EMPRESA_FORMS });
+  protected empresaModel = signal<EmpresaForm>(INICIALIZAR_EMPRESA_FORMS());
 
   /* ROTAS DE OPERAÇÃO */
   protected operationMap = OperationMap;
 
   /* CICLO DE VIDA PARA INICIALIZAR A LISTA */
   ngOnInit(): void {
-    this.carregar().subscribe();
+    this.carregarTodos().subscribe();
+    this.carregarContador().subscribe();
   }
+
+  /* CICLO DE VIDA PARA LIMPAR O DADO DA BUSCA */
+  ngOnDestroy(): void {
+    this.empresaService.limparBuscar();
+  }
+
   /* FUNÇÃO DE CARREGAMENTO DE LISTA */
-  protected carregar() {
-    return this.empresaService.listar();
+  protected carregarTodos() {
+    return this.empresaService.listarTabela();
+  }
+
+  /* FUNÇÃO DE CARREGAMENTO DE CONTADOR */
+  protected carregarContador() {
+    return this.empresaService.counter();
+  }
+
+  /* FUNÇÃO DE CARREGAMENTO O DADO SELECIONADO */
+  protected carregarDado(id: string) {
+    return this.empresaService.buscar(id);
   }
 
   /* FUNÇÃO DE CARREGAMENTO DE LISTA DE AUDITORIA */
@@ -84,20 +102,14 @@ export class Empresa implements OnInit {
       this.mudarRegistro(RecordMap.INFORMACAO);
       if (item) this.carregarRegistro(item);
       else this.operacaoEstado.set(OperationMap.INICIAL);
-      this.resetForm();
     }
-    if (operacao === OperationMap.CADASTRAR) {
-      this.resetForm();
-    }
-    this.buscar.set({ ...INICIALIZAR_EMPRESA_ENTITY });
     this.operacaoEstado.set(operacao);
   }
 
   /* FUNÇÃO DE MUDANÇA DE REGISTRO */
   protected mudarRegistro(registro: RecordType): void {
     if (registro === RecordMap.ATUALIZAR) {
-      this.resetForm();
-      this.empresaModel.set(this.buscar());
+      this.registroEstado.set(registro);
     }
     this.auditoriaEstado.set(true);
     this.registroEstado.set(registro);
@@ -116,21 +128,13 @@ export class Empresa implements OnInit {
 
   /* FUNÇÃO DE CARREGAMENTO DE INFORMAÇÕES PARA AUDITORIA E REGISTRO */
   private carregarRegistro(id: string): void {
-    this.carregar().subscribe({
-      next: () => {
-        const dado = this.listar().find((item) => item.id === id);
+    this.carregarDado(id).subscribe({
+      next: (dado) => {
         if (dado) {
           const field: string = 'registroId';
           this.carregarAuditoria(field, id).subscribe();
-          this.buscar.set(dado);
-          this.empresaModel.set(this.buscar());
         }
       },
     });
-  }
-
-  /* FUNÇÃO DE INICIALIZAÇÃO DO FORMULARIO */
-  private resetForm(): void {
-    this.empresaModel.set({ ...INICIALIZAR_EMPRESA_FORMS });
   }
 }

@@ -3,6 +3,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { RequestHttp } from '../constants/requests.const';
 import { SetoresModel } from '../entities/setores.model';
 import { Observable, tap, catchError, throwError } from 'rxjs';
+import { Contador } from '../interfaces/counter.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,9 @@ export class SetoresService {
 
   private buscarSetoresSignal = signal<SetoresModel | null>(null);
   public buscarSetores = this.buscarSetoresSignal.asReadonly();
+
+  private contadorSetoresSignal = signal<Contador | null>(null);
+  public contadorSetores = this.contadorSetoresSignal.asReadonly();
 
   cadastrar(dados: SetoresModel): Observable<SetoresModel> {
     return this.http.post<SetoresModel>(this.apiUrl, dados);
@@ -46,8 +50,9 @@ export class SetoresService {
     );
   }
 
+  /* BUSCA O DADOS PARA A TABELA COM APENAS DADOS NECESSARIOS */
   listarTabela(): Observable<SetoresModel[]> {
-    return this.http.get<SetoresModel[]>(this.apiUrl).pipe(
+    return this.http.get<SetoresModel[]>(`${this.apiUrl}/list`).pipe(
       tap((dados) => {
         this.listarSetoresSignal.set(dados);
       }),
@@ -63,5 +68,22 @@ export class SetoresService {
       }),
       catchError((error) => throwError(() => error)),
     );
+  }
+
+  /* CONTADOR DE REGISTROS TOTAIS, ATIVOS E INATIVOS */
+  counter(): Observable<Contador> {
+    return this.http.get<Contador>(`${this.apiUrl}/counter`).pipe(
+      tap((dado) => {
+        this.contadorSetoresSignal.set(dado);
+      }),
+      catchError((error) => throwError(() => error)),
+    );
+  }
+
+  /* LIMPEZA DOS SIGNALS DE LISTAR E BUSCAR */
+  public limparBuscar() {
+    this.buscarSetoresSignal.set(null);
+    this.listarSetoresSignal.set([]);
+    this.contadorSetoresSignal.set(null);
   }
 }

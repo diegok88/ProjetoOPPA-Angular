@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { MenuItemService } from '../../services/menu-item.service';
@@ -19,8 +19,10 @@ export class DashboardUser {
 
   // VARIAVEL DE ARMAZENAMENTO DO SUBMENU ATUAL ABERTO
   protected activeSubmenu = signal<string | null>(null);
+
   // VARIAVEL DO SIDEBAR
   protected isSidebarCollapsed = signal<boolean>(true);
+
   // FUNÇÃO DE ABERTURA E FECHAMENTO DO SUBMENUS DO SIDEBAR MANUALMENTE
   protected toggleSubmenu(chave: string | undefined, event: Event): void {
     event.preventDefault();

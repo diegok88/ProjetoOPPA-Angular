@@ -1,0 +1,415 @@
+<form class="container-operation-forms" (ngSubmit)="executar($event)">
+  <div class="container-operation-forms-separated">
+    <section class="container-operation-forms-group">
+      @if (isAtualizar()) {
+        <div class="container-operation-forms-update">
+          <mat-list>
+            <mat-list-item>
+              <span matListItemTitle>
+                <p class="list-label">Id:</p>
+                <p class="list-data">{{ buscar().id }}</p>
+              </span>
+            </mat-list-item>
+          </mat-list>
+        </div>
+      }
+
+      <mat-form-field appearance="outline">
+        <mat-label>Cnpj</mat-label>
+        <input
+          matInput
+          type="text"
+          id="cnpj"
+          name="cnpj"
+          placeholder="Insira o cnpj da empresa"
+          [ngModel]="getField('cnpj')"
+          (ngModelChange)="setField('cnpj', $event)"
+          mask="00.000.000/0000-00"
+          (keypress)="aoPressionarTecla($event, 'cnpj')"
+          (blur)="onBlur('cnpj')"
+          autocomplete="off"
+        />
+        @if (getField('cnpj')) {
+          <!-- PARA O BOTÃO NÃO SER SUBMETIDO IGUAL A DO CADASTRAR O MESMO DEVE SER TIPADO - type="button" -->
+          <button
+            matSuffix
+            matIconButton
+            type="button"
+            aria-label="Clear"
+            (click)="clearField('cnpj')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+        <mat-hint>
+          @if (obterErro('cnpj')) {
+            <span class="error-message" [class.show]="!!obterErro('cnpj')">{{
+              obterErro('cnpj')
+            }}</span>
+          }
+        </mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Razão Social</mat-label>
+        <input
+          matInput
+          type="text"
+          id="razaoSocial"
+          name="razaoSocial"
+          placeholder="Insira a razão social da empresa"
+          [ngModel]="getField('razaoSocial')"
+          (ngModelChange)="setField('razaoSocial', $event)"
+          mask="A******************************************************************"
+          (keypress)="aoPressionarTecla($event, 'razaoSocial')"
+          (blur)="onBlur('razaoSocial')"
+          autocomplete="off"
+        />
+        @if (getField('razaoSocial')) {
+          <!-- PARA O BOTÃO NÃO SER SUBMETIDO IGUAL A DO CADASTRAR O MESMO DEVE SER TIPADO - type="button" -->
+          <button
+            matSuffix
+            matIconButton
+            type="button"
+            aria-label="Clear"
+            (click)="clearField('razaoSocial')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+        <mat-hint>
+          @if (obterErro('razaoSocial')) {
+            <span class="error-message" [class.show]="!!obterErro('razaoSocial')">{{
+              obterErro('razaoSocial')
+            }}</span>
+          }
+        </mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Nome Fantasia</mat-label>
+        <input
+          matInput
+          type="text"
+          id="nomeFantasia"
+          name="nomeFantasia"
+          placeholder="Insira o nome fantasia da empresa"
+          [ngModel]="getField('nomeFantasia')"
+          (ngModelChange)="setField('nomeFantasia', $event)"
+          mask="A******************************************************************"
+          (keypress)="aoPressionarTecla($event, 'nomeFantasia')"
+          (blur)="onBlur('nomeFantasia')"
+          autocomplete="off"
+        />
+        @if (getField('nomeFantasia')) {
+          <!-- PARA O BOTÃO NÃO SER SUBMETIDO IGUAL A DO CADASTRAR O MESMO DEVE SER TIPADO - type="button" -->
+          <button
+            matSuffix
+            matIconButton
+            type="button"
+            aria-label="Clear"
+            (click)="clearField('nomeFantasia')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+        <mat-hint>
+          @if (obterErro('nomeFantasia')) {
+            <span class="error-message" [class.show]="!!obterErro('nomeFantasia')">{{
+              obterErro('nomeFantasia')
+            }}</span>
+          }
+        </mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Contato</mat-label>
+        <input
+          matInput
+          type="text"
+          id="contato"
+          name="contato"
+          placeholder="Insira o telefone de contato"
+          [ngModel]="getField('contato')"
+          (ngModelChange)="setField('contato', $event)"
+          (keypress)="aoPressionarTecla($event, 'contato')"
+          mask="00 00000-0000"
+          (blur)="onBlur('contato')"
+          autocomplete="off"
+        />
+        @if (getField('contato')) {
+          <button
+            matSuffix
+            matIconButton
+            type="button"
+            aria-label="Clear"
+            (click)="clearField('contato')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+        <mat-hint>
+          @if (obterErro('contato')) {
+            <span class="error-message" [class.show]="!!obterErro('contato')">{{
+              obterErro('contato')
+            }}</span>
+          }
+        </mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          type="email"
+          id="email"
+          name="email"
+          placeholder="Insira o e-mail da empresa"
+          [ngModel]="getField('email')"
+          (ngModelChange)="setField('email', $event)"
+          (keypress)="aoPressionarTecla($event, 'email')"
+          (blur)="onBlur('email')"
+          autocomplete="off"
+        />
+        @if (getField('email')) {
+          <button
+            matSuffix
+            matIconButton
+            type="button"
+            aria-label="Clear"
+            (click)="clearField('email')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+        <mat-hint>
+          @if (obterErro('email')) {
+            <span class="error-message" [class.show]="!!obterErro('email')">{{
+              obterErro('email')
+            }}</span>
+          }
+        </mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Rua</mat-label>
+        <input
+          matInput
+          type="text"
+          id="rua"
+          name="rua"
+          placeholder="Insira o nome da rua"
+          [ngModel]="getField('rua')"
+          (ngModelChange)="setField('rua', $event)"
+          mask="S******************************************************************"
+          (keypress)="aoPressionarTecla($event, 'rua')"
+          (blur)="onBlur('rua')"
+          autocomplete="off"
+        />
+        @if (getField('rua')) {
+          <button
+            matSuffix
+            matIconButton
+            type="button"
+            aria-label="Clear"
+            (click)="clearField('rua')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+        <mat-hint>
+          @if (obterErro('rua')) {
+            <span class="error-message" [class.show]="!!obterErro('rua')">{{
+              obterErro('rua')
+            }}</span>
+          }
+        </mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Número</mat-label>
+        <input
+          matInput
+          type="text"
+          id="numero"
+          name="numero"
+          placeholder="Insira o número do endereço"
+          [ngModel]="getField('numero')"
+          (ngModelChange)="setField('numero', $event)"
+          mask="00000"
+          (keypress)="aoPressionarTecla($event, 'numero')"
+          (blur)="onBlur('numero')"
+          autocomplete="off"
+        />
+        @if (getField('numero')) {
+          <button
+            matSuffix
+            matIconButton
+            type="button"
+            aria-label="Clear"
+            (click)="clearField('numero')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+        <mat-hint>
+          @if (obterErro('numero')) {
+            <span class="error-message" [class.show]="!!obterErro('numero')">{{
+              obterErro('numero')
+            }}</span>
+          }
+        </mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Bairro</mat-label>
+        <input
+          matInput
+          type="text"
+          id="bairro"
+          name="bairro"
+          placeholder="Insira o bairro"
+          [ngModel]="getField('bairro')"
+          (ngModelChange)="setField('bairro', $event)"
+          mask="S******************************************************************"
+          (keypress)="aoPressionarTecla($event, 'bairro')"
+          (blur)="onBlur('bairro')"
+          autocomplete="off"
+        />
+        @if (getField('bairro')) {
+          <button
+            matSuffix
+            matIconButton
+            type="button"
+            aria-label="Clear"
+            (click)="clearField('bairro')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+        <mat-hint>
+          @if (obterErro('bairro')) {
+            <span class="error-message" [class.show]="!!obterErro('bairro')">{{
+              obterErro('bairro')
+            }}</span>
+          }
+        </mat-hint>
+      </mat-form-field>
+
+      <div class="campos-menor">
+        <mat-form-field appearance="outline">
+          <mat-label>Cidade</mat-label>
+          <input
+            matInput
+            type="text"
+            id="cidade"
+            name="cidade"
+            placeholder="Insira a cidade"
+            [ngModel]="getField('cidade')"
+            (ngModelChange)="setField('cidade', $event)"
+            mask="S******************************************************************"
+            (keypress)="aoPressionarTecla($event, 'cidade')"
+            (blur)="onBlur('cidade')"
+            autocomplete="off"
+          />
+          @if (getField('cidade')) {
+            <button
+              matSuffix
+              matIconButton
+              type="button"
+              aria-label="Clear"
+              (click)="clearField('cidade')"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+          <mat-hint>
+            @if (obterErro('cidade')) {
+              <span class="error-message" [class.show]="!!obterErro('cidade')">{{
+                obterErro('cidade')
+              }}</span>
+            }
+          </mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Estado</mat-label>
+          <input
+            matInput
+            type="text"
+            id="estado"
+            name="estado"
+            placeholder="Insira o estado (UF)"
+            [ngModel]="getField('estado')"
+            (ngModelChange)="setField('estado', $event)"
+            mask="S******************************************************************"
+            (keypress)="aoPressionarTecla($event, 'estado')"
+            (blur)="onBlur('estado')"
+            maxlength="2"
+            autocomplete="off"
+          />
+          @if (getField('estado')) {
+            <button
+              matSuffix
+              matIconButton
+              type="button"
+              aria-label="Clear"
+              (click)="clearField('estado')"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+          <mat-hint>
+            @if (obterErro('estado')) {
+              <span class="error-message" [class.show]="!!obterErro('estado')">{{
+                obterErro('estado')
+              }}</span>
+            }
+          </mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>CEP</mat-label>
+          <input
+            matInput
+            type="text"
+            id="cep"
+            name="cep"
+            placeholder="Insira o CEP"
+            [ngModel]="getField('cep')"
+            (ngModelChange)="setField('cep', $event)"
+            mask="00000-000"
+            (keypress)="aoPressionarTecla($event, 'cep')"
+            (blur)="onBlur('cep')"
+            autocomplete="off"
+          />
+          @if (getField('cep')) {
+            <button
+              matSuffix
+              matIconButton
+              type="button"
+              aria-label="Clear"
+              (click)="clearField('cep')"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+          <mat-hint>
+            @if (obterErro('cep')) {
+              <span class="error-message" [class.show]="!!obterErro('cep')">{{
+                obterErro('cep')
+              }}</span>
+            }
+          </mat-hint>
+        </mat-form-field>
+      </div>
+    </section>
+    <section class="container-operation-forms-button">
+      @if (isAtualizar()) {
+        <button matButton="outlined" type="submit" [disabled]="!isFormValid()">Atualizar</button>
+      } @else {
+        <button matButton="outlined" type="submit" [disabled]="!isFormValid()">Cadastrar</button>
+      }
+    </section>
+  </div>
+</form>

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, ViewEncapsulation } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuditoriaData } from '../../interfaces/auditoria-data.interface';
 import { UsuarioData } from '../../interfaces/usuario-data.interface';
@@ -47,14 +47,15 @@ import { MatListModule } from '@angular/material/list';
   styleUrl: './usuario.scss',
   encapsulation: ViewEncapsulation.None,
 })
-export class Usuario implements OnInit {
+export class Usuario implements OnInit, OnDestroy {
   /* INJEÇÃO DE DEPENDENCIAS DE SERVIÇOS */
   private usuarioService = inject(UsuarioService);
   private auditoriaService = inject(AuditoriaService);
 
   /* DADOS RETORNADOS DO SERVIÇO */
-  protected readonly listar = this.usuarioService.usuario;
-  protected readonly buscar = signal<UsuarioModel>(INICIALIZAR_USUARIO_ENTITY());
+  protected readonly listar = this.usuarioService.listarUsuario;
+  protected readonly buscar = this.usuarioService.buscarUsuario;
+  protected readonly contador = this.usuarioService.contadorUsuario;
   protected readonly listarAuditoria = this.auditoriaService.auditoria;
   protected readonly buscarAuditoria = signal<AuditoriaData>({ ...INICIALIZAR_AUDITORIA_ENTITY });
 
@@ -72,12 +73,30 @@ export class Usuario implements OnInit {
 
   /* CICLO DE VIDA PARA INICIALIZAR A LISTA */
   ngOnInit(): void {
-    this.carregar().subscribe();
+    this.carregarTodos().subscribe();
+    this.carregarContador().subscribe();
   }
+
+  /* CICLO DE VIDA PARA LIMPAR O DADO DA BUSCA */
+  ngOnDestroy(): void {
+    this.usuarioService.limparBuscar();
+  }
+
   /* FUNÇÃO DE CARREGAMENTO DE LISTA */
-  protected carregar() {
-    return this.usuarioService.listar();
+  protected carregarTodos() {
+    return this.usuarioService.listarTabela();
   }
+
+  /* FUNÇÃO DE CARREGAMENTO DE CONTADOR */
+  protected carregarContador() {
+    return this.usuarioService.counter();
+  }
+
+  /* FUNÇÃO DE CARREGAMENTO O DADO SELECIONADO */
+  protected carregarDado(id: string) {
+    return this.usuarioService.buscar(id);
+  }
+
   /* FUNÇÃO DE CARREGAMENTO DE LISTA DE AUDITORIA */
   protected carregarAuditoria(field: string, query: string) {
     return this.auditoriaService.listar(field, query);
@@ -90,18 +109,12 @@ export class Usuario implements OnInit {
       this.mudarRegistro(RecordMap.INFORMACAO);
       if (item) this.carregarRegistro(item);
       else this.operacaoEstado.set(OperationMap.INICIAL);
-      this.resetForm();
     }
-    if (operacao === OperationMap.CADASTRAR) {
-      this.resetForm();
-    }
-    this.buscar.set(INICIALIZAR_USUARIO_ENTITY());
     this.operacaoEstado.set(operacao);
   }
   /* FUNÇÃO DE MUDANÇA DE REGISTRO */
   protected mudarRegistro(registro: RecordType): void {
     if (registro === RecordMap.ATUALIZAR) {
-      this.resetForm();
       this.usuarioModel.set(INICIALIZAR_USUARIO_FORMS());
       this.registroEstado.set(registro);
     }
@@ -122,22 +135,13 @@ export class Usuario implements OnInit {
 
   /* FUNÇÃO DE CARREGAMENTO DE INFORMAÇÕES PARA AUDITORIA E REGISTRO */
   private carregarRegistro(id: string): void {
-    this.carregar().subscribe({
-      next: () => {
-        const dado = this.listar().find((item) => item.id === id);
+    this.carregarDado(id).subscribe({
+      next: (dado) => {
         if (dado) {
           const field: string = 'registroId';
           this.carregarAuditoria(field, id).subscribe();
-          console.log(this.listarAuditoria());
-          this.buscar.set(dado);
-          this.usuarioModel.set(this.buscar());
         }
       },
     });
-  }
-
-  /* FUNÇÃO DE INICIALIZAÇÃO DO FORMULARIO */
-  private resetForm(): void {
-    this.usuarioModel.set(INICIALIZAR_USUARIO_FORMS());
   }
 }

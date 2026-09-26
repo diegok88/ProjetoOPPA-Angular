@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { RequestHttp } from '../constants/requests.const';
-import { UsuarioData } from '../interfaces/usuario-data.interface';
 import { catchError, Observable, tap, throwError } from 'rxjs';
+import { Contador } from '../interfaces/counter.interface';
+import { UsuarioModel } from '../entities/usuario.model';
 
 @Injectable({
   providedIn: 'root',
@@ -11,31 +12,73 @@ export class UsuarioService {
   private http = inject(HttpClient);
   private apiUrl = RequestHttp.usuario;
 
-  private usuarioSignal = signal<UsuarioData[] | []>([]);
-  public usuario = this.usuarioSignal.asReadonly();
+  private listarUsuarioSignal = signal<UsuarioModel[] | []>([]);
+  public listarUsuario = this.listarUsuarioSignal.asReadonly();
 
-  cadastrar(dados: UsuarioData): Observable<UsuarioData> {
-    return this.http.post<UsuarioData>(`${this.apiUrl}/assist`, dados);
+  private buscarUsuarioSignal = signal<UsuarioModel | null>(null);
+  public buscarUsuario = this.buscarUsuarioSignal.asReadonly();
+
+  private contadorUsuarioSignal = signal<Contador | null>(null);
+  public contadorUsuario = this.contadorUsuarioSignal.asReadonly();
+
+  cadastrar(dados: UsuarioModel): Observable<UsuarioModel> {
+    return this.http.post<UsuarioModel>(`${this.apiUrl}`, dados);
   }
-  atualizar(id: string, dados: UsuarioData): Observable<UsuarioData> {
-    return this.http.patch<UsuarioData>(`${this.apiUrl}/${id}`, dados);
+  atualizar(id: string, dados: UsuarioModel): Observable<UsuarioModel> {
+    return this.http.patch<UsuarioModel>(`${this.apiUrl}/${id}`, dados);
   }
-  ativar(id: string): Observable<UsuarioData> {
-    return this.http.patch<UsuarioData>(`${this.apiUrl}/active/${id}`, {});
+  ativar(id: string): Observable<UsuarioModel> {
+    return this.http.patch<UsuarioModel>(`${this.apiUrl}/active/${id}`, {});
   }
-  inativar(id: string): Observable<UsuarioData> {
-    return this.http.patch<UsuarioData>(`${this.apiUrl}/deactive/${id}`, {});
+  inativar(id: string): Observable<UsuarioModel> {
+    return this.http.patch<UsuarioModel>(`${this.apiUrl}/deactive/${id}`, {});
   }
-  deletar(id: string): Observable<UsuarioData> {
-    return this.http.delete<UsuarioData>(`${this.apiUrl}/${id}`);
+  deletar(id: string): Observable<UsuarioModel> {
+    return this.http.delete<UsuarioModel>(`${this.apiUrl}/${id}`);
   }
-  listar(): Observable<UsuarioData[]> {
-    return this.http.get<UsuarioData[]>(this.apiUrl).pipe(
+  listar(): Observable<UsuarioModel[]> {
+    return this.http.get<UsuarioModel[]>(this.apiUrl).pipe(
       tap((dados) => {
-        this.usuarioSignal.set(dados);
-        console.log(this.usuario());
+        this.listarUsuarioSignal.set(dados);
       }),
       catchError((error) => throwError(() => error)),
     );
+  }
+
+  /* BUSCA O DADOS PARA A TABELA COM APENAS DADOS NECESSARIOS */
+  listarTabela(): Observable<UsuarioModel[]> {
+    return this.http.get<UsuarioModel[]>(`${this.apiUrl}/list`).pipe(
+      tap((dados) => {
+        this.listarUsuarioSignal.set(dados);
+      }),
+      catchError((error) => throwError(() => error)),
+    );
+  }
+
+  /* BUSCA O DADOS UNICO SOLICITADO */
+  buscar(id: string): Observable<UsuarioModel> {
+    return this.http.get<UsuarioModel>(`${this.apiUrl}/${id}`).pipe(
+      tap((dado) => {
+        this.buscarUsuarioSignal.set(dado);
+      }),
+      catchError((error) => throwError(() => error)),
+    );
+  }
+
+  /* CONTADOR DE REGISTROS TOTAIS, ATIVOS E INATIVOS */
+  counter(): Observable<Contador> {
+    return this.http.get<Contador>(`${this.apiUrl}/counter`).pipe(
+      tap((dado) => {
+        this.contadorUsuarioSignal.set(dado);
+      }),
+      catchError((error) => throwError(() => error)),
+    );
+  }
+
+  /* LIMPEZA DOS SIGNALS DE LISTAR E BUSCAR */
+  public limparBuscar() {
+    this.buscarUsuarioSignal.set(null);
+    this.listarUsuarioSignal.set([]);
+    this.contadorUsuarioSignal.set(null);
   }
 }

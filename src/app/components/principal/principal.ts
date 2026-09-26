@@ -1,6 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { MatIconModule } from '@angular/material/icon';
+import { PerfilService } from '../../services/perfil.service';
 
 @Component({
   selector: 'app-principal',
@@ -10,6 +11,9 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class Principal {
   private authService = inject(AuthService);
+
+  protected perfilService = inject(PerfilService);
+  protected perfil = this.perfilService.buscarPerfil;
 
   protected readonly usuario = this.authService.usuario;
 

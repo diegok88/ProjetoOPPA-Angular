@@ -1,6 +1,6 @@
 <section class="container-operation-initial">
-  <img class="operation-initial-img" src="images/team.png" alt="Perfil" />
-  <span class="operation-initial-text">Cadastrar um novo Perfil?</span>
+  <img class="operation-initial-img" src="images/id-card.png" alt="Perfil" />
+  <span class="operation-initial-text">Cadastrar um novo Usuário?</span>
   <button matButton="outlined" class="operacao-button" (click)="onCadastrarOperacao()">
     Clique aqui
   </button>
@@ -10,7 +10,7 @@
         <div class="container-card-icon totals">
           <mat-icon fontSet="material-symbols-outlined">List_Alt</mat-icon>
         </div>
-        <mat-card-title>Total de Perfis</mat-card-title>
+        <mat-card-title>Total de Usuários</mat-card-title>
         <mat-card-subtitle>{{ contador()?.total }}</mat-card-subtitle>
       </mat-card-header>
     </mat-card>
@@ -19,7 +19,7 @@
         <div class="container-card-icon active">
           <mat-icon fontSet="material-symbols-outlined">Verified</mat-icon>
         </div>
-        <mat-card-title>Total de Ativas</mat-card-title>
+        <mat-card-title>Total de Ativos</mat-card-title>
         <mat-card-subtitle>{{ contador()?.ativos }}</mat-card-subtitle>
       </mat-card-header>
     </mat-card>
@@ -28,7 +28,7 @@
         <div class="container-card-icon deactive">
           <mat-icon fontSet="material-symbols-outlined">Release_Alert</mat-icon>
         </div>
-        <mat-card-title>Total de Inativas</mat-card-title>
+        <mat-card-title>Total de Inativos</mat-card-title>
         <mat-card-subtitle>{{ contador()?.inativos }}</mat-card-subtitle>
       </mat-card-header>
     </mat-card>

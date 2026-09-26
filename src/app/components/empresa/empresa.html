@@ -13,9 +13,12 @@
     <div class="container-operation-action">
       @switch (operacaoEstado()) {
         @case ('inicial') {
-          <app-inicial-empresa
-            (abrirCadastro)="mudarOperacao(operationMap.CADASTRAR)"
-          ></app-inicial-empresa>
+          @if (contador(); as contagem) {
+            <app-inicial-empresa
+              [contador]="contagem"
+              (abrirCadastro)="mudarOperacao(operationMap.CADASTRAR)"
+            ></app-inicial-empresa>
+          }
         }
         @case ('cadastrar') {
           <section class="container-operation-signup">
@@ -31,8 +34,6 @@
             <app-form-empresa
               [operacaoAtual]="operacaoEstado()"
               [registroAtual]="registroEstado()"
-              [listar]="listar()"
-              [buscar]="buscar()"
               (onMudarOperacao)="mudarOperacao(operationMap.INICIAL)"
             ></app-form-empresa>
           </section>
@@ -40,11 +41,13 @@
         @case ('registro') {
           <section class="container-operation-register">
             <div class="container-operation-register-toggle">
-              <app-toogle
-                [statusEntity]="buscar().status"
-                [onRegistroAtual]="registroEstado()"
-                (onMudarRegistro)="mudarRegistro($event)"
-              ></app-toogle>
+              @if (buscar(); as dado) {
+                <app-toogle
+                  [statusEntity]="dado.status"
+                  [onRegistroAtual]="registroEstado()"
+                  (onMudarRegistro)="mudarRegistro($event)"
+                ></app-toogle>
+              }
             </div>
             <div class="container-operation-separated">
               @switch (registroEstado()) {
@@ -60,10 +63,11 @@
                         <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
                       </button>
                     </div>
-                    <app-info-empresa [info]="buscar()"></app-info-empresa>
+                    @if (buscar(); as dado) {
+                      <app-info-empresa [info]="dado"></app-info-empresa>
+                    }
                   </div>
                 }
-
                 @case ('atualizar') {
                   <div class="container-operation-register">
                     <div class="container-operation-action-header">
@@ -76,13 +80,14 @@
                         <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
                       </button>
                     </div>
-                    <app-form-empresa
-                      [operacaoAtual]="operacaoEstado()"
-                      [registroAtual]="registroEstado()"
-                      [listar]="listar()"
-                      [buscar]="buscar()"
-                      (onMudarOperacao)="mudarOperacao(operationMap.INICIAL)"
-                    ></app-form-empresa>
+                    @if (buscar(); as dado) {
+                      <app-form-empresa
+                        [operacaoAtual]="operacaoEstado()"
+                        [registroAtual]="registroEstado()"
+                        [buscar]="dado"
+                        (onMudarOperacao)="mudarOperacao($event, dado.id)"
+                      ></app-form-empresa>
+                    }
                   </div>
                 }
                 @case ('status') {
@@ -97,12 +102,14 @@
                         <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
                       </button>
                     </div>
-                    <app-process-empresa
-                      [operacaoAtual]="operacaoEstado()"
-                      [registroAtual]="registroEstado()"
-                      [buscar]="buscar()"
-                      (onMudarOperacao)="mudarOperacao($event, buscar().id)"
-                    ></app-process-empresa>
+                    @if (buscar(); as dado) {
+                      <app-process-empresa
+                        [operacaoAtual]="operacaoEstado()"
+                        [registroAtual]="registroEstado()"
+                        [buscar]="dado"
+                        (onMudarOperacao)="mudarOperacao($event, dado.id)"
+                      ></app-process-empresa>
+                    }
                   </div>
                 }
                 @case ('eliminar') {
@@ -117,12 +124,14 @@
                         <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
                       </button>
                     </div>
-                    <app-process-empresa
-                      [operacaoAtual]="operacaoEstado()"
-                      [registroAtual]="registroEstado()"
-                      [buscar]="buscar()"
-                      (onMudarOperacao)="mudarOperacao($event, buscar().id)"
-                    ></app-process-empresa>
+                    @if (buscar(); as dado) {
+                      <app-process-empresa
+                        [operacaoAtual]="operacaoEstado()"
+                        [registroAtual]="registroEstado()"
+                        [buscar]="dado"
+                        (onMudarOperacao)="mudarOperacao($event, dado.id)"
+                      ></app-process-empresa>
+                    }
                   </div>
                 }
                 @case ('auditoria') {

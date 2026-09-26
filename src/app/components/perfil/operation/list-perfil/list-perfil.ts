@@ -23,11 +23,11 @@ import { PerfilModel } from '../../../../entities/perfil.model';
 export class ListPerfil implements OnInit {
   protected displayedColumns: string[] = ['codigo', 'descricao', 'acao'];
 
-  public listaPerfil = input<PerfilModel[] | []>([]);
+  public listar = input<PerfilModel[] | []>([]);
   public abrirRegistro = output<string>();
 
   ngOnInit(): void {
-    this.listaPerfil();
+    this.listar();
   }
 
   protected onAbrirRegistro(id: string): void {

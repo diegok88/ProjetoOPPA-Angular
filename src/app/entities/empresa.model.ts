@@ -44,30 +44,16 @@ export const CamposEmpresa: (keyof EmpresaForm)[] = [
   'cidade',
   'estado',
   'cep',
-] as const;
+];
 
 /* CONSTANTE DOS CAMPOS DA ENTIDADE ACEITA APENAS NUMEROS */
-export const CamposEmpresaNumeros: (keyof EmpresaForm)[] = [
-  'cnpj',
-  'contato',
-  'numero',
-  'cep',
-] as const;
+export const CamposEmpresaNumeros: (keyof EmpresaForm)[] = ['cnpj', 'contato', 'numero', 'cep'];
 
 /* CONSTANTE DOS CAMPOS DA ENTIDADE ACEITA APENAS LETRAS */
-export const CamposEmpresaLetras: (keyof EmpresaForm)[] = [
-  'rua',
-  'bairro',
-  'cidade',
-  'estado',
-] as const;
+export const CamposEmpresaLetras: (keyof EmpresaForm)[] = ['rua', 'bairro', 'cidade', 'estado'];
 
 /* CONSTANTE DOS CAMPOS DA ENTIDADE LIVRES */
-export const CamposEmpresaLivres: (keyof EmpresaForm)[] = [
-  'razaoSocial',
-  'nomeFantasia',
-  'email',
-] as const;
+export const CamposEmpresaLivres: (keyof EmpresaForm)[] = ['razaoSocial', 'nomeFantasia', 'email'];
 
 /* MAPEAMENTO DA ENTIDADE */
 export const EmpresaMap = {
@@ -88,7 +74,7 @@ export const EmpresaMap = {
 export type EmpresaType = (typeof EmpresaMap)[keyof typeof EmpresaMap];
 
 /* INICIALIZADOR DO OBJETO SIGNALS DE BUSCA */
-export const INICIALIZAR_EMPRESA_ENTITY: EmpresaModel = {
+export const INICIALIZAR_EMPRESA_ENTITY = (): EmpresaModel => ({
   id: '',
   codigo: undefined,
   cnpj: '',
@@ -103,10 +89,10 @@ export const INICIALIZAR_EMPRESA_ENTITY: EmpresaModel = {
   estado: '',
   cep: '',
   status: undefined,
-} as const;
+});
 
 /* INICIALIZADOR DO OBJETO SIGNALS DO FORMULARIO */
-export const INICIALIZAR_EMPRESA_FORMS: EmpresaForm = {
+export const INICIALIZAR_EMPRESA_FORMS = (): EmpresaForm => ({
   cnpj: '',
   razaoSocial: '',
   nomeFantasia: '',
@@ -118,7 +104,7 @@ export const INICIALIZAR_EMPRESA_FORMS: EmpresaForm = {
   cidade: '',
   estado: '',
   cep: '',
-} as const;
+});
 
 /* TIPOS DE FALHAS */
 export type ErrorEmpresaType =

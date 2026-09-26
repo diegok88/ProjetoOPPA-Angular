@@ -24,7 +24,7 @@
           placeholder="Insira a descrição do perfil"
           [ngModel]="getField('descricao')"
           (ngModelChange)="setField('descricao', $event)"
-          mask="A******************************************************************"
+          mask="S******************************************************************"
           (keypress)="aoPressionarTecla($event, 'descricao')"
           (blur)="onBlur('descricao')"
           autocomplete="off"

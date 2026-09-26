@@ -13,10 +13,12 @@
     <div class="container-operation-action">
       @switch (operacaoEstado()) {
         @case ('inicial') {
-          <app-inicial-usuario
-            [listar]="listar()"
-            (abrirCadastro)="mudarOperacao(operationMap.CADASTRAR)"
-          ></app-inicial-usuario>
+          @if (contador(); as contagem) {
+            <app-inicial-usuario
+              [contador]="contagem"
+              (abrirCadastro)="mudarOperacao(operationMap.CADASTRAR)"
+            ></app-inicial-usuario>
+          }
         }
         @case ('cadastrar') {
           <section class="container-operation-signup">
@@ -29,8 +31,6 @@
             <app-form-usuario
               [operacaoAtual]="operacaoEstado()"
               [registroAtual]="registroEstado()"
-              [listar]="listar()"
-              [buscar]="buscar()"
               (onMudarOperacao)="mudarOperacao(operationMap.INICIAL)"
             ></app-form-usuario>
           </section>
@@ -38,11 +38,13 @@
         @case ('registro') {
           <section class="container-operation-register">
             <div class="container-operation-register-toggle">
-              <app-toogle
-                [statusEntity]="buscar().status"
-                [onRegistroAtual]="registroEstado()"
-                (onMudarRegistro)="mudarRegistro($event)"
-              ></app-toogle>
+              @if (buscar(); as dado) {
+                <app-toogle
+                  [statusEntity]="dado.status"
+                  [onRegistroAtual]="registroEstado()"
+                  (onMudarRegistro)="mudarRegistro($event)"
+                ></app-toogle>
+              }
             </div>
             <div class="container-operation-separated">
               @switch (registroEstado()) {
@@ -58,7 +60,9 @@
                         <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
                       </button>
                     </div>
-                    <app-info-usuario [info]="buscar()"></app-info-usuario>
+                    @if (buscar(); as dado) {
+                      <app-info-usuario [info]="dado"></app-info-usuario>
+                    }
                   </div>
                 }
                 @case ('atualizar') {
@@ -73,19 +77,20 @@
                         <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
                       </button>
                     </div>
-                    <app-form-usuario
-                      [operacaoAtual]="operacaoEstado()"
-                      [registroAtual]="registroEstado()"
-                      [listar]="listar()"
-                      [buscar]="buscar()"
-                      (onMudarOperacao)="mudarOperacao($event, buscar().id)"
-                    ></app-form-usuario>
+                    @if (buscar(); as dado) {
+                      <app-form-usuario
+                        [operacaoAtual]="operacaoEstado()"
+                        [registroAtual]="registroEstado()"
+                        [buscar]="dado"
+                        (onMudarOperacao)="mudarOperacao($event, dado.id)"
+                      ></app-form-usuario>
+                    }
                   </div>
                 }
                 @case ('ativar') {
                   <div class="container-operation-register">
                     <div class="container-operation-action-header">
-                      <span>Inativar o Usuário</span>
+                      <span>Ativar o Usuário</span>
                       <button
                         mat-icon-button
                         color="accent"
@@ -94,12 +99,14 @@
                         <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
                       </button>
                     </div>
-                    <app-process-usuario
-                      [operacaoAtual]="operacaoEstado()"
-                      [registroAtual]="registroEstado()"
-                      [buscar]="buscar()"
-                      (onMudarOperacao)="mudarOperacao($event, buscar().id)"
-                    ></app-process-usuario>
+                    @if (buscar(); as dado) {
+                      <app-process-usuario
+                        [operacaoAtual]="operacaoEstado()"
+                        [registroAtual]="registroEstado()"
+                        [buscar]="dado"
+                        (onMudarOperacao)="mudarOperacao($event, dado.id)"
+                      ></app-process-usuario>
+                    }
                   </div>
                 }
                 @case ('status') {
@@ -114,12 +121,14 @@
                         <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
                       </button>
                     </div>
-                    <app-process-usuario
-                      [operacaoAtual]="operacaoEstado()"
-                      [registroAtual]="registroEstado()"
-                      [buscar]="buscar()"
-                      (onMudarOperacao)="mudarOperacao($event, buscar().id)"
-                    ></app-process-usuario>
+                    @if (buscar(); as dado) {
+                      <app-process-usuario
+                        [operacaoAtual]="operacaoEstado()"
+                        [registroAtual]="registroEstado()"
+                        [buscar]="dado"
+                        (onMudarOperacao)="mudarOperacao($event, dado.id)"
+                      ></app-process-usuario>
+                    }
                   </div>
                 }
                 @case ('eliminar') {
@@ -134,12 +143,14 @@
                         <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
                       </button>
                     </div>
-                    <app-process-usuario
-                      [operacaoAtual]="operacaoEstado()"
-                      [registroAtual]="registroEstado()"
-                      [buscar]="buscar()"
-                      (onMudarOperacao)="mudarOperacao($event, buscar().id)"
-                    ></app-process-usuario>
+                    @if (buscar(); as dado) {
+                      <app-process-usuario
+                        [operacaoAtual]="operacaoEstado()"
+                        [registroAtual]="registroEstado()"
+                        [buscar]="dado"
+                        (onMudarOperacao)="mudarOperacao($event, dado.id)"
+                      ></app-process-usuario>
+                    }
                   </div>
                 }
                 @case ('auditoria') {

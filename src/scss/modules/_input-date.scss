@@ -1,15 +1,18 @@
 @use '@angular/material' as mat;
 
+// ===================================================================
+// DATEPICKER / CALENDÁRIO — ESTILOS GLOBAIS (styles.scss da raiz)
+// ===================================================================
+
 :root {
   @include mat.datepicker-overrides(
     (
       calendar-container-touch-shape: 10px,
 
-      calendar-container-background-color: blue,
-
+      calendar-container-background-color: var(--color-secondary),
       // Cor das setas < >
       calendar-navigation-button-icon-color: var(--color-white),
-      // Cor da setas para vaixo de periodo
+      // Cor da seta para baixo de periodo
       calendar-period-button-icon-color: var(--color-white),
       // Cor do mes
       calendar-body-label-text-color: var(--color-white),
@@ -22,7 +25,7 @@
   );
 }
 
-// cria borda no cnteiner do calendario
+// Cria borda no container do calendario
 .mat-datepicker-content {
   border: 2px solid white;
 }
@@ -40,25 +43,114 @@ body .mat-tooltip {
 span.mat-calendar-body-cell-content {
   color: white;
 }
-// Eliminar o Mes junto com os dias
-.mat-calendar-body tr:has(td.mat-calendar-body-label[colspan='7']) {
+
+// ===================================================================
+// RÓTULO DO MÊS — esconder SEM apagar os primeiros dias
+// O rótulo fica na MESMA linha dos primeiros dias do mês, ocupando
+// as colunas vazias do começo. NUNCA esconder a <tr> inteira:
+// isso apaga os dias 1, 2, 3... dos meses que começam no fim da semana.
+// ===================================================================
+
+// Esconde apenas o TEXTO do rótulo, mantendo a célula (alinhamento preservado)
+td.mat-calendar-body-label {
+  opacity: 0;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  padding: 0 !important;
+}
+
+// Oculta a linha APENAS quando ela contém SOMENTE o rótulo
+// (nenhum dia dentro) — caso de meses que começam no domingo
+.mat-calendar-body tr:not(:has(td:not(.mat-calendar-body-label))) {
   display: none !important;
 }
 
-// Oculta a linha do ano (colspan 4) no seletor de mês/ano
-.mat-calendar-body tr:has(td.mat-calendar-body-label[colspan='4']) {
-  display: none !important;
+// ===================================================================
+// TAMANHO FIXO DO CALENDÁRIO
+// ===================================================================
+
+.mat-mdc-datepicker-content .mat-calendar {
+  width: 350px;
+  height: 400px; // altura fixa entre meses de 5 ou 6 linhas
 }
-// Oculta apenas a escrita
-td.mat-calendar-body-label {
-  opacity: 0;
+
+.mat-calendar-content {
+  height: 100%;
 }
-// Tamanho do container do calendário
-div.cdk-overlay-pane {
-  mat-datepicker-content {
-    div.mat-datepicker-content-container {
-      width: 350px;
-      height: auto;
-    }
+
+.mat-calendar-body {
+  height: 100%;
+}
+
+.mat-calendar-body tr {
+  height: calc(100% / 6);
+}
+
+// ===================================================================
+// FIX DO CABEÇALHO DA SEMANA (D S T Q Q S S)
+// ===================================================================
+
+.mat-calendar table {
+  display: table !important;
+  width: 100%;
+  table-layout: fixed; // trava as 7 colunas em larguras iguais
+  border-collapse: collapse;
+}
+
+.mat-calendar thead {
+  display: table-header-group !important;
+}
+
+.mat-calendar tbody {
+  display: table-row-group !important;
+}
+
+.mat-calendar tr {
+  display: table-row !important;
+}
+
+.mat-calendar th,
+.mat-calendar td {
+  display: table-cell !important;
+}
+
+// Cabeçalho da semana: nas CÉLULAS (th), uma coluna cada
+th.mat-calendar-table-header {
+  width: calc(100% / 7);
+  text-align: center;
+  padding: 0 4px;
+  color: var(--color-white) !important;
+}
+
+// Separador header/corpo
+.mat-calendar-table-header-divider {
+  height: 1px;
+}
+
+// ===================================================================
+// ELIMINA OS PONTINHOS JUNTO ÀS SETAS < >
+// ===================================================================
+
+.mat-calendar .mat-calendar-previous-button,
+.mat-calendar .mat-calendar-next-button,
+.mat-calendar .mat-calendar-period-button {
+  &::before,
+  &::after {
+    display: none !important;
+    content: none !important;
   }
+  text-decoration: none !important;
+  border-bottom: none !important;
+}
+
+.mat-calendar ::marker {
+  content: none !important;
+}
+
+// Esconde TODO tooltip do Material (painel de overlay inteiro)
+.cdk-overlay-pane.mat-mdc-tooltip-panel {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }

@@ -99,10 +99,18 @@ export class FormSetores {
     const isNumbers = /[0-9]/.test(key);
     const isLetters = /[a-zA-ZÀ-ÿ]/.test(key);
 
-    if (CamposSetoresLetras.includes(campo as keyof SetoresForm) && isNumbers) {
-      this.invalidCharFields.update((state) => ({ ...state, [campo]: true }));
-    } else if (CamposSetoresNumeros.includes(campo as keyof SetoresForm) && isLetters) {
-      this.invalidCharFields.update((state) => ({ ...state, [campo]: true }));
+    if (CamposSetoresLetras.includes(campo as keyof SetoresForm)) {
+      if (isNumbers) {
+        this.invalidCharFields.update((state) => ({ ...state, [campo]: true }));
+      } else {
+        this.invalidCharFields.update((state) => ({ ...state, [campo]: false }));
+      }
+    } else if (CamposSetoresNumeros.includes(campo as keyof SetoresForm)) {
+      if (isLetters) {
+        this.invalidCharFields.update((state) => ({ ...state, [campo]: true }));
+      } else {
+        this.invalidCharFields.update((state) => ({ ...state, [campo]: false }));
+      }
     }
   }
 
@@ -114,7 +122,7 @@ export class FormSetores {
         const touched = this.fieldTouched()[campo as string] ?? false;
         const submitted = this.formSubmitted();
         const recordEqual = this.listar().some(
-          (item) => item[campo] === this.setoresModel()[campo],
+          (item) => item[campo] === this.setoresModel()[campo].trim().toUpperCase(),
         );
 
         let erro: ErrorSetoresType = null;
@@ -211,6 +219,11 @@ export class FormSetores {
     return this.setoresService.listar();
   }
 
+  /* FUNÇÃO DE CARREGAMENTO DO CONATDOR A CADA SERVIÇO CONCLUIDO */
+  protected carregarContador() {
+    return this.setoresService.counter();
+  }
+
   /* FUNÇÃO DE CADASTRO E ATUALIZAR */
   protected executar(event: Event): void {
     event.preventDefault();
@@ -253,6 +266,7 @@ export class FormSetores {
             this.resetForm();
             this.onMudarOperacao.emit(OperationMap.INICIAL);
             this.carregar().subscribe();
+            this.carregarContador().subscribe();
             this.finalizarService.finalizar({
               ...FINALIZAR_SUCESSO,
               operacao: 'Cadastro do setor',
@@ -332,5 +346,6 @@ export class FormSetores {
     this.setoresModel.set(INICIALIZAR_SETORES_FORMS());
     this.formSubmitted.set(false);
     this.touchedSubmitted.set(true);
+    this.invalidCharFields.set({});
   }
 }
