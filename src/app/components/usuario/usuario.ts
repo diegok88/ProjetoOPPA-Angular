@@ -4,12 +4,7 @@ import { AuditoriaData } from '../../interfaces/auditoria-data.interface';
 import { UsuarioData } from '../../interfaces/usuario-data.interface';
 import { AuditoriaService } from '../../services/auditoria.service';
 import { UsuarioService } from '../../services/usuario.service';
-import {
-  Escalas,
-  INICIALIZAR_USUARIO_ENTITY,
-  INICIALIZAR_USUARIO_FORMS,
-  UsuarioModel,
-} from '../../entities/usuario.model';
+import { Escalas, INICIALIZAR_USUARIO_FORMS } from '../../entities/usuario.model';
 import {
   OperationMap,
   OperationType,
@@ -27,6 +22,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Toogle } from '../toogle/toogle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
+import { GestorService } from '../../services/gestor.service';
 
 @Component({
   selector: 'app-usuario',
@@ -50,10 +46,11 @@ import { MatListModule } from '@angular/material/list';
 export class Usuario implements OnInit, OnDestroy {
   /* INJEÇÃO DE DEPENDENCIAS DE SERVIÇOS */
   private usuarioService = inject(UsuarioService);
+  private gestorService = inject(GestorService);
   private auditoriaService = inject(AuditoriaService);
 
   /* DADOS RETORNADOS DO SERVIÇO */
-  protected readonly listar = this.usuarioService.listarUsuario;
+  protected readonly listar = this.gestorService.listarGestor;
   protected readonly buscar = this.usuarioService.buscarUsuario;
   protected readonly contador = this.usuarioService.contadorUsuario;
   protected readonly listarAuditoria = this.auditoriaService.auditoria;
@@ -80,11 +77,12 @@ export class Usuario implements OnInit, OnDestroy {
   /* CICLO DE VIDA PARA LIMPAR O DADO DA BUSCA */
   ngOnDestroy(): void {
     this.usuarioService.limparBuscar();
+    this.gestorService.limparBuscar();
   }
 
   /* FUNÇÃO DE CARREGAMENTO DE LISTA */
   protected carregarTodos() {
-    return this.usuarioService.listarTabela();
+    return this.gestorService.listarTabela();
   }
 
   /* FUNÇÃO DE CARREGAMENTO DE CONTADOR */

@@ -7,14 +7,13 @@ export interface UsuarioModel {
   dataAdmissao?: Date | null;
   dataDesligamento?: Date | null;
   perfilId?: string | null;
-  desPerfil?: string | null;
   turno: string;
   escala: string;
   empresaId?: string | null;
-  desEmpresa?: string | null;
   status?: boolean;
-  nomeGestor?: string | null;
-  crachaGestor?: number | null;
+  perfil?: { descricao: string; nivel: string };
+  empresa?: { razaoSocial: string };
+  gestorComoColaborador?: { id: string; gestor: { nome: string; cracha: number } }[];
 }
 
 export interface UsuarioForm {
@@ -80,19 +79,20 @@ export type UsuarioType = (typeof UsuarioMap)[keyof typeof UsuarioMap];
 
 /* INICIALIZADOR DO OBJETO SIGNALS DE BUSCA */
 export const INICIALIZAR_USUARIO_ENTITY = (): UsuarioModel => ({
-  id: '',
+  id: undefined,
   cracha: undefined,
   nome: '',
   dataNascimento: null,
   dataAdmissao: null,
   dataDesligamento: null,
-  perfilId: '',
-  desPerfil: '',
+  perfilId: null,
   turno: '' as TurnoType,
   escala: '' as EscalaType,
-  empresaId: '',
-  desEmpresa: '',
+  empresaId: null,
   status: undefined,
+  perfil: undefined,
+  empresa: undefined,
+  gestorComoColaborador: [],
 });
 
 /* INICIALIZADOR DO OBJETO SIGNALS DO FORMULARIO - FACTORY */

@@ -2,16 +2,16 @@
   <table mat-table [dataSource]="listar()" class="tabela-lista">
     <ng-container matColumnDef="cracha">
       <th mat-header-cell *matHeaderCellDef>Crachá</th>
-      <td mat-cell *matCellDef="let element">{{ element?.cracha }}</td>
+      <td mat-cell *matCellDef="let element">{{ element?.colaborador.cracha }}</td>
     </ng-container>
     <ng-container matColumnDef="nome">
       <th mat-header-cell *matHeaderCellDef>Nome</th>
-      <td mat-cell *matCellDef="let element">{{ element?.nome }}</td>
+      <td mat-cell *matCellDef="let element">{{ element?.colaborador.nome }}</td>
     </ng-container>
     <ng-container matColumnDef="acao">
       <th mat-header-cell *matHeaderCellDef>Ação</th>
       <td mat-cell *matCellDef="let element">
-        <button mat-icon-button color="accent" (click)="onAbrirRegistro(element.id)">
+        <button mat-icon-button color="accent" (click)="onAbrirRegistro(element.colaboradorId)">
           <mat-icon fontSet="material-symbols-outlined">more_horiz</mat-icon>
         </button>
       </td>

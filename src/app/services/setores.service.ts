@@ -10,7 +10,7 @@ import { Contador } from '../interfaces/counter.interface';
 })
 export class SetoresService {
   private http = inject(HttpClient);
-  private apiUrl = RequestHttp.setores;
+  private apiUrl = RequestHttp.setor;
 
   private listarSetoresSignal = signal<SetoresModel[] | []>([]);
   public listarSetores = this.listarSetoresSignal.asReadonly();

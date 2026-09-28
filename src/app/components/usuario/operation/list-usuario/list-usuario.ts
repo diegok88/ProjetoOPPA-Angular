@@ -3,6 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { UsuarioModel } from '../../../../entities/usuario.model';
+import { GestorModel } from '../../../../entities/gestor.model';
 
 @Component({
   selector: 'app-list-usuario',
@@ -23,7 +24,7 @@ import { UsuarioModel } from '../../../../entities/usuario.model';
 export class ListUsuario implements OnInit {
   protected displayedColumns: string[] = ['cracha', 'nome', 'acao'];
 
-  public listar = input<UsuarioModel[] | []>([]);
+  public listar = input<GestorModel[] | []>([]);
   public abrirRegistro = output<string>();
 
   ngOnInit(): void {

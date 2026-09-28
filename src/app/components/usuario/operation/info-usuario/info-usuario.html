@@ -34,7 +34,7 @@
       <mat-list-item>
         <span matListItemTitle>
           <p>Perfil:</p>
-          <p>{{ info().desPerfil }}</p></span
+          <p>{{ info().perfil?.descricao }} - {{ info().perfil?.nivel }}</p></span
         >
       </mat-list-item>
       <mat-list-item>
@@ -52,7 +52,7 @@
       <mat-list-item>
         <span matListItemTitle>
           <p>Empresa:</p>
-          <p>{{ info().desEmpresa }}</p></span
+          <p>{{ info().empresa?.razaoSocial }}</p></span
         >
       </mat-list-item>
       <mat-list-item>
@@ -64,7 +64,10 @@
       <mat-list-item>
         <span matListItemTitle>
           <p>Gestor Responsável:</p>
-          <p>{{ info().nomeGestor }} - {{ info().crachaGestor }}</p></span
+          <p>
+            {{ info().gestorComoColaborador?.[0]?.gestor?.nome }} -
+            {{ info().gestorComoColaborador?.[0]?.gestor?.cracha }}
+          </p></span
         >
       </mat-list-item>
     </mat-list>

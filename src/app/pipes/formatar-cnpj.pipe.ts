@@ -1,4 +1,3 @@
-'00.000.000/0000-00';
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
