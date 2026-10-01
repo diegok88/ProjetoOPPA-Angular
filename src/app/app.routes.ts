@@ -19,13 +19,13 @@ export const routes: Routes = [
         path: 'principal',
         loadComponent: () => import('./components/principal/principal').then((p) => p.Principal),
         canActivate: [roleGuard],
-        data: { roles: [ROLES_MAP.ASN1, ROLES_MAP.ADN1] },
+        data: { roles: [ROLES_MAP.ASN1, ROLES_MAP.ADN1, ROLES_MAP.GEN1] },
       },
       {
         path: 'usuario',
         loadComponent: () => import('./components/usuario/usuario').then((u) => u.Usuario),
         canActivate: [roleGuard],
-        data: { roles: [ROLES_MAP.ASN1] },
+        data: { roles: [ROLES_MAP.ASN1, ROLES_MAP.ADN1, ROLES_MAP.GEN1] },
       },
       {
         path: 'perfil',
@@ -37,13 +37,13 @@ export const routes: Routes = [
         path: 'empresa',
         loadComponent: () => import('./components/empresa/empresa').then((e) => e.Empresa),
         canActivate: [roleGuard],
-        data: { roles: [ROLES_MAP.ASN1] },
+        data: { roles: [ROLES_MAP.ASN1, ROLES_MAP.ADN1] },
       },
       {
         path: 'setores',
         loadComponent: () => import('./components/setores/setores').then((s) => s.Setores),
         canActivate: [roleGuard],
-        data: { roles: [ROLES_MAP.ASN1] },
+        data: { roles: [ROLES_MAP.ASN1, ROLES_MAP.ADN1] },
       },
       //  Adicione aqui as outras subrotas declaradas no MenuService
       {

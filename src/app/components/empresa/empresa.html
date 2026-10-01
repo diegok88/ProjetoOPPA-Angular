@@ -13,11 +13,20 @@
     <div class="container-operation-action">
       @switch (operacaoEstado()) {
         @case ('inicial') {
-          @if (contador(); as contagem) {
-            <app-inicial-empresa
-              [contador]="contagem"
-              (abrirCadastro)="mudarOperacao(operationMap.CADASTRAR)"
-            ></app-inicial-empresa>
+          @if (initialAuthorization()) {
+            @if (contador(); as contagem) {
+              <app-inicial-empresa
+                [contador]="contagem"
+                (abrirCadastro)="mudarOperacao(operationMap.CADASTRAR)"
+              ></app-inicial-empresa>
+            }
+          } @else {
+            @if (contadorAdGe(); as contagemAdGe) {
+              <app-inicial-empresa-ad-ge
+                [contador]="contagemAdGe"
+                (abrirCadastro)="mudarOperacao(operationMap.REGISTRO)"
+              ></app-inicial-empresa-ad-ge>
+            }
           }
         }
         @case ('cadastrar') {

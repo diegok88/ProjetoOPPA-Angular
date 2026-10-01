@@ -52,7 +52,7 @@ export class Usuario implements OnInit, OnDestroy {
   /* DADOS RETORNADOS DO SERVIÇO */
   protected readonly listar = this.gestorService.listarGestor;
   protected readonly buscar = this.usuarioService.buscarUsuario;
-  protected readonly contador = this.usuarioService.contadorUsuario;
+  protected readonly contador = this.gestorService.contadorGestor;
   protected readonly listarAuditoria = this.auditoriaService.auditoria;
   protected readonly buscarAuditoria = signal<AuditoriaData>({ ...INICIALIZAR_AUDITORIA_ENTITY });
 
@@ -87,7 +87,7 @@ export class Usuario implements OnInit, OnDestroy {
 
   /* FUNÇÃO DE CARREGAMENTO DE CONTADOR */
   protected carregarContador() {
-    return this.usuarioService.counter();
+    return this.gestorService.counter();
   }
 
   /* FUNÇÃO DE CARREGAMENTO O DADO SELECIONADO */

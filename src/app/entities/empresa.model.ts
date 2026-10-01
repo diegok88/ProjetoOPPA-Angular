@@ -14,7 +14,7 @@ export interface EmpresaModel {
   estado: string;
   cep: string;
   status?: boolean;
-  qtdCracha?: number;
+  contadorCracha?: { contador: number };
 }
 
 export interface EmpresaForm {

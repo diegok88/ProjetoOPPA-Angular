@@ -60,12 +60,14 @@ import {
   MAT_NATIVE_DATE_FORMATS,
 } from '@angular/material/core';
 import { DateBrAdapter } from '../../../../services/data-br-adaptador.service';
-import { CamposPerfilLetras, PerfilModel } from '../../../../entities/perfil.model';
+import { PerfilModel } from '../../../../entities/perfil.model';
 import { MatSelectModule } from '@angular/material/select';
 import { EmpresaService } from '../../../../services/empresa.service';
 import { PerfilService } from '../../../../services/perfil.service';
-import { Empresa } from '../../../empresa/empresa';
 import { EmpresaModel } from '../../../../entities/empresa.model';
+import { GestorService } from '../../../../services/gestor.service';
+import { AuthService } from '../../../../services/auth.service';
+import { ROLES_MAP } from '../../../../constants/role-map.const';
 
 @Component({
   selector: 'app-form-usuario',
@@ -94,8 +96,10 @@ export class FormUsuario {
 
   /* SERVIÇO DE COMUNICAÇÃO COM O BACKEND */
   private usuarioService = inject(UsuarioService);
+  private gestorService = inject(GestorService);
   private empresaService = inject(EmpresaService);
   private perfilService = inject(PerfilService);
+  private authService = inject(AuthService);
 
   /* INJEÇÃO DE DEPENDENCIA PARA BUG NO ATUALIZAR,  NÃO DETECTAVA A FLUTUAÇÃO DA LABEL */
   private cdr = inject(ChangeDetectorRef);
@@ -183,6 +187,11 @@ export class FormUsuario {
         const invalidChar = this.invalidCharFields()[campo as string] ?? false;
         const submitted = this.formSubmitted();
 
+        /* Condicional com o intuito de pular o campo empresaId e retorna-lo nulo */
+        if (campo === 'empresaId' && !this.formAuthorization()) {
+          return { ...acc, [campo]: null };
+        }
+
         let erro: ErrorUsuarioType = null;
 
         if (touched || submitted) {
@@ -230,9 +239,20 @@ export class FormUsuario {
     return getErrorUsuarioMessage(this.erros()[campo] ?? null);
   }
 
+  protected formAuthorization = computed(() => {
+    if (this.authService.getRole() === ROLES_MAP.ASN1) {
+      return true;
+    }
+    return false;
+  });
+
   /* FUNÇÃO DE VALIDAÇÃO DO FORMULARIO */
   protected isFormValid = computed(() => {
-    const erros = this.erros();
+    const erros = { ...this.erros() };
+
+    if (!this.formAuthorization) {
+      erros['empresaId'] = null;
+    }
 
     return CamposUsuario.every((campo) => erros[campo as string] === null);
   });
@@ -350,17 +370,19 @@ export class FormUsuario {
 
   ngOnInit(): void {
     this.inicializarForm();
-    this.carregarEmpresa().subscribe();
+    if (this.formAuthorization()) {
+      this.carregarEmpresa().subscribe();
+    }
     this.carregarPerfil().subscribe();
   }
 
   /* FUNÇÃO DE CARREGAMENTO DE DADOS DE ENTIDADES EXTERNAS PARA SELECTS */
   private carregarEmpresa() {
-    return this.empresaService.listar();
+    return this.empresaService.listarTabela();
   }
 
   private carregarPerfil() {
-    return this.perfilService.listar();
+    return this.perfilService.listarTabela();
   }
 
   /* FUNÇÃO DE INICIALIZAÇÃO DA CLASSE */
@@ -404,12 +426,12 @@ export class FormUsuario {
 
   /* FUNÇÃO DE CARREGAMENTO A CADA SERVIÇO CONCLUIDO */
   protected carregarTodos() {
-    return this.usuarioService.listarTabela();
+    return this.gestorService.listarTabela();
   }
 
   /* FUNÇÃO DE CARREGAMENTO DO CONATDOR A CADA SERVIÇO CONCLUIDO */
   protected carregarContador() {
-    return this.usuarioService.counter();
+    return this.gestorService.counter();
   }
 
   /* FUNÇÃO DE CADASTRO E ATUALIZAR */

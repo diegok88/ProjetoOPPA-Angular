@@ -24,6 +24,7 @@ import { DialogConfirmarService } from '../../../../services/dialog-confirmar.se
 import { DialogFinalizarService } from '../../../../services/dialog-finalizar.service';
 import { UsuarioService } from '../../../../services/usuario.service';
 import { INICIALIZAR_USUARIO_ENTITY, UsuarioModel } from '../../../../entities/usuario.model';
+import { GestorService } from '../../../../services/gestor.service';
 
 @Component({
   selector: 'app-process-usuario',
@@ -38,6 +39,7 @@ export class ProcessUsuario implements OnInit {
 
   /* SERVIÇO DE COMUNICAÇÃO COM O BACKEND */
   private usuarioService = inject(UsuarioService);
+  private gestorService = inject(GestorService);
 
   /* SIGNAL DE CONFIGURAÇÃO DO TIPO DE PROCESSO */
   protected listaProcessoSignal = signal<ConfigProcess | null>(null);
@@ -67,7 +69,7 @@ export class ProcessUsuario implements OnInit {
 
   /* FUNÇÃO DE CARREGAMENTO A CADA SERVIÇO CONCLUIDO */
   protected carregar() {
-    return this.usuarioService.listarTabela();
+    return this.gestorService.listarTabela();
   }
 
   /* FUNÇÃO DE CARREGAMENTO DO CONATDOR A CADA SERVIÇO CONCLUIDO */

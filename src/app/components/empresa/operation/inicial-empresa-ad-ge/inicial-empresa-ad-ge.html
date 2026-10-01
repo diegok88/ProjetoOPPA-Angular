@@ -1,0 +1,36 @@
+<section class="container-operation-initial">
+  <img class="operation-initial-img" src="images/factory.png" alt="Empresa" />
+  <span class="operation-initial-text">Operações úteis da Empresa!</span>
+  <button matButton="outlined" class="operacao-button" (click)="onCadastrarOperacao()">
+    Clique aqui
+  </button>
+  <div class="operation-initial-data">
+    <mat-card class="initial-totals" appearance="outlined">
+      <mat-card-header>
+        <div class="container-card-icon totals">
+          <mat-icon fontSet="material-symbols-outlined">List_Alt</mat-icon>
+        </div>
+        <mat-card-title>Total de Usuários</mat-card-title>
+        <mat-card-subtitle>{{ contador()?.total }}</mat-card-subtitle>
+      </mat-card-header>
+    </mat-card>
+    <mat-card class="initial-active" appearance="outlined">
+      <mat-card-header>
+        <div class="container-card-icon active">
+          <mat-icon fontSet="material-symbols-outlined">Verified</mat-icon>
+        </div>
+        <mat-card-title>Usuários Ativas</mat-card-title>
+        <mat-card-subtitle>{{ contador()?.ativos }}</mat-card-subtitle>
+      </mat-card-header>
+    </mat-card>
+    <mat-card class="initial-deactive" appearance="outlined">
+      <mat-card-header>
+        <div class="container-card-icon deactive">
+          <mat-icon fontSet="material-symbols-outlined">Release_Alert</mat-icon>
+        </div>
+        <mat-card-title>Usuários Inativas</mat-card-title>
+        <mat-card-subtitle>{{ contador()?.inativos }}</mat-card-subtitle>
+      </mat-card-header>
+    </mat-card>
+  </div>
+</section>

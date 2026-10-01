@@ -179,27 +179,29 @@
         </mat-hint>
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Empresa</mat-label>
-        <mat-select
-          name="empresaId"
-          placeholder="Selecione a empresa"
-          [ngModel]="getField('empresaId')"
-          (ngModelChange)="setField('empresaId', $event)"
-          (openedChange)="!$event && onBlur('empresaId')"
-        >
-          @for (opcao of empresaOptions(); track opcao.value) {
-            <mat-option [value]="opcao.value">{{ opcao.viewValue }}</mat-option>
-          }
-        </mat-select>
-        <mat-hint>
-          @if (obterErro('empresaId')) {
-            <span class="error-message" [class.show]="!!obterErro('empresaId')">{{
-              obterErro('empresaId')
-            }}</span>
-          }
-        </mat-hint>
-      </mat-form-field>
+      @if (formAuthorization()) {
+        <mat-form-field appearance="outline">
+          <mat-label>Empresa</mat-label>
+          <mat-select
+            name="empresaId"
+            placeholder="Selecione a empresa"
+            [ngModel]="getField('empresaId')"
+            (ngModelChange)="setField('empresaId', $event)"
+            (openedChange)="!$event && onBlur('empresaId')"
+          >
+            @for (opcao of empresaOptions(); track opcao.value) {
+              <mat-option [value]="opcao.value">{{ opcao.viewValue }}</mat-option>
+            }
+          </mat-select>
+          <mat-hint>
+            @if (obterErro('empresaId')) {
+              <span class="error-message" [class.show]="!!obterErro('empresaId')">{{
+                obterErro('empresaId')
+              }}</span>
+            }
+          </mat-hint>
+        </mat-form-field>
+      }
 
       <mat-form-field appearance="outline">
         <mat-label>Perfil</mat-label>

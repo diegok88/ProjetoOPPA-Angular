@@ -5,7 +5,7 @@ export interface SetoresModel {
   descricao: string;
   empresaId?: string;
   status?: boolean;
-  nomeEmpresa?: string;
+  empresa?: { razaoSocial: string };
 }
 
 export interface SetoresForm {

@@ -1,14 +1,9 @@
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuditoriaData } from '../../interfaces/auditoria-data.interface';
 import { AuditoriaService } from '../../services/auditoria.service';
 import { EmpresaService } from '../../services/empresa.service';
-import {
-  EmpresaForm,
-  EmpresaModel,
-  INICIALIZAR_EMPRESA_ENTITY,
-  INICIALIZAR_EMPRESA_FORMS,
-} from '../../entities/empresa.model';
+import { EmpresaForm, INICIALIZAR_EMPRESA_FORMS } from '../../entities/empresa.model';
 import { ListEmpresa } from './operation/list-empresa/list-empresa';
 import {
   OperationMap,
@@ -25,12 +20,16 @@ import { AuditEmpresa } from './operation/audit-empresa/audit-empresa';
 import { ProcessEmpresa } from './operation/process-empresa/process-empresa';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { AuthService } from '../../services/auth.service';
+import { ROLES_MAP } from '../../constants/role-map.const';
+import { InicialEmpresaAdGe } from './operation/inicial-empresa-ad-ge/inicial-empresa-ad-ge';
 
 @Component({
   selector: 'app-empresa',
   imports: [
     FormsModule,
     InicialEmpresa,
+    InicialEmpresaAdGe,
     ListEmpresa,
     FormEmpresa,
     Toogle,
@@ -46,12 +45,14 @@ import { MatButtonModule } from '@angular/material/button';
 export class Empresa implements OnInit, OnDestroy {
   /* INJEÇÃO DE DEPENDENCIAS DE SERVIÇOS */
   private empresaService = inject(EmpresaService);
+  private authService = inject(AuthService);
   private auditoriaService = inject(AuditoriaService);
 
   /* DADOS RETORNADOS DO SERVIÇO */
   protected readonly listar = this.empresaService.listarEmpresa;
   protected readonly buscar = this.empresaService.buscarEmpresas;
-  protected readonly contador = this.empresaService.contadorPerfil;
+  protected readonly contador = this.empresaService.contadorEmpresa;
+  protected readonly contadorAdGe = this.empresaService.contadorEmpresaAdGe;
   protected readonly listarAuditoria = this.auditoriaService.auditoria;
   protected readonly buscarAuditoria = signal<AuditoriaData>({ ...INICIALIZAR_AUDITORIA_ENTITY });
 
@@ -68,13 +69,22 @@ export class Empresa implements OnInit, OnDestroy {
   /* CICLO DE VIDA PARA INICIALIZAR A LISTA */
   ngOnInit(): void {
     this.carregarTodos().subscribe();
-    this.carregarContador().subscribe();
+    if (!this.initialAuthorization()) {
+      this.carregarContadorAdGe().subscribe();
+    } else {
+      this.carregarContador().subscribe();
+    }
   }
 
   /* CICLO DE VIDA PARA LIMPAR O DADO DA BUSCA */
   ngOnDestroy(): void {
     this.empresaService.limparBuscar();
   }
+
+  protected initialAuthorization = computed(() => {
+    if (this.authService.getRole() === ROLES_MAP.ASN1) return true;
+    return false;
+  });
 
   /* FUNÇÃO DE CARREGAMENTO DE LISTA */
   protected carregarTodos() {
@@ -84,6 +94,11 @@ export class Empresa implements OnInit, OnDestroy {
   /* FUNÇÃO DE CARREGAMENTO DE CONTADOR */
   protected carregarContador() {
     return this.empresaService.counter();
+  }
+
+  /* FUNÇÃO DE CARREGAMENTO DE CONTADOR */
+  protected carregarContadorAdGe() {
+    return this.empresaService.counterCollaborators();
   }
 
   /* FUNÇÃO DE CARREGAMENTO O DADO SELECIONADO */
@@ -99,6 +114,12 @@ export class Empresa implements OnInit, OnDestroy {
   protected mudarOperacao(operacao: OperationType, item?: string): void {
     if (!operacao) this.operacaoEstado.set(OperationMap.INICIAL);
     if (operacao === OperationMap.REGISTRO) {
+      /* Carrega os dados da empresa se o perfil for diferente de ASSISTENCIA */
+      if (!this.initialAuthorization()) {
+        const dado = this.listar()?.[0]?.id ?? '';
+        this.carregarDado(dado).subscribe();
+        this.carregarRegistro(dado);
+      }
       this.mudarRegistro(RecordMap.INFORMACAO);
       if (item) this.carregarRegistro(item);
       else this.operacaoEstado.set(OperationMap.INICIAL);
@@ -108,9 +129,6 @@ export class Empresa implements OnInit, OnDestroy {
 
   /* FUNÇÃO DE MUDANÇA DE REGISTRO */
   protected mudarRegistro(registro: RecordType): void {
-    if (registro === RecordMap.ATUALIZAR) {
-      this.registroEstado.set(registro);
-    }
     this.auditoriaEstado.set(true);
     this.registroEstado.set(registro);
   }

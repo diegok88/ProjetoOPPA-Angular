@@ -14,7 +14,7 @@ export class MenuItemService {
       rotulo: 'Principal',
       icone: 'icons/home.png',
       caminho: 'principal',
-      papeis: [ROLES_MAP.ASN1, ROLES_MAP.ADN1],
+      papeis: [ROLES_MAP.ASN1, ROLES_MAP.ADN1, ROLES_MAP.GEN1],
     },
     {
       rotulo: 'Gestão',
@@ -34,6 +34,27 @@ export class MenuItemService {
           caminho: 'gestao/dispensas',
         },
         { rotulo: 'Penalidades', icone: 'icons/dangerous.png', caminho: 'gestao/penalidades' },
+      ],
+    },
+    // Modelo como classificação de opções
+    {
+      rotulo: 'Gestão',
+      icone: 'icons/group.png',
+      chave: 'gestao',
+      papeis: [ROLES_MAP.GEN1],
+      children: [
+        { rotulo: 'Usuários', icone: 'icons/badge.png', caminho: 'usuario' },
+        {
+          rotulo: 'Alocações',
+          icone: 'icons/swap_horizontal_circle.png',
+          caminho: 'gestao/alocacoes',
+        },
+        {
+          rotulo: 'Dispensas',
+          icone: 'icons/calendar_add_on.png',
+          caminho: 'gestao/dispensas',
+        },
+        //{ rotulo: 'Penalidades', icone: 'icons/dangerous.png', caminho: 'gestao/penalidades' },
       ],
     },
     {

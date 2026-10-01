@@ -28,6 +28,7 @@ export class AuthService {
   });
 
   login(credencial: LoginData): Observable<AuthResponse> {
+    this.perfilSignal.set(null);
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credencial);
   }
 
@@ -37,9 +38,11 @@ export class AuthService {
       .pipe(tap(() => this.perfilSignal.set(null)));
   }
 
-  obterPerfil(): Observable<UserGuard> {
-    const cache = this.perfilSignal();
-    if (cache) return of(cache);
+  obterPerfil(force = false): Observable<UserGuard> {
+    if (!force) {
+      const cache = this.perfilSignal();
+      if (cache) return of(cache);
+    }
     return this.http
       .get<UserGuard>(`${this.apiUrl}/profile`)
       .pipe(tap((usuario) => this.perfilSignal.set(usuario)));
@@ -55,6 +58,6 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return this.perfilSignal() !== null; 
+    return this.perfilSignal() !== null;
   }
 }

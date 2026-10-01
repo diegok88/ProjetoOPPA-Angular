@@ -60,7 +60,7 @@ export class LoginUser {
   protected isFormValid = computed(() => {
     const badgeOk = !this.badgeEmptyFieldError() && !this.badgeErrorNumber();
     const passwordOk = !this.passwordEmptyFieldError();
-    const enterpriceOk = !this.enterpriceEmptyFieldError() && !this.enterpriceEmptyFieldError();
+    const enterpriceOk = !this.enterpriceEmptyFieldError() && !this.enterpriceErrorNumber();
     return badgeOk && passwordOk && enterpriceOk;
   });
   // Função generica de atualização todos os inputs
@@ -93,7 +93,7 @@ export class LoginUser {
     }
     this.auth.login(this.loginModel()).subscribe({
       next: () => {
-        this.auth.obterPerfil().subscribe({
+        this.auth.obterPerfil(true).subscribe({
           next: () => {
             this.router.navigate(['/dashboard-user']);
           },

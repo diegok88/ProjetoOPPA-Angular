@@ -230,7 +230,7 @@ export class FormEmpresa implements OnInit {
 
   /* FUNÇÃO DE CARREGAMENTO A CADA SERVIÇO CONCLUIDO */
   protected carregar() {
-    return this.empresaService.listar();
+    return this.empresaService.listarTabela();
   }
 
   /* FUNÇÃO DE CARREGAMENTO DO CONATDOR A CADA SERVIÇO CONCLUIDO */
