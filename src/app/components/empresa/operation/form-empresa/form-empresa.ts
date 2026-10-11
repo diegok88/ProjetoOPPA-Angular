@@ -186,6 +186,7 @@ export class FormEmpresa implements OnInit {
   protected getField(field: keyof EmpresaForm) {
     return this.empresaModel()[field] ?? '';
   }
+
   /* SETTER DA ENTIDADE */
   protected setField(field: keyof EmpresaModel, value: string): void {
     this.empresaModel.update((model) => ({ ...model, [field]: value }));
@@ -352,7 +353,7 @@ export class FormEmpresa implements OnInit {
     if (typeof value === 'string') return '';
     if (typeof value === 'number') return 0;
     if (typeof value === 'boolean') return false;
-    if (value instanceof Date) return null; // ou new Date()
+    if (value instanceof Date) return null; 
     return null;
   }
 

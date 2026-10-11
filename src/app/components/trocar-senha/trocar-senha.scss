@@ -1,0 +1,30 @@
+.container-information {
+  height: 96%;
+  display: block;
+  color: var(--color-white);
+}
+
+.container-information-header {
+  margin: 10px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--color-white);
+}
+
+.container-information-main {
+  height: 93%;
+
+  display: flex;
+  justify-content: center;
+}
+
+.container-information-forms {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.container-information-forms-group {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}

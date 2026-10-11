@@ -1,0 +1,84 @@
+<div class="container-information">
+  <div class="container-information-header">
+    <span>Dados do Usuário</span>
+  </div>
+  <section class="container-information-main">
+    <div class="container-information-list">
+      @if (info(); as usuario) {
+        <mat-list>
+          <mat-list-item>
+            <span matListItemTitle>
+              <p class="list-label">Id:</p>
+              <p class="list-data">{{ usuario.id }}</p>
+            </span>
+          </mat-list-item>
+          <mat-list-item>
+            <span matListItemTitle>
+              <p>Crachá:</p>
+              <p>{{ usuario.cracha }}</p>
+            </span>
+          </mat-list-item>
+          <mat-list-item>
+            <span matListItemTitle>
+              <p>Nome:</p>
+              <p>{{ usuario.nome }}</p>
+            </span>
+          </mat-list-item>
+          <mat-list-item>
+            <span matListItemTitle>
+              <p>Data de Nascimento:</p>
+              <p>{{ usuario.dataNascimento | date: 'dd/MM/yyyy' }}</p>
+            </span>
+          </mat-list-item>
+          <mat-list-item>
+            <span matListItemTitle>
+              <p>Data de Admissão:</p>
+              <p>{{ usuario.dataAdmissao | date: 'dd/MM/yyyy' }}</p>
+            </span>
+          </mat-list-item>
+          <mat-list-item>
+            <span matListItemTitle>
+              <p>Perfil:</p>
+              <p>{{ usuario.perfil?.descricao }} - {{ usuario.perfil?.nivel }}</p>
+            </span>
+          </mat-list-item>
+          <mat-list-item>
+            <span matListItemTitle>
+              <p>Turno:</p>
+              <p>{{ usuario.turno }}</p>
+            </span>
+          </mat-list-item>
+          <mat-list-item>
+            <span matListItemTitle>
+              <p>Escala:</p>
+              <p>{{ usuario.escala }}</p>
+            </span>
+          </mat-list-item>
+          <mat-list-item>
+            <span matListItemTitle>
+              <p>Empresa:</p>
+              <p>{{ usuario.empresa?.razaoSocial }}</p>
+            </span>
+          </mat-list-item>
+          <mat-list-item>
+            <span matListItemTitle>
+              <p>Status:</p>
+              <p>{{ usuario.status }}</p>
+            </span>
+          </mat-list-item>
+          <mat-list-item class="item-largest">
+            <span matListItemTitle>
+              <p>Gestor Responsável:</p>
+              <p>
+                {{ usuario.gestorComoColaborador?.[0]?.gestor?.nome }} -
+                {{ usuario.gestorComoColaborador?.[0]?.gestor?.cracha }}
+              </p>
+            </span>
+          </mat-list-item>
+        </mat-list>
+      } @else {
+        <span>Usuário não encontrado!</span>
+      }
+    </div>
+  </section>
+</div>

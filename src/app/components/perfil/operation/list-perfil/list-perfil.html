@@ -1,4 +1,8 @@
-@if (listar().length) {
+@if (carregando()) {
+  <div class="operation-list-loading">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+} @else if (listar().length) {
   <table mat-table [dataSource]="listar()" class="tabela-lista">
     <ng-container matColumnDef="codigo">
       <th mat-header-cell *matHeaderCellDef>Codigo</th>

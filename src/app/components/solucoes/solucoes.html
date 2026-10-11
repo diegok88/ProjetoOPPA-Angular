@@ -1,0 +1,189 @@
+<div class="container-operation">
+  <section class="container-operation-header">
+    <h2 class="operacao-h2">Soluções</h2>
+  </section>
+  <section class="container-operation-main">
+    <div class="container-operation-list">
+      <span>Lista de Ativos</span>
+      <app-list-solucoes
+        [listar]="listarAtivos()"
+        (abrirRegistro)="mudarOperacao(operationMap.SUB_LISTA, $event)"
+      ></app-list-solucoes>
+    </div>
+    <div class="container-operation-action">
+      @switch (operacaoEstado()) {
+        @case ('inicial') {
+          @if (contador(); as contagem) {
+            <app-inicial-solucoes
+              [contador]="contagem"
+              (abrirCadastro)="mudarOperacao(operationMap.CADASTRAR)"
+            ></app-inicial-solucoes>
+          }
+        }
+        @case ('cadastrar') {
+          <section class="container-operation-signup">
+            <div class="container-operation-action-header">
+              <span>Cadastrar Solução</span>
+              <img
+                class="container-operation-back"
+                src="icons/arrow_circle_left.png"
+                alt="Voltar"
+                (click)="mudarOperacao(operationMap.SUB_LISTA)"
+              />
+            </div>
+            @if (itemAtivo(); as ativo) {
+              <app-form-solucoes
+                [operacaoAtual]="operacaoEstado()"
+                [registroAtual]="registroEstado()"
+                (onMudarOperacao)="mudarOperacao(operationMap.SUB_LISTA, ativo)"
+              ></app-form-solucoes>
+            }
+          </section>
+        }
+        @case ('sub-lista') {
+          <section class="container-operation-signup">
+            <div class="container-operation-action-header">
+              <span>Lista de Soluções do Ativo</span>
+              <img
+                class="container-operation-back"
+                src="icons/arrow_circle_left.png"
+                alt="Voltar"
+                (click)="mudarOperacao(operationMap.INICIAL)"
+              />
+            </div>
+            <app-sub-list-solucoes
+              [listar]="listar()"
+              (abrirRegistro)="mudarOperacao(operationMap.REGISTRO, $event)"
+            ></app-sub-list-solucoes>
+            <button
+              matButton="outlined"
+              class="operacao-button"
+              (click)="mudarOperacao(operationMap.CADASTRAR)"
+            >
+              Cadastrar Solução
+            </button>
+          </section>
+        }
+        @case ('registro') {
+          <section class="container-operation-register">
+            <div class="container-operation-register-toggle">
+              @if (buscar(); as dado) {
+                <app-toogle
+                  [statusEntity]="dado.status"
+                  [onRegistroAtual]="registroEstado()"
+                  (onMudarRegistro)="mudarRegistro($event)"
+                ></app-toogle>
+              }
+            </div>
+            <div class="container-operation-separated">
+              @switch (registroEstado()) {
+                @case ('informacao') {
+                  <div class="container-operation-register">
+                    <div class="container-operation-action-header">
+                      <span>Dados da Solução</span>
+                      <button
+                        mat-icon-button
+                        color="accent"
+                        (click)="mudarOperacao(operationMap.SUB_LISTA)"
+                      >
+                        <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
+                      </button>
+                    </div>
+                    @if (buscar(); as dado) {
+                      <app-info-solucoes [info]="dado"></app-info-solucoes>
+                    }
+                  </div>
+                }
+                @case ('atualizar') {
+                  <div class="container-operation-register">
+                    <div class="container-operation-action-header">
+                      <span>Atualizar a Solução</span>
+                      <button
+                        mat-icon-button
+                        color="accent"
+                        (click)="mudarOperacao(operationMap.SUB_LISTA)"
+                      >
+                        <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
+                      </button>
+                    </div>
+                    @if (buscar(); as dado) {
+                      <app-form-solucoes
+                        [operacaoAtual]="operacaoEstado()"
+                        [registroAtual]="registroEstado()"
+                        [buscar]="dado"
+                        (onMudarOperacao)="mudarOperacao($event, dado.id)"
+                      ></app-form-solucoes>
+                    }
+                  </div>
+                }
+                @case ('status') {
+                  <div class="container-operation-register">
+                    <div class="container-operation-action-header">
+                      <span>Inativar a Solução</span>
+                      <button
+                        mat-icon-button
+                        color="accent"
+                        (click)="mudarOperacao(operationMap.SUB_LISTA)"
+                      >
+                        <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
+                      </button>
+                    </div>
+                    @if (buscar(); as dado) {
+                      <app-process-solucoes
+                        [authorization]="initialAuthorization()"
+                        [operacaoAtual]="operacaoEstado()"
+                        [registroAtual]="registroEstado()"
+                        [buscar]="dado"
+                        (onMudarOperacao)="mudarOperacao($event, dado.id)"
+                      ></app-process-solucoes>
+                    }
+                  </div>
+                }
+                @case ('eliminar') {
+                  <div class="container-operation-register">
+                    <div class="container-operation-action-header">
+                      <span>Eliminar a Solução</span>
+                      <button
+                        mat-icon-button
+                        color="accent"
+                        (click)="mudarOperacao(operationMap.SUB_LISTA)"
+                      >
+                        <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
+                      </button>
+                    </div>
+                    @if (buscar(); as dado) {
+                      @if (itemAtivo(); as ativo) {
+                        <app-process-solucoes
+                          [authorization]="initialAuthorization()"
+                          [operacaoAtual]="operacaoEstado()"
+                          [registroAtual]="registroEstado()"
+                          [buscar]="dado"
+                          (onMudarOperacao)="mudarOperacao($event, ativo)"
+                        ></app-process-solucoes>
+                      }
+                    }
+                  </div>
+                }
+                @case ('auditoria') {
+                  <div class="container-operation-register">
+                    <div class="container-operation-action-header">
+                      <span>Auditoria da Solução</span>
+                      <button
+                        mat-icon-button
+                        color="accent"
+                        (click)="mudarOperacao(operationMap.SUB_LISTA)"
+                      >
+                        <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
+                      </button>
+                    </div>
+                    <app-auditoria [listarAuditoria]="listarAuditoria()"></app-auditoria>
+                  </div>
+                }
+              }
+            </div>
+          </section>
+        }
+      }
+    </div>
+  </section>
+</div>

@@ -1,7 +1,9 @@
 export const OperationMap = {
   INICIAL: 'inicial',
   CADASTRAR: 'cadastrar',
+  SUB_LISTA: 'sub-lista',
   REGISTRO: 'registro',
+  HISTORICO: 'historico',
 } as const;
 
 export type OperationType = (typeof OperationMap)[keyof typeof OperationMap];

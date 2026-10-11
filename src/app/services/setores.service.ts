@@ -41,8 +41,9 @@ export class SetoresService {
     return this.http.delete<SetoresModel>(`${this.apiUrl}/${id}`);
   }
 
-  listar(): Observable<SetoresModel[]> {
-    return this.http.get<SetoresModel[]>(this.apiUrl).pipe(
+  /* BUSCA COM CONSULTA */
+  listar(query?: string): Observable<SetoresModel[]> {
+    return this.http.get<SetoresModel[]>(`${this.apiUrl}?${query}`).pipe(
       tap((dados) => {
         this.listarSetoresSignal.set(dados);
       }),

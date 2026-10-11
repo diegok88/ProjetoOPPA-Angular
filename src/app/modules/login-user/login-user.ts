@@ -78,7 +78,7 @@ export class LoginUser {
     this.showPassword.update((value) => !value);
   }
 
-  clickEvent(event: MouseEvent) {
+  protected clickEvent(event: MouseEvent) {
     this.hide.set(!this.hide());
     event.stopPropagation();
   }

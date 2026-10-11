@@ -1,0 +1,27 @@
+th.mat-mdc-header-cell:nth-child(1),
+    td.mdc-data-table__cell:nth-child(1) {
+      width: 15%;
+    }
+
+    th.mat-mdc-header-cell:nth-child(2),
+    td.mdc-data-table__cell:nth-child(2) {
+      width: 15%;
+    }
+
+    th.mat-mdc-header-cell:nth-child(4),
+    td.mdc-data-table__cell:nth-child(4) {
+      width: 20%;
+    }
+
+    .container-operation-dados-registrados {
+      height: auto !important;
+      min-height: 0 !important;
+      width: 810px !important;
+      padding: 16px !important;
+
+      p {
+        white-space: pre-wrap;
+        height: auto;
+        width: auto;
+      }
+    }

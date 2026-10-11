@@ -1,0 +1,89 @@
+<mat-tab-group animationDuration="200ms" class="tabs-turno">
+  <mat-tab label="Comercial">
+    <ng-template matTabLabel>
+      <span class="tab-label"
+        >Comercial <span class="tab-count">{{ listarC().length }}</span></span
+      >
+    </ng-template>
+
+    <ul>
+      @for (item of listarC(); track item.colaboradorId) {
+        <li>
+          <span class="cracha">{{ item.colaborador.cracha }}</span>
+          <span class="nome">{{ item.colaborador.nome }}</span>
+          <button mat-icon-button (click)="onAbrirRegistro(item.colaboradorId)">
+            <mat-icon fontSet="material-symbols-outlined">more_horiz</mat-icon>
+          </button>
+        </li>
+      } @empty {
+        <li class="vazio">Nenhum colaborador neste turno</li>
+      }
+    </ul>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template matTabLabel>
+      <span class="tab-label"
+        >Manhã <span class="tab-count">{{ listarM().length }}</span></span
+      >
+    </ng-template>
+
+    <ul>
+      @for (item of listarM(); track item.colaboradorId) {
+        <li>
+          <span class="cracha">{{ item.colaborador.cracha }}</span>
+          <span class="nome">{{ item.colaborador.nome }}</span>
+          <button mat-icon-button (click)="onAbrirRegistro(item.colaboradorId)">
+            <mat-icon fontSet="material-symbols-outlined">more_horiz</mat-icon>
+          </button>
+        </li>
+      } @empty {
+        <li class="vazio">Nenhum colaborador neste turno</li>
+      }
+    </ul>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template matTabLabel>
+      <span class="tab-label"
+        >Tarde <span class="tab-count">{{ listarT().length }}</span></span
+      >
+    </ng-template>
+
+    <ul>
+      @for (item of listarT(); track item.colaboradorId) {
+        <li>
+          <span class="cracha">{{ item.colaborador.cracha }}</span>
+          <span class="nome">{{ item.colaborador.nome }}</span>
+          <button mat-icon-button (click)="onAbrirRegistro(item.colaboradorId)">
+            <mat-icon fontSet="material-symbols-outlined">more_horiz</mat-icon>
+          </button>
+        </li>
+      } @empty {
+        <li class="vazio">Nenhum colaborador neste turno</li>
+      }
+    </ul>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template matTabLabel>
+      <span class="tab-label"
+        >Noite <span class="tab-count">{{ listarN().length }}</span></span
+      >
+    </ng-template>
+
+    <ul>
+      @for (item of listarN(); track item.colaboradorId) {
+        <li>
+          <span class="cracha">{{ item.colaborador.cracha }}</span>
+          <span class="nome">{{ item.colaborador.nome }}</span>
+          <button mat-icon-button (click)="onAbrirRegistro(item.colaboradorId)">
+            <mat-icon fontSet="material-symbols-outlined">more_horiz</mat-icon>
+          </button>
+        </li>
+      } @empty {
+        <li class="vazio">Nenhum colaborador neste turno</li>
+      }
+    </ul>
+  </mat-tab>
+</mat-tab-group>

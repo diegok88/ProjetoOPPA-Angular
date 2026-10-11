@@ -7,12 +7,12 @@ export interface UsuarioModel {
   dataAdmissao?: Date | null;
   dataDesligamento?: Date | null;
   perfilId?: string | null;
+  perfil?: { descricao: string; nivel: string };
   turno: string;
   escala: string;
   empresaId?: string | null;
-  status?: boolean;
-  perfil?: { descricao: string; nivel: string };
   empresa?: { razaoSocial: string };
+  status?: boolean;
   gestorComoColaborador?: { id: string; gestor: { nome: string; cracha: number } }[];
 }
 
@@ -68,10 +68,10 @@ export const UsuarioMap = {
   NOME: 'nome',
   DATANASCIMENTO: 'dataNascimento',
   DATAADMISSAO: 'dataAdmissao',
-  PERFILID: 'perfilId',
+  PERFIL_ID: 'perfilId',
   TURNO: 'turno',
   ESCALA: 'escala',
-  EMPRESAID: 'empresaId',
+  EMPRESA_ID: 'empresaId',
 } as const;
 
 /* TIPOS DA ENTIDADE */
@@ -86,12 +86,12 @@ export const INICIALIZAR_USUARIO_ENTITY = (): UsuarioModel => ({
   dataAdmissao: null,
   dataDesligamento: null,
   perfilId: null,
+  perfil: undefined,
   turno: '' as TurnoType,
   escala: '' as EscalaType,
   empresaId: null,
-  status: undefined,
-  perfil: undefined,
   empresa: undefined,
+  status: undefined,
   gestorComoColaborador: [],
 });
 

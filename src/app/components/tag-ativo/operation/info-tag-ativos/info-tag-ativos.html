@@ -1,0 +1,32 @@
+<mat-list>
+  <mat-list-item>
+    <span matListItemTitle>
+      <p class="list-label">Id:</p>
+      <p class="list-data">{{ info().id }}</p>
+    </span>
+  </mat-list-item>
+  <mat-list-item>
+    <span matListItemTitle>
+      <p class="list-label">Codigo:</p>
+      <p class="list-data">{{ info().codigo }}</p>
+    </span>
+  </mat-list-item>
+  <mat-list-item>
+    <span matListItemTitle>
+      <p class="list-label">Descrição:</p>
+      <p class="list-data">{{ info().descricao }}</p>
+    </span>
+  </mat-list-item>
+  <mat-list-item>
+    <span matListItemTitle>
+      <p class="list-label">Ativo:</p>
+      <p class="list-data">{{ info().ativo?.descricao }} - {{ info().ativo?.modelo }}</p>
+    </span>
+  </mat-list-item>
+  <mat-list-item>
+    <span matListItemTitle>
+      <p class="list-label">Status:</p>
+      <p class="list-data">{{ info().status ? 'Ativo' : 'Inativo' }}</p>
+    </span>
+  </mat-list-item>
+</mat-list>

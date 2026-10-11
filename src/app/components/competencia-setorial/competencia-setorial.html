@@ -1,0 +1,55 @@
+<div class="container-operation">
+  <section class="container-operation-header">
+    <h2 class="operacao-h2">Competência Setorial</h2>
+  </section>
+  <section class="container-operation-main">
+    <div class="container-operation-list">
+      <span>Lista de Competências por Turno</span>
+      <app-list-competencia-setorial
+        [listar]="listar()"
+        (abrirRegistro)="mudarOperacao(operationMap.REGISTRO, $event)"
+      ></app-list-competencia-setorial>
+    </div>
+    <div class="container-operation-action">
+      @switch (operacaoEstado()) {
+        @case ('inicial') {
+          @if (contador(); as contagem) {
+            <app-inicial-competencia-setorial
+              [contador]="contagem"
+              (abrirCadastro)="mudarOperacao(operationMap.HISTORICO)"
+            ></app-inicial-competencia-setorial>
+          }
+        }
+        @case ('registro') {
+          <div class="container-operation-register">
+            <div class="container-operation-action-header">
+              <span>Operações de Competência Setorial</span>
+              <button mat-icon-button color="accent" (click)="mudarOperacao(operationMap.INICIAL)">
+                <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
+              </button>
+            </div>
+            @if (usuarioId(); as usuario) {
+              <app-form-competencia-setorial
+                [usuarioId]="usuario"
+                (onMudarOperacao)="mudarOperacao(operationMap.INICIAL)"
+              ></app-form-competencia-setorial>
+            }
+          </div>
+        }
+        @case ('historico') {
+          <div class="container-operation-register">
+            <div class="container-operation-action-header">
+              <span>Histórico de Competência Setorial</span>
+              <button mat-icon-button color="accent" (click)="mudarOperacao(operationMap.INICIAL)">
+                <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
+              </button>
+            </div>
+            <app-audit-competencia-setorial
+              [listarAuditoria]="listarAuditoria()"
+            ></app-audit-competencia-setorial>
+          </div>
+        }
+      }
+    </div>
+  </section>
+</div>

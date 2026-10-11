@@ -1,0 +1,83 @@
+<form class="container-operation-forms" (ngSubmit)="executar($event)">
+  <div class="container-operation-forms-separated">
+    <section class="container-operation-forms-group">
+      @if (isAtualizar()) {
+        <div class="container-operation-forms-update">
+          <mat-list>
+            <mat-list-item>
+              <span matListItemTitle>
+                <p class="list-label">Id:</p>
+                <p class="list-data">{{ buscar().id }}</p>
+              </span>
+            </mat-list-item>
+          </mat-list>
+        </div>
+      }
+
+      <mat-form-field appearance="outline">
+        <mat-label>Senha</mat-label>
+        <input
+          matInput
+          type="text"
+          id="senha"
+          name="senha"
+          placeholder="Insira a senha da tag"
+          [ngModel]="getField('senha')"
+          (ngModelChange)="setField('senha', $event)"
+          mask="A******************************************************************"
+          (keypress)="aoPressionarTecla($event, 'senha')"
+          (blur)="onBlur('senha')"
+          autocomplete="new-password"
+        />
+        @if (getField('senha')) {
+          <!-- PARA O BOTÃO NÃO SER SUBMETIDO IGUAL A DO CADASTRAR O MESMO DEVE SER TIPADO - type="button" -->
+          <button
+            matSuffix
+            matIconButton
+            type="button"
+            aria-label="Clear"
+            (click)="clearField('senha')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+        <mat-hint>
+          @if (obterErro('senha')) {
+            <span class="error-message" [class.show]="!!obterErro('senha')">{{
+              obterErro('senha')
+            }}</span>
+          }
+        </mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Ativo</mat-label>
+        <mat-select
+          name="ativoId"
+          placeholder="Selecione o ativo da tag"
+          [ngModel]="getField('ativoId')"
+          (ngModelChange)="setField('ativoId', $event)"
+          (openedChange)="!$event && onBlur('ativoId')"
+        >
+          @for (opcao of ativosOptions(); track opcao.value) {
+            <mat-option [value]="opcao.value">{{ opcao.viewValue }}</mat-option>
+          }
+        </mat-select>
+        <mat-hint>
+          @if (obterErro('ativoId')) {
+            <span class="error-message" [class.show]="!!obterErro('ativoId')">{{
+              obterErro('ativoId')
+            }}</span>
+          }
+        </mat-hint>
+      </mat-form-field>
+    </section>
+    <section class="container-operation-forms-button">
+      @if (isAtualizar()) {
+        <button matButton="outlined" type="submit" [disabled]="!isFormValid()">Atualizar</button>
+      } @else {
+        <button matButton="outlined" type="submit" [disabled]="!isFormValid()">Cadastrar</button>
+      }
+    </section>
+  </div>
+</form>

@@ -58,3 +58,38 @@
 button:disabled {
   opacity: 0.5;
 }
+
+/* ESTILIZAÇÃO APLICADA EM FORMULARIOS DE COMPETENCIA OPERACIONAL */
+.container-registro-forms {
+  height: 83px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-bottom: 2px solid var(--color-white);
+}
+
+.container-empty-section {
+  color: color-mix(in srgb, var(--color-white) 55%, transparent);
+}
+
+.container-forms-registro {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-bottom: 2px solid var(--color-white);
+}
+
+.table-chips-status {
+  padding: 5px 10px;
+  border-radius: 10px;
+  background-color: var(--color-negative);
+}
+
+.deactive {
+  background-color: var(--color-positive);
+}

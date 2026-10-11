@@ -81,6 +81,11 @@ export class Empresa implements OnInit, OnDestroy {
     this.empresaService.limparBuscar();
   }
 
+  /* 
+  FUNÇÃO DE AUTORIZAÇÃO PELO PERFIL DO USUARIO:
+  - Inicializa a tela inicial de acordo com o perfil.
+  - Garante as operações que cada perfil pode executar.
+  */
   protected initialAuthorization = computed(() => {
     if (this.authService.getRole() === ROLES_MAP.ASN1) return true;
     return false;
@@ -112,6 +117,7 @@ export class Empresa implements OnInit, OnDestroy {
   }
   /* FUNÇÃO DE MUDANÇA DE OPERAÇÃO */
   protected mudarOperacao(operacao: OperationType, item?: string): void {
+    /* Se operação estiver vazia inicializa na tela INICIAL */
     if (!operacao) this.operacaoEstado.set(OperationMap.INICIAL);
     if (operacao === OperationMap.REGISTRO) {
       /* Carrega os dados da empresa se o perfil for diferente de ASSISTENCIA */

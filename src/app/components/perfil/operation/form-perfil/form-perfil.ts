@@ -235,7 +235,7 @@ export class FormPerfil implements OnInit {
 
   /* FUNÇÃO DE CARREGAMENTO A CADA SERVIÇO CONCLUIDO */
   protected carregar() {
-    return this.perfilService.listarTabela();
+    return this.perfilService.listarTabela(); 
   }
 
   /* FUNÇÃO DE CARREGAMENTO DO CONATDOR A CADA SERVIÇO CONCLUIDO */

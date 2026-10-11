@@ -1,0 +1,20 @@
+.container-information {
+  height: 100%;
+  display: block;
+  color: var(--color-white);
+}
+
+.container-information-header {
+  margin: 10px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--color-white);
+}
+
+.container-information-main {
+  display: flex;
+  justify-content: center;
+}
+
+.container-information-list {
+  width: 80%;
+}

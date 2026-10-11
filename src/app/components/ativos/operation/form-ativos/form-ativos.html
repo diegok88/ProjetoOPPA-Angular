@@ -1,0 +1,189 @@
+<form class="container-operation-forms" (ngSubmit)="executar($event)">
+  <div class="container-operation-forms-separated">
+    <section class="container-operation-forms-group">
+      @if (isAtualizar()) {
+        <div class="container-operation-forms-update">
+          <mat-list>
+            <mat-list-item>
+              <span matListItemTitle>
+                <p class="list-label">Id:</p>
+                <p class="list-data">{{ buscar().id }}</p>
+              </span>
+            </mat-list-item>
+          </mat-list>
+        </div>
+      }
+      <div class="campos-menor">
+        <mat-form-field appearance="outline">
+          <mat-label>Descrição</mat-label>
+          <input
+            matInput
+            type="text"
+            id="descricao"
+            name="descricao"
+            placeholder="Insira a descrição do ativo"
+            [ngModel]="getField('descricao')"
+            (ngModelChange)="setField('descricao', $event)"
+            mask="A******************************************************************"
+            (keypress)="aoPressionarTecla($event, 'descricao')"
+            (blur)="onBlur('descricao')"
+            autocomplete="off"
+          />
+          @if (getField('descricao')) {
+            <!-- PARA O BOTÃO NÃO SER SUBMETIDO IGUAL A DO CADASTRAR O MESMO DEVE SER TIPADO - type="button" -->
+            <button
+              matSuffix
+              matIconButton
+              type="button"
+              aria-label="Clear"
+              (click)="clearField('descricao')"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+          <mat-hint>
+            @if (obterErro('descricao')) {
+              <span class="error-message" [class.show]="!!obterErro('descricao')">{{
+                obterErro('descricao')
+              }}</span>
+            }
+          </mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Modelo</mat-label>
+          <input
+            matInput
+            type="text"
+            id="modelo"
+            name="modelo"
+            placeholder="Insira o modelo do ativo"
+            [ngModel]="getField('modelo')"
+            (ngModelChange)="setField('modelo', $event)"
+            mask="A******************************************************************"
+            (keypress)="aoPressionarTecla($event, 'modelo')"
+            (blur)="onBlur('modelo')"
+            autocomplete="off"
+          />
+          @if (getField('modelo')) {
+            <button
+              matSuffix
+              matIconButton
+              type="button"
+              aria-label="Clear"
+              (click)="clearField('modelo')"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+          <mat-hint>
+            @if (obterErro('modelo')) {
+              <span class="error-message" [class.show]="!!obterErro('modelo')">{{
+                obterErro('modelo')
+              }}</span>
+            }
+          </mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fabricante</mat-label>
+          <input
+            matInput
+            type="text"
+            id="fabricante"
+            name="fabricante"
+            placeholder="Insira o fabricante do ativo"
+            [ngModel]="getField('fabricante')"
+            (ngModelChange)="setField('fabricante', $event)"
+            mask="A******************************************************************"
+            (keypress)="aoPressionarTecla($event, 'fabricante')"
+            (blur)="onBlur('fabricante')"
+            autocomplete="off"
+          />
+          @if (getField('fabricante')) {
+            <button
+              matSuffix
+              matIconButton
+              type="button"
+              aria-label="Clear"
+              (click)="clearField('fabricante')"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+          <mat-hint>
+            @if (obterErro('fabricante')) {
+              <span class="error-message" [class.show]="!!obterErro('fabricante')">{{
+                obterErro('fabricante')
+              }}</span>
+            }
+          </mat-hint>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Ano</mat-label>
+        <input
+          matInput
+          type="text"
+          id="ano"
+          name="ano"
+          placeholder="Insira o ano do ativo"
+          [ngModel]="getField('ano')"
+          (ngModelChange)="setField('ano', $event)"
+          mask="0000"
+          (keypress)="aoPressionarTecla($event, 'ano')"
+          (blur)="onBlur('ano')"
+          autocomplete="off"
+        />
+        @if (getField('ano')) {
+          <button
+            matSuffix
+            matIconButton
+            type="button"
+            aria-label="Clear"
+            (click)="clearField('ano')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+        <mat-hint>
+          @if (obterErro('ano')) {
+            <span class="error-message" [class.show]="!!obterErro('ano')">{{
+              obterErro('ano')
+            }}</span>
+          }
+        </mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline"> 
+        <mat-label>Setor</mat-label>
+        <mat-select
+          name="setorId"
+          placeholder="Selecione o setor do ativo"
+          [ngModel]="getField('setorId')"
+          (ngModelChange)="setField('setorId', $event)"
+          (openedChange)="!$event && onBlur('setorId')"
+        >
+          @for (opcao of setoresOptions(); track opcao.value) {
+            <mat-option [value]="opcao.value">{{ opcao.viewValue }}</mat-option>
+          }
+        </mat-select>
+        <mat-hint>
+          @if (obterErro('setorId')) {
+            <span class="error-message" [class.show]="!!obterErro('setorId')">{{
+              obterErro('setorId')
+            }}</span>
+          }
+        </mat-hint>
+      </mat-form-field>
+    </section>
+    <section class="container-operation-forms-button">
+      @if (isAtualizar()) {
+        <button matButton="outlined" type="submit" [disabled]="!isFormValid()">Atualizar</button>
+      } @else {
+        <button matButton="outlined" type="submit" [disabled]="!isFormValid()">Cadastrar</button>
+      }
+    </section>
+  </div>
+</form>

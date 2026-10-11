@@ -67,7 +67,7 @@ export class ProcessSetores {
 
   /* FUNÇÃO DE CARREGAMENTO A CADA SERVIÇO CONCLUIDO */
   protected carregar() {
-    return this.setoresService.listar();
+    return this.setoresService.listarTabela();
   }
 
   /* FUNÇÃO DE CARREGAMENTO DO CONATDOR A CADA SERVIÇO CONCLUIDO */

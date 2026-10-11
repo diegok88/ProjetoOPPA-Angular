@@ -4,6 +4,7 @@ import { RequestHttp } from '../constants/requests.const';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { Contador } from '../interfaces/counter.interface';
 import { UsuarioModel } from '../entities/usuario.model';
+import { PinModel, SenhaModel } from '../entities/credenciais.model';
 
 @Injectable({
   providedIn: 'root',
@@ -26,6 +27,12 @@ export class UsuarioService {
   }
   atualizar(id: string, dados: UsuarioModel): Observable<UsuarioModel> {
     return this.http.patch<UsuarioModel>(`${this.apiUrl}/${id}`, dados);
+  }
+  trocarSenha(dados: SenhaModel): Observable<SenhaModel> {
+    return this.http.patch<SenhaModel>(`${this.apiUrl}/password`, dados);
+  }
+  trocarPin(dados: PinModel): Observable<PinModel> {
+    return this.http.patch<PinModel>(`${this.apiUrl}/pin`, dados);
   }
   ativar(id: string): Observable<UsuarioModel> {
     return this.http.patch<UsuarioModel>(`${this.apiUrl}/active/${id}`, {});

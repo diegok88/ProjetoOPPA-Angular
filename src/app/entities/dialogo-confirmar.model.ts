@@ -7,32 +7,32 @@ export interface DialogoConfirmarData<T = any> {
   acao: () => Promise<T> | import('rxjs').Observable<T>;
 }
 
-export const CONFIRMAR_CADASTRAR = {
+export const CONFIRMAR_CADASTRAR = { 
   icone: '/icons/add_circle_84.png',
   titulo: 'Novo',
-  mensagem: 'Deseja confirmar o cadastro do',
+  mensagem: 'Deseja confirmar o cadastro',
 };
 
 export const CONFIRMAR_ATUALIZAR = {
   icone: '/icons/add_circle_84.png',
   titulo: 'Atualizar',
-  mensagem: 'Deseja confirmar a atualização do',
+  mensagem: 'Deseja confirmar a atualização',
 };
 
 export const CONFIRMAR_ATIVAR = {
   icone: '/icons/add_circle_84.png',
   titulo: 'Ativar',
-  mensagem: 'Deseja confirmar a ativação do',
+  mensagem: 'Deseja confirmar a ativação',
 };
 
 export const CONFIRMAR_INATIVAR = {
   icone: '/icons/add_circle_84.png',
   titulo: 'Inativar',
-  mensagem: 'Deseja confirmar o inativação do',
+  mensagem: 'Deseja confirmar o inativação',
 };
 
 export const CONFIRMAR_ELIMINAR = {
   icone: '/icons/add_circle_84.png',
   titulo: 'Eliminar',
-  mensagem: 'Deseja confirmar o eliminação do',
+  mensagem: 'Deseja confirmar o eliminação',
 };

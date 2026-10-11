@@ -48,14 +48,14 @@ export const INICIALIZAR_PERFIL_ENTITY = (): PerfilModel => ({
   id: '',
   codigo: undefined,
   descricao: '',
-  nivel: '',
+  nivel: '' as NivelType,
   status: undefined,
-});
+}); 
 
 /* INICIALIZADOR DO OBJETO SIGNALS DO FORMULARIO */
 export const INICIALIZAR_PERFIL_FORMS = (): PerfilForm => ({
   descricao: '',
-  nivel: '',
+  nivel: '' as NivelType,
 });
 
 /* TIPOS DE FALHAS */

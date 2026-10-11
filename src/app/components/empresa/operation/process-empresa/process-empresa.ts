@@ -24,10 +24,11 @@ import {
   FINALIZAR_SUCESSO,
 } from '../../../../entities/dialogo-finalizar.model';
 import { DataProcessEmpresa } from '../../../../constants/data-process.const';
+import { Bloqueado } from '../../../bloqueado/bloqueado';
 
 @Component({
   selector: 'app-process-empresa',
-  imports: [FormsModule, MatButtonModule],
+  imports: [Bloqueado, FormsModule, MatButtonModule],
   templateUrl: './process-empresa.html',
   styles: ``,
 })
@@ -46,6 +47,7 @@ export class ProcessEmpresa implements OnInit {
   private tipoProcesso = signal<RecordType | null>(null);
 
   /* ENTRADA E SAIDA DE DADOS DO COMPONENTE */
+  public authorization = input<boolean | undefined>();
   public operacaoAtual = input<OperationType | undefined>();
   public registroAtual = input<RecordType | undefined>();
   public buscar = input<EmpresaModel>(INICIALIZAR_EMPRESA_ENTITY());

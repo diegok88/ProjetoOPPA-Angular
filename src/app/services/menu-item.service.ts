@@ -128,7 +128,7 @@ export class MenuItemService {
         {
           rotulo: 'Competência Setorial',
           icone: 'icons/demography.png',
-          caminho: 'empresa/competenciasetorial',
+          caminho: 'competencia-setorial',
         },
       ],
     },
@@ -138,16 +138,16 @@ export class MenuItemService {
       chave: 'ativos',
       papeis: [ROLES_MAP.ASN1],
       children: [
-        { rotulo: 'Ativos', icone: 'icons/precision_manufacturing.png', caminho: 'ativos/ativos' },
-        { rotulo: 'Tags Ativos', icone: 'icons/manufacturing.png', caminho: 'ativos/tags-ativos' },
+        { rotulo: 'Ativos', icone: 'icons/precision_manufacturing.png', caminho: 'ativos' },
+        { rotulo: 'Tags Ativos', icone: 'icons/manufacturing.png', caminho: 'tag-ativo' },
         {
           rotulo: 'Estados do Ativos',
           icone: 'icons/manage_history.png',
           caminho: 'ativos/estados-ativos',
         },
         { rotulo: 'Ocorrências', icone: 'icons/problem.png', caminho: 'ativos/ocorrencias' },
-        { rotulo: 'Falhas', icone: 'icons/warning.png', caminho: 'ativos/falhas' },
-        { rotulo: 'Soluções', icone: 'icons/lightbulb_circle.png', caminho: 'ativos/solucoes' },
+        { rotulo: 'Falhas', icone: 'icons/warning.png', caminho: 'falhas' },
+        { rotulo: 'Soluções', icone: 'icons/lightbulb_circle.png', caminho: 'solucoes' },
       ],
     },
     {
@@ -156,9 +156,9 @@ export class MenuItemService {
       chave: 'usuario',
       papeis: [ROLES_MAP.ASN1, ROLES_MAP.ADN1],
       children: [
-        { rotulo: 'Informações', icone: 'icons/id_card.png', caminho: 'usuario/informacoes' },
-        { rotulo: 'Trocar senha', icone: 'icons/lock_reset.png', caminho: 'usuario/trocar-senha' },
-        { rotulo: 'Trocar PIN', icone: 'icons/keyboard_lock.png', caminho: 'usuario/trocar-pin' },
+        { rotulo: 'Informações', icone: 'icons/id_card.png', caminho: 'informacoes' },
+        { rotulo: 'Trocar senha', icone: 'icons/lock_reset.png', caminho: 'trocar-senha' },
+        { rotulo: 'Trocar PIN', icone: 'icons/keyboard_lock.png', caminho: 'trocar-pin' },
       ],
     },
   ];

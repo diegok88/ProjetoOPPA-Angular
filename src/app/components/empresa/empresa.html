@@ -113,11 +113,13 @@
                     </div>
                     @if (buscar(); as dado) {
                       <app-process-empresa
+                        [authorization]="initialAuthorization()"
                         [operacaoAtual]="operacaoEstado()"
                         [registroAtual]="registroEstado()"
                         [buscar]="dado"
                         (onMudarOperacao)="mudarOperacao($event, dado.id)"
                       ></app-process-empresa>
+                      <!-- inserir um input para receber a autorização -->
                     }
                   </div>
                 }
@@ -135,6 +137,7 @@
                     </div>
                     @if (buscar(); as dado) {
                       <app-process-empresa
+                        [authorization]="initialAuthorization()"
                         [operacaoAtual]="operacaoEstado()"
                         [registroAtual]="registroEstado()"
                         [buscar]="dado"

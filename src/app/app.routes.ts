@@ -45,6 +45,63 @@ export const routes: Routes = [
         canActivate: [roleGuard],
         data: { roles: [ROLES_MAP.ASN1, ROLES_MAP.ADN1] },
       },
+      {
+        path: 'competencia-setorial',
+        loadComponent: () =>
+          import('./components/competencia-setorial/competencia-setorial').then(
+            (c) => c.CompetenciaSetorial,
+          ),
+        canActivate: [roleGuard],
+        data: { roles: [ROLES_MAP.ASN1, ROLES_MAP.ADN1] },
+      },
+
+      //  ATIVOS
+      {
+        path: 'ativos',
+        loadComponent: () => import('./components/ativos/ativos').then((a) => a.Ativos),
+        canActivate: [roleGuard],
+        data: { roles: [ROLES_MAP.ASN1, ROLES_MAP.ADN1] },
+      },
+      {
+        path: 'tag-ativo',
+        loadComponent: () => import('./components/tag-ativo/tag-ativo').then((t) => t.TagAtivo),
+        canActivate: [roleGuard],
+        data: { roles: [ROLES_MAP.ASN1, ROLES_MAP.ADN1] },
+      },
+      {
+        path: 'falhas',
+        loadComponent: () => import('./components/falhas/falhas').then((f) => f.Falhas),
+        canActivate: [roleGuard],
+        data: { roles: [ROLES_MAP.ASN1, ROLES_MAP.ADN1] },
+      },
+      {
+        path: 'solucoes',
+        loadComponent: () => import('./components/solucoes/solucoes').then((s) => s.Solucoes),
+        canActivate: [roleGuard],
+        data: { roles: [ROLES_MAP.ASN1, ROLES_MAP.ADN1] },
+      },
+
+      //  USUÁRIOS
+      {
+        path: 'informacoes',
+        loadComponent: () =>
+          import('./components/informacoes/informacoes').then((i) => i.Informacoes),
+        canActivate: [roleGuard],
+        data: { roles: [ROLES_MAP.ASN1, ROLES_MAP.ADN1] },
+      },
+      {
+        path: 'trocar-senha',
+        loadComponent: () =>
+          import('./components/trocar-senha/trocar-senha').then((t) => t.TrocarSenha),
+        canActivate: [roleGuard],
+        data: { roles: [ROLES_MAP.ASN1, ROLES_MAP.ADN1] },
+      },
+      {
+        path: 'trocar-pin',
+        loadComponent: () => import('./components/trocar-pin/trocar-pin').then((t) => t.TrocarPin),
+        canActivate: [roleGuard],
+        data: { roles: [ROLES_MAP.ASN1, ROLES_MAP.ADN1] },
+      },
       //  Adicione aqui as outras subrotas declaradas no MenuService
       {
         path: '',

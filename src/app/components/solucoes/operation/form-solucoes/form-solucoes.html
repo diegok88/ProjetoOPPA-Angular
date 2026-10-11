@@ -1,0 +1,99 @@
+<form class="container-operation-forms" (ngSubmit)="executar($event)">
+  <div class="container-operation-forms-separated">
+    <section class="container-operation-forms-group">
+      @if (isAtualizar()) {
+        <div class="container-operation-forms-update">
+          <mat-list>
+            <mat-list-item>
+              <span matListItemTitle>
+                <p class="list-label">Id:</p>
+                <p class="list-data">{{ buscar().id }}</p>
+              </span>
+            </mat-list-item>
+          </mat-list>
+        </div>
+      }
+      <mat-form-field appearance="outline">
+        <mat-label>Falha</mat-label>
+        <mat-select
+          name="falhaId"
+          placeholder="Selecione a falha da solução" 
+          [ngModel]="getField('falhaId')"
+          (ngModelChange)="setField('falhaId', $event)"
+          (openedChange)="!$event && onBlur('falhaId')"
+        >
+          @for (opcao of falhasOptions(); track opcao.value) {
+            <mat-option [value]="opcao.value">{{ opcao.viewValue }}</mat-option>
+          }
+        </mat-select>
+        <mat-hint>
+          @if (obterErro('falhaId')) {
+            <span class="error-message" [class.show]="!!obterErro('falhaId')">{{
+              obterErro('falhaId')
+            }}</span>
+          }
+        </mat-hint>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Descrição</mat-label>
+        <input
+          matInput
+          type="text"
+          id="descricao"
+          name="descricao"
+          placeholder="Insira a descrição da solução"
+          [ngModel]="getField('descricao')"
+          (ngModelChange)="setField('descricao', $event)"
+          (keypress)="aoPressionarTecla($event, 'descricao')"
+          (blur)="onBlur('descricao')"
+        />
+        @if (getField('descricao')) {
+          <button
+            matSuffix
+            matIconButton
+            type="button"
+            aria-label="Clear"
+            (click)="clearField('descricao')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+        <mat-hint>
+          @if (obterErro('descricao')) {
+            <span class="error-message" [class.show]="!!obterErro('descricao')">{{
+              obterErro('descricao')
+            }}</span>
+          }
+        </mat-hint>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Direcionamento</mat-label>
+        <mat-select
+          name="direcionamentoId"
+          placeholder="Selecione o direcionamento da solução"
+          [ngModel]="getField('direcionamentoId')"
+          (ngModelChange)="setField('direcionamentoId', $event)"
+          (openedChange)="!$event && onBlur('direcionamentoId')"
+        >
+          @for (opcao of perfisOptions(); track opcao.value) {
+            <mat-option [value]="opcao.value">{{ opcao.viewValue }}</mat-option>
+          }
+        </mat-select>
+        <mat-hint>
+          @if (obterErro('direcionamentoId')) {
+            <span class="error-message" [class.show]="!!obterErro('direcionamentoId')">{{
+              obterErro('direcionamentoId')
+            }}</span>
+          }
+        </mat-hint>
+      </mat-form-field>
+    </section>
+    <section class="container-operation-forms-button">
+      @if (isAtualizar()) {
+        <button matButton="outlined" type="submit" [disabled]="!isFormValid()">Atualizar</button>
+      } @else {
+        <button matButton="outlined" type="submit" [disabled]="!isFormValid()">Cadastrar</button>
+      }
+    </section>
+  </div>
+</form>

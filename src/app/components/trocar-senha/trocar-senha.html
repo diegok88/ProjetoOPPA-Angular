@@ -1,0 +1,151 @@
+<div class="container-information">
+  <div class="container-information-header">
+    <span>Trocar senha</span>
+  </div>
+  <section class="container-information-main">
+    <form class="container-information-forms" (ngSubmit)="executar($event)">
+      <section class="container-information-forms-group">
+        <mat-form-field appearance="outline">
+          <mat-label>Senha Atual</mat-label>
+          <mat-icon matPrefix>key</mat-icon>
+          <input
+            matInput
+            [type]="isHidden('senhaAtual') ? 'password' : 'text'"
+            id="senha"
+            name="senha"
+            placeholder="Digite sua senha atual"
+            [ngModel]="getField('senhaAtual')"
+            (ngModelChange)="setField('senhaAtual', $event)"
+            mask="A******************************************************************"
+            (keypress)="aoPressionarTecla($event, 'senhaAtual')"
+            (blur)="onBlur('senhaAtual')"
+            autocomplete="new-password"
+          />
+          @if (getField('senhaAtual')) {
+            <button
+              matSuffix
+              matIconButton
+              type="button"
+              aria-label="Clear"
+              (click)="clearField('senhaAtual')"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+          <button
+            matIconButton
+            matSuffix
+            type="button"
+            (click)="toggleVisibility($event, 'senhaAtual')"
+            aria-label="Alternar visibilidade da senha"
+            [attr.aria-pressed]="!isHidden('senhaAtual')"
+          >
+            <mat-icon>{{ isHidden('senhaAtual') ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-hint>
+            @if (obterErro('senhaAtual')) {
+              <span class="error-message" [class.show]="!!obterErro('senhaAtual')">{{
+                obterErro('senhaAtual')
+              }}</span>
+            }
+          </mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nova Senha</mat-label>
+          <mat-icon matPrefix>key</mat-icon>
+          <input
+            matInput
+            [type]="isHidden('novaSenha') ? 'password' : 'text'"
+            id="novaSenha"
+            name="novaSenha"
+            placeholder="Insira a nova senha"
+            [ngModel]="getField('novaSenha')"
+            (ngModelChange)="setField('novaSenha', $event)"
+            mask="A******************************************************************"
+            (keypress)="aoPressionarTecla($event, 'novaSenha')"
+            (blur)="onBlur('novaSenha')"
+            autocomplete="new-password"
+          />
+          @if (getField('novaSenha')) {
+            <button
+              matSuffix
+              matIconButton
+              type="button"
+              aria-label="Clear"
+              (click)="clearField('novaSenha')"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+          <button
+            matIconButton
+            matSuffix
+            type="button"
+            (click)="toggleVisibility($event, 'novaSenha')"
+            aria-label="Alternar visibilidade da senha"
+            [attr.aria-pressed]="!isHidden('novaSenha')"
+          >
+            <mat-icon>{{ isHidden('novaSenha') ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-hint>
+            @if (obterErro('novaSenha')) {
+              <span class="error-message" [class.show]="!!obterErro('novaSenha')">{{
+                obterErro('novaSenha')
+              }}</span>
+            }
+          </mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Repita a Nova Senha</mat-label>
+          <mat-icon matPrefix>key</mat-icon>
+          <input
+            matInput
+            [type]="isHidden('repitaSenha') ? 'password' : 'text'"
+            id="repitaSenha"
+            name="repitaSenha"
+            placeholder="Repita a nova senha"
+            [ngModel]="getField('repitaSenha')"
+            (ngModelChange)="setField('repitaSenha', $event)"
+            mask="A******************************************************************"
+            (keypress)="aoPressionarTecla($event, 'repitaSenha')"
+            (blur)="onBlur('repitaSenha')"
+            autocomplete="new-password"
+          />
+          @if (getField('repitaSenha')) {
+            <button
+              matSuffix
+              matIconButton
+              type="button"
+              aria-label="Clear"
+              (click)="clearField('repitaSenha')"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+          <button
+            matIconButton
+            matSuffix
+            type="button"
+            (click)="toggleVisibility($event, 'repitaSenha')"
+            aria-label="Alternar visibilidade da senha"
+            [attr.aria-pressed]="!isHidden('repitaSenha')"
+          >
+            <mat-icon>{{ isHidden('repitaSenha') ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-hint>
+            @if (obterErro('repitaSenha')) {
+              <span class="error-message" [class.show]="!!obterErro('repitaSenha')">{{
+                obterErro('repitaSenha')
+              }}</span>
+            }
+          </mat-hint>
+        </mat-form-field>
+      </section>
+      <section class="container-operation-forms-button">
+        <button matButton="outlined" type="submit" [disabled]="!isFormValid()">Cadastrar</button>
+      </section>
+    </form>
+  </section>
+</div>

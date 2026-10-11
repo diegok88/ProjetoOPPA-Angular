@@ -1,0 +1,151 @@
+<div class="container-information">
+  <div class="container-information-header">
+    <span>Trocar pin</span>
+  </div>
+  <section class="container-information-main">
+    <form class="container-information-forms" (ngSubmit)="executar($event)">
+      <section class="container-information-forms-group">
+        <mat-form-field appearance="outline">
+          <mat-label>Pin Atual</mat-label>
+          <mat-icon matPrefix>key</mat-icon>
+          <input
+            matInput
+            [type]="isHidden('pinAtual') ? 'password' : 'text'"
+            id="pin"
+            name="pin"
+            placeholder="Digite seu pin atual"
+            [ngModel]="getField('pinAtual')"
+            (ngModelChange)="setField('pinAtual', $event)"
+            mask="0000"
+            (keypress)="aoPressionarTecla($event, 'pinAtual')"
+            (blur)="onBlur('pinAtual')"
+            autocomplete="off"
+          />
+          @if (getField('pinAtual')) {
+            <button
+              matSuffix
+              matIconButton
+              type="button"
+              aria-label="Clear"
+              (click)="clearField('pinAtual')"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+          <button
+            matIconButton
+            matSuffix
+            type="button"
+            (click)="toggleVisibility($event, 'pinAtual')"
+            aria-label="Alternar visibilidade do pin"
+            [attr.aria-pressed]="!isHidden('pinAtual')"
+          >
+            <mat-icon>{{ isHidden('pinAtual') ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-hint>
+            @if (obterErro('pinAtual')) {
+              <span class="error-message" [class.show]="!!obterErro('pinAtual')">{{
+                obterErro('pinAtual')
+              }}</span>
+            }
+          </mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Novo Pin</mat-label>
+          <mat-icon matPrefix>key</mat-icon>
+          <input
+            matInput
+            [type]="isHidden('novaPin') ? 'password' : 'text'"
+            id="novaPin"
+            name="novaPin"
+            placeholder="Insira o novo pin"
+            [ngModel]="getField('novaPin')"
+            (ngModelChange)="setField('novaPin', $event)"
+            mask="0000"
+            (keypress)="aoPressionarTecla($event, 'novaPin')"
+            (blur)="onBlur('novaPin')"
+            autocomplete="off"
+          />
+          @if (getField('novaPin')) {
+            <button
+              matSuffix
+              matIconButton
+              type="button"
+              aria-label="Clear"
+              (click)="clearField('novaPin')"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+          <button
+            matIconButton
+            matSuffix
+            type="button"
+            (click)="toggleVisibility($event, 'novaPin')"
+            aria-label="Alternar visibilidade do pin"
+            [attr.aria-pressed]="!isHidden('novaPin')"
+          >
+            <mat-icon>{{ isHidden('novaPin') ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-hint>
+            @if (obterErro('novaPin')) {
+              <span class="error-message" [class.show]="!!obterErro('novaPin')">{{
+                obterErro('novaPin')
+              }}</span>
+            }
+          </mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Repita o Novo Pin</mat-label>
+          <mat-icon matPrefix>key</mat-icon>
+          <input
+            matInput
+            [type]="isHidden('repitaPin') ? 'password' : 'text'"
+            id="repitaPin"
+            name="repitaPin"
+            placeholder="Repita o novo pin"
+            [ngModel]="getField('repitaPin')"
+            (ngModelChange)="setField('repitaPin', $event)"
+            mask="0000"
+            (keypress)="aoPressionarTecla($event, 'repitaPin')"
+            (blur)="onBlur('repitaPin')"
+            autocomplete="off"
+          />
+          @if (getField('repitaPin')) {
+            <button
+              matSuffix
+              matIconButton
+              type="button"
+              aria-label="Clear"
+              (click)="clearField('repitaPin')"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+          <button
+            matIconButton
+            matSuffix
+            type="button"
+            (click)="toggleVisibility($event, 'repitaPin')"
+            aria-label="Alternar visibilidade do pin"
+            [attr.aria-pressed]="!isHidden('repitaPin')"
+          >
+            <mat-icon>{{ isHidden('repitaPin') ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-hint>
+            @if (obterErro('repitaPin')) {
+              <span class="error-message" [class.show]="!!obterErro('repitaPin')">{{
+                obterErro('repitaPin')
+              }}</span>
+            }
+          </mat-hint>
+        </mat-form-field>
+      </section>
+      <section class="container-operation-forms-button">
+        <button matButton="outlined" type="submit" [disabled]="!isFormValid()">Cadastrar</button>
+      </section>
+    </form>
+  </section>
+</div>

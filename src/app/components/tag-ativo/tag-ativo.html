@@ -1,0 +1,163 @@
+<div class="container-operation">
+  <section class="container-operation-header">
+    <h2 class="operacao-h2">Tags de Ativos</h2>
+  </section>
+  <section class="container-operation-main">
+    <div class="container-operation-list">
+      <span>Lista de Tags</span>
+      <app-list-tag-ativos
+        [listar]="listar()"
+        (abrirRegistro)="mudarOperacao(operationMap.REGISTRO, $event)"
+      ></app-list-tag-ativos>
+    </div>
+    <div class="container-operation-action">
+      @switch (operacaoEstado()) {
+        @case ('inicial') {
+          @if (contador(); as contagem) {
+            <app-inicial-tag-ativos
+              [contador]="contagem"
+              (abrirCadastro)="mudarOperacao(operationMap.CADASTRAR)"
+            ></app-inicial-tag-ativos>
+          }
+        }
+        @case ('cadastrar') {
+          <section class="container-operation-signup">
+            <div class="container-operation-action-header">
+              <span>Cadastrar Tag</span>
+              <img
+                class="container-operation-back"
+                src="icons/arrow_circle_left.png"
+                alt="Voltar"
+                (click)="mudarOperacao(operationMap.INICIAL)"
+              />
+            </div>
+            <app-form-tag-ativos
+              [operacaoAtual]="operacaoEstado()"
+              [registroAtual]="registroEstado()"
+              (onMudarOperacao)="mudarOperacao(operationMap.INICIAL)"
+            ></app-form-tag-ativos>
+          </section>
+        }
+        @case ('registro') {
+          <section class="container-operation-register">
+            <div class="container-operation-register-toggle">
+              @if (buscar(); as dado) {
+                <app-toogle
+                  [statusEntity]="dado.status"
+                  [onRegistroAtual]="registroEstado()"
+                  (onMudarRegistro)="mudarRegistro($event)"
+                ></app-toogle>
+              }
+            </div>
+            <div class="container-operation-separated">
+              @switch (registroEstado()) {
+                @case ('informacao') {
+                  <div class="container-operation-register">
+                    <div class="container-operation-action-header">
+                      <span>Dados da Tag</span>
+                      <button
+                        mat-icon-button
+                        color="accent"
+                        (click)="mudarOperacao(operationMap.INICIAL)"
+                      >
+                        <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
+                      </button>
+                    </div>
+                    @if (buscar(); as dado) {
+                      <app-info-tag-ativos [info]="dado"></app-info-tag-ativos>
+                    }
+                  </div>
+                }
+                @case ('atualizar') {
+                  <div class="container-operation-register">
+                    <div class="container-operation-action-header">
+                      <span>Atualizar a Tag</span>
+                      <button
+                        mat-icon-button
+                        color="accent"
+                        (click)="mudarOperacao(operationMap.INICIAL)"
+                      >
+                        <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
+                      </button>
+                    </div>
+                    @if (buscar(); as dado) {
+                      <app-form-tag-ativos
+                        [operacaoAtual]="operacaoEstado()"
+                        [registroAtual]="registroEstado()"
+                        [buscar]="dado"
+                        (onMudarOperacao)="mudarOperacao($event, dado.id)"
+                      ></app-form-tag-ativos>
+                    }
+                  </div>
+                }
+                @case ('status') {
+                  <div class="container-operation-register">
+                    <div class="container-operation-action-header">
+                      <span>Inativar a Tag</span>
+                      <button
+                        mat-icon-button
+                        color="accent"
+                        (click)="mudarOperacao(operationMap.INICIAL)"
+                      >
+                        <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
+                      </button>
+                    </div>
+                    @if (buscar(); as dado) {
+                      <app-process-tag-ativos
+                        [authorization]="initialAuthorization()"
+                        [operacaoAtual]="operacaoEstado()"
+                        [registroAtual]="registroEstado()"
+                        [buscar]="dado"
+                        (onMudarOperacao)="mudarOperacao($event, dado.id)"
+                      ></app-process-tag-ativos>
+                    }
+                  </div>
+                }
+                @case ('eliminar') {
+                  <div class="container-operation-register">
+                    <div class="container-operation-action-header">
+                      <span>Eliminar a Tag</span>
+                      <button
+                        mat-icon-button
+                        color="accent"
+                        (click)="mudarOperacao(operationMap.INICIAL)"
+                      >
+                        <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
+                      </button>
+                    </div>
+                    @if (buscar(); as dado) {
+                      <app-process-tag-ativos
+                        [authorization]="initialAuthorization()"
+                        [operacaoAtual]="operacaoEstado()"
+                        [registroAtual]="registroEstado()"
+                        [buscar]="dado"
+                        (onMudarOperacao)="mudarOperacao($event, dado.id)"
+                      ></app-process-tag-ativos>
+                    }
+                  </div>
+                }
+                @case ('auditoria') {
+                  <div class="container-operation-register">
+                    <div class="container-operation-action-header">
+                      <span>Auditoria da Tag</span>
+                      <button
+                        mat-icon-button
+                        color="accent"
+                        (click)="mudarOperacao(operationMap.INICIAL)"
+                      >
+                        <mat-icon fontSet="material-symbols-outlined">arrow_circle_left</mat-icon>
+                      </button>
+                    </div>
+                    <app-audit-tag-ativos
+                      [listarAuditoria]="listarAuditoria()"
+                    ></app-audit-tag-ativos>
+                  </div>
+                }
+              }
+            </div>
+          </section>
+        }
+      }
+    </div>
+  </section>
+</div>

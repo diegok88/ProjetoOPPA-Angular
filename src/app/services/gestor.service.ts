@@ -15,6 +15,9 @@ export class GestorService {
   private listarGestorSignal = signal<GestorModel[] | []>([]);
   public listarGestor = this.listarGestorSignal.asReadonly();
 
+  private listarGestorCompetenciaSignal = signal<GestorModel[] | []>([]);
+  public listarGestorCompetencia = this.listarGestorCompetenciaSignal.asReadonly();
+
   private contadorGestorSignal = signal<Contador | null>(null);
   public contadorGestor = this.contadorGestorSignal.asReadonly();
 
@@ -23,6 +26,16 @@ export class GestorService {
     return this.http.get<GestorModel[]>(`${this.apiUrl}/list`).pipe(
       tap((dados) => {
         this.listarGestorSignal.set(dados);
+      }),
+      catchError((error) => throwError(() => error)),
+    );
+  }
+
+  /* BUSCA O DADOS PARA A TABELA COM APENAS DADOS NECESSARIOS - competencia setorial */
+  listarCompetencia(): Observable<GestorModel[]> {
+    return this.http.get<GestorModel[]>(`${this.apiUrl}/list_competencia`).pipe(
+      tap((dados) => {
+        this.listarGestorCompetenciaSignal.set(dados);
       }),
       catchError((error) => throwError(() => error)),
     );
@@ -42,6 +55,7 @@ export class GestorService {
   /* LIMPEZA DOS SIGNALS DE LISTAR E BUSCAR */
   public limparBuscar() {
     this.listarGestorSignal.set([]);
+    this.listarGestorCompetenciaSignal.set([]);
     this.contadorGestorSignal.set(null);
   }
 }

@@ -76,7 +76,7 @@ export class Setores implements OnInit, OnDestroy {
 
   /* FUNÇÃO DE CARREGAMENTO DE LISTA */
   protected carregarTodos() {
-    return this.setoresService.listarTabela();
+    return this.setoresService.listarTabela(); 
   }
 
   /* FUNÇÃO DE CARREGAMENTO DE CONTADOR */

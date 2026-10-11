@@ -1,0 +1,134 @@
+<form class="container-operation-forms" (ngSubmit)="executar($event)">
+  <div class="container-operation-forms-separated">
+    <section class="container-operation-forms-group">
+      @if (isAtualizar()) {
+        <div class="container-operation-forms-update">
+          <mat-list>
+            <mat-list-item>
+              <span matListItemTitle>
+                <p class="list-label">Id:</p>
+                <p class="list-data">{{ buscar().id }}</p>
+              </span>
+            </mat-list-item>
+          </mat-list>
+        </div>
+      }
+      <mat-form-field appearance="outline">
+        <mat-label>Código</mat-label>
+        <input
+          matInput
+          type="text"
+          id="codigo"
+          name="codigo"
+          placeholder="Insira a código da falha"
+          [ngModel]="getField('codigo')"
+          (ngModelChange)="setField('codigo', $event)"
+          (keypress)="aoPressionarTecla($event, 'codigo')"
+          (blur)="onBlur('codigo')"
+        />
+        @if (getField('descricao')) {
+          <!-- PARA O BOTÃO NÃO SER SUBMETIDO IGUAL A DO CADASTRAR O MESMO DEVE SER TIPADO - type="button" -->
+          <button
+            matSuffix
+            matIconButton
+            type="button"
+            aria-label="Clear"
+            (click)="clearField('codigo')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+        <mat-hint>
+          @if (obterErro('codigo')) {
+            <span class="error-message" [class.show]="!!obterErro('codigo')">{{
+              obterErro('codigo')
+            }}</span>
+          }
+        </mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Descrição</mat-label>
+        <input
+          matInput
+          type="text"
+          id="descricao"
+          name="descricao"
+          placeholder="Insira a descrição da falha"
+          [ngModel]="getField('descricao')"
+          (ngModelChange)="setField('descricao', $event)"
+          (keypress)="aoPressionarTecla($event, 'descricao')"
+          (blur)="onBlur('descricao')"
+        />
+        @if (getField('descricao')) {
+          <!-- PARA O BOTÃO NÃO SER SUBMETIDO IGUAL A DO CADASTRAR O MESMO DEVE SER TIPADO - type="button" -->
+          <button
+            matSuffix
+            matIconButton
+            type="button"
+            aria-label="Clear"
+            (click)="clearField('descricao')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+        <mat-hint>
+          @if (obterErro('descricao')) {
+            <span class="error-message" [class.show]="!!obterErro('descricao')">{{
+              obterErro('descricao')
+            }}</span>
+          }
+        </mat-hint>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Ativo</mat-label>
+        <mat-select
+          name="ativoId"
+          placeholder="Selecione o ativo da falha"
+          [ngModel]="getField('ativoId')"
+          (ngModelChange)="setField('ativoId', $event)"
+          (openedChange)="!$event && onBlur('ativoId')"
+        >
+          @for (opcao of ativosOptions(); track opcao.value) {
+            <mat-option [value]="opcao.value">{{ opcao.viewValue }}</mat-option>
+          }
+        </mat-select>
+        <mat-hint>
+          @if (obterErro('ativoId')) {
+            <span class="error-message" [class.show]="!!obterErro('ativoId')">{{
+              obterErro('ativoId')
+            }}</span>
+          }
+        </mat-hint>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Direcionamento</mat-label>
+        <mat-select
+          name="direcionamentoId"
+          placeholder="Selecione o direcionamento da falha"
+          [ngModel]="getField('direcionamentoId')"
+          (ngModelChange)="setField('direcionamentoId', $event)"
+          (openedChange)="!$event && onBlur('direcionamentoId')"
+        >
+          @for (opcao of perfisOptions(); track opcao.value) {
+            <mat-option [value]="opcao.value">{{ opcao.viewValue }}</mat-option>
+          }
+        </mat-select>
+        <mat-hint>
+          @if (obterErro('direcionamentoId')) {
+            <span class="error-message" [class.show]="!!obterErro('direcionamentoId')">{{
+              obterErro('direcionamentoId')
+            }}</span>
+          }
+        </mat-hint>
+      </mat-form-field>
+    </section>
+    <section class="container-operation-forms-button">
+      @if (isAtualizar()) {
+        <button matButton="outlined" type="submit" [disabled]="!isFormValid()">Atualizar</button>
+      } @else {
+        <button matButton="outlined" type="submit" [disabled]="!isFormValid()">Cadastrar</button>
+      }
+    </section>
+  </div>
+</form>

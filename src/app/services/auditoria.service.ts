@@ -20,4 +20,11 @@ export class AuditoriaService {
       catchError((error) => throwError(() => error)),
     );
   }
+
+  listarMais(query?: string): Observable<AuditoriaData[]> {
+    return this.http.get<AuditoriaData[]>(`${this.apiUrl}?${query}`).pipe(
+      tap((dados) => this.auditoriaSignal.set(dados)),
+      catchError((error) => throwError(() => error)),
+    );
+  }
 }

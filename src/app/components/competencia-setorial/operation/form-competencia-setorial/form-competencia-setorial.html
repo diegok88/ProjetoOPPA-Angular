@@ -1,0 +1,68 @@
+<div>
+  <section class="container-registro-forms">
+    @if (setoresOptions().length > 0) {
+      <form (ngSubmit)="executar($event)" class="container-forms-registro">
+        <mat-form-field appearance="outline">
+          <mat-label>Setor</mat-label>
+          <mat-select
+            name="setorId"
+            placeholder="Selecione o setor"
+            [ngModel]="getField('setorId')"
+            (ngModelChange)="setField('setorId', $event)"
+            (openedChange)="!$event && onBlur('setorId')"
+          >
+            @for (opcao of setoresOptions(); track opcao.value) {
+              <mat-option [value]="opcao.value">{{ opcao.viewValue }}</mat-option>
+            }
+          </mat-select>
+          <mat-hint>
+            @if (obterErro('setorId')) {
+              <span class="error-message" [class.show]="!!obterErro('setorId')">{{
+                obterErro('setorId')
+              }}</span>
+            }
+          </mat-hint>
+        </mat-form-field>
+        <button matButton="outlined" type="submit" [disabled]="!isFormValid()">Cadastrar</button>
+      </form>
+    } @else {
+      <span class="container-empty-section"> Todos setores alocados neste turno! </span>
+    }
+  </section>
+  <section>
+    <table mat-table [dataSource]="listarCompetencia()" class="tabela-forms">
+      <ng-container matColumnDef="codigo">
+        <th mat-header-cell *matHeaderCellDef>Código</th>
+        <td mat-cell *matCellDef="let element">{{ element?.codigo }}</td>
+      </ng-container>
+      <ng-container matColumnDef="setor">
+        <th mat-header-cell *matHeaderCellDef>Setor</th>
+        <td mat-cell *matCellDef="let element">{{ element?.setor.descricao }}</td>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let element">
+          <span class="table-chips-status" [class.deactive]="element?.status">{{
+            element?.status ? 'Ativo' : 'Inativo'
+          }}</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="acao">
+        <th mat-header-cell *matHeaderCellDef>Ações</th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button color="accent">
+            <mat-icon fontSet="material-symbols-outlined" (click)="inativar(element)"
+              >cancel</mat-icon
+            >
+          </button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </section>
+</div>
+
+<!--
+     
+-->

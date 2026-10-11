@@ -1,10 +1,9 @@
 import { Component, inject, OnDestroy, OnInit, signal, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuditoriaData } from '../../interfaces/auditoria-data.interface';
-import { UsuarioData } from '../../interfaces/usuario-data.interface';
 import { AuditoriaService } from '../../services/auditoria.service';
 import { UsuarioService } from '../../services/usuario.service';
-import { Escalas, INICIALIZAR_USUARIO_FORMS } from '../../entities/usuario.model';
+import { Escalas } from '../../entities/usuario.model';
 import {
   OperationMap,
   OperationType,
@@ -63,14 +62,12 @@ export class Usuario implements OnInit, OnDestroy {
   protected registroEstado = signal<RecordType>(RecordMap.INFORMACAO);
   protected auditoriaEstado = signal<boolean>(true);
 
-  protected usuarioModel = signal<UsuarioData>(INICIALIZAR_USUARIO_FORMS());
-
   /* ROTAS DE OPERAÇÃO */
   protected operationMap = OperationMap;
 
   /* CICLO DE VIDA PARA INICIALIZAR A LISTA */
   ngOnInit(): void {
-    this.carregarTodos().subscribe();
+    this.carregarUsuarios().subscribe();
     this.carregarContador().subscribe();
   }
 
@@ -80,8 +77,10 @@ export class Usuario implements OnInit, OnDestroy {
     this.gestorService.limparBuscar();
   }
 
+  /* SIGNAL PARA AUTORIZAR OPERAÇÃO DE ACORDO COM  O PERFIL - verificar a aplicabilidade */
+
   /* FUNÇÃO DE CARREGAMENTO DE LISTA */
-  protected carregarTodos() {
+  protected carregarUsuarios() {
     return this.gestorService.listarTabela();
   }
 
@@ -113,7 +112,6 @@ export class Usuario implements OnInit, OnDestroy {
   /* FUNÇÃO DE MUDANÇA DE REGISTRO */
   protected mudarRegistro(registro: RecordType): void {
     if (registro === RecordMap.ATUALIZAR) {
-      this.usuarioModel.set(INICIALIZAR_USUARIO_FORMS());
       this.registroEstado.set(registro);
     }
     this.auditoriaEstado.set(true);

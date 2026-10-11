@@ -4,6 +4,7 @@ import { catchError, Observable, tap, throwError } from 'rxjs';
 import { RequestHttp } from '../constants/requests.const';
 import { PerfilModel } from '../entities/perfil.model';
 import { Contador } from '../interfaces/counter.interface';
+import { FalhasModel } from '../entities/falhas.model';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +22,7 @@ export class PerfilService {
   private contadorPerfilSignal = signal<Contador | null>(null);
   public contadorPerfil = this.contadorPerfilSignal.asReadonly();
 
+  /* CADASTRO DA ENTIDADE */
   cadastrar(dados: PerfilModel): Observable<PerfilModel> {
     return this.http.post<PerfilModel>(this.apiUrl, dados);
   }
@@ -42,8 +44,8 @@ export class PerfilService {
   }
 
   /* LISTA TODOS OS DADOS CADASTRADOS */
-  listar(): Observable<PerfilModel[]> {
-    return this.http.get<PerfilModel[]>(this.apiUrl).pipe(
+  listar(query?: string): Observable<PerfilModel[]> { 
+    return this.http.get<PerfilModel[]>(`${this.apiUrl}?${query}`).pipe(
       tap((dados) => {
         this.listarPerfilSignal.set(dados);
       }),

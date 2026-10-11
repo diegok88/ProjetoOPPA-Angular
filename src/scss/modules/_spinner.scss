@@ -1,0 +1,17 @@
+@use '@angular/material' as mat;
+
+:root {
+  @include mat.progress-spinner-overrides(
+    (
+      active-indicator-color: var(--color-white),
+    )
+  );
+}
+
+.operation-list-loading {
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
